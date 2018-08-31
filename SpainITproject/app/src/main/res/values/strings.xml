@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Spain-ITproject</string>
+    <string name="welcome_message">Welcome</string>
+    <string name="login_txt">Login to existing account</string>
+    <string name="create_account">Create a new account</string>
 </resources>
