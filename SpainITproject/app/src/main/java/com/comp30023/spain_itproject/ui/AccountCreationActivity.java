@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.ui;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 public class AccountCreationActivity extends AppCompatActivity {

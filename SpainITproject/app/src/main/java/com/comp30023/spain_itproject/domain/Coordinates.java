@@ -1,6 +1,8 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.domain;
 
-public class Coordinates {
+import java.io.Serializable;
+
+public class Coordinates implements Serializable {
 
     private float lat;
     private float lon;

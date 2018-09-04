@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.comp30023.spain_itproject.DependentHomeActivity">
+    tools:context="com.comp30023.spain_itproject.ui.DependentHomeActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

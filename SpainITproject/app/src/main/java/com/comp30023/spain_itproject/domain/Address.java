@@ -1,6 +1,8 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.domain;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
 
     private String number;
     private String streetName;

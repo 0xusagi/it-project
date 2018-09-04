@@ -1,8 +1,8 @@
 package com.comp30023.spain_itproject.uicontroller;
 
-import com.comp30023.spain_itproject.DependentUser;
-import com.comp30023.spain_itproject.Location;
-import com.comp30023.spain_itproject.User;
+import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.domain.User;
 
 public class AccountController {
 

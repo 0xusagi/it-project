@@ -1,7 +1,9 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.comp30023.spain_itproject.R;
 
 public class CarerHomeActivity extends AppCompatActivity {
 

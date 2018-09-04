@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.ui;
 
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.R;
 
 import java.util.ArrayList;
 

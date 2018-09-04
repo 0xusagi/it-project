@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.domain;
 
 import com.comp30023.spain_itproject.uicontroller.MapsService;
 
