@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +13,11 @@ import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 public class AccountCreationActivity extends AppCompatActivity {
 
-    public static String invalidDetails = "Those details didn\'t work, please try again";
-    public static String incorrectPinLength = "PIN must be 4 digits, please try again";
-    public static String differentPins = "PINs don\'t match, please try again";
+    public static final String PASSED_USER = "PASSED USER";
+
+    public static final String invalidDetails = "Those details didn\'t work, please try again";
+    public static final String incorrectPinLength = "PIN must be 4 digits, please try again";
+    public static final String differentPins = "PINs don\'t match, please try again";
 
     private TextView messageText;
 
@@ -64,9 +67,23 @@ public class AccountCreationActivity extends AppCompatActivity {
             return;
         }
 
-        boolean success = AccountController.createAccount(name, phoneNumber, pin, isDependent);
+        boolean success = AccountController.registerAccount(name, phoneNumber, pin, isDependent);
         if (!success) {
             resetAllFields(invalidDetails);
+        } else {
+
+            User user = AccountController.login(phoneNumber, pin, isDependent);
+
+            Intent intent;
+            if (isDependent) {
+                intent = new Intent(this, DependentHomeActivity.class);
+            } else {
+                intent = new Intent(this, CarerHomeActivity.class);
+            }
+
+            intent.putExtra(PASSED_USER, user);
+            startActivity(intent);
+
         }
     }
 

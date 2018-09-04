@@ -2,7 +2,9 @@ package com.comp30023.spain_itproject;
 
 import com.comp30023.spain_itproject.uicontroller.MapsService;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
 
     private Address address;
     private Coordinates coords;
@@ -14,5 +16,9 @@ public class Location {
 
         coords = MapsService.getCoordinates(address);
 
+    }
+
+    public String getTag() {
+        return tag;
     }
 }

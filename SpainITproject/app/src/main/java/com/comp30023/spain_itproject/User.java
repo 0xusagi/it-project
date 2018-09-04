@@ -1,10 +1,12 @@
 package com.comp30023.spain_itproject;
 
-public class User {
+import java.io.Serializable;
 
-    String name;
-    String phoneNumber;
-    String pin;
+public class User implements Serializable {
+
+    private String name;
+    private String phoneNumber;
+    private String pin;
 
     public User(String name, String phoneNumber, String pin) {
 
@@ -13,5 +15,6 @@ public class User {
         this.pin = pin;
 
     }
+
 
 }
