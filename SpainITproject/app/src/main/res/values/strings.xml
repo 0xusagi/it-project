@@ -12,4 +12,6 @@
     <string name="i_am">I am a...</string>
     <string name="dependent">Dependent</string>
     <string name="carer">Carer</string>
+    <string name="invalid_details">Those details didn\'t work, please try again</string>
+    <string name="confirm_pin">Confirm PIN:</string>
 </resources>

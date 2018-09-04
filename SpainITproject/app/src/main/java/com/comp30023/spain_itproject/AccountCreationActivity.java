@@ -1,61 +1,102 @@
 package com.comp30023.spain_itproject;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.comp30023.spain_itproject.uicontroller.AccountController;
+
 public class AccountCreationActivity extends AppCompatActivity {
+
+    public static String invalidDetails = "Those details didn\'t work, please try again";
+    public static String incorrectPinLength = "PIN must be 4 digits, please try again";
+    public static String differentPins = "PINs don\'t match, please try again";
+
+    private TextView messageText;
+
+    private EditText nameText;
+    private EditText phoneNumberText;
+    private EditText pinText;
+    private EditText confirmPinText;
+
+    private ToggleButton dependentButton;
+    private ToggleButton carerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_creation);
 
-        ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
+        messageText = (TextView) findViewById(R.id.enterDetailsText);
+
+        dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
         dependentButton.setChecked(true);
 
-        ToggleButton carerButton = (ToggleButton) findViewById(R.id.carerButton);
+        carerButton = (ToggleButton) findViewById(R.id.carerButton);
         carerButton.setChecked(false);
 
+        nameText = (EditText) findViewById(R.id.nameField);
+        phoneNumberText = (EditText) findViewById(R.id.phoneNumberField);
+        pinText = (EditText) findViewById(R.id.pinField);
+        confirmPinText = (EditText) findViewById(R.id.confirmPinField);
+
     }
 
-    /*public void registerButtonClick(View view) {
+    public void registerButtonClick(View view) {
 
-        EditText nameText = (EditText) findViewById(R.id.nameField);
         String name = nameText.getText().toString();
-
-        EditText phoneNumberText = (EditText) findViewById(R.id.phoneNumberField);
         String phoneNumber = phoneNumberText.getText().toString();
-
-        EditText pinText = (EditText) findViewById(R.id.pinField);
         String pin = pinText.getText().toString();
+        String confirmPin = confirmPinText.getText().toString();
 
-        createAccount(name, phoneNumber, pin);
+        ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
+        Boolean isDependent = dependentButton.isChecked();
 
+        if (pin.length() != 4) {
+            resetPinFields(incorrectPinLength);
+            return;
+        } else if (!(confirmPin.equals(pin))) {
+            resetPinFields(differentPins);
+            return;
+        }
 
-
+        boolean success = AccountController.createAccount(name, phoneNumber, pin, isDependent);
+        if (!success) {
+            resetAllFields(invalidDetails);
+        }
     }
 
-    public void createAccount(String name, String phoneNumber, String pin) {
+    private void resetPinFields(String message) {
+        nameText.getText().clear();
+        phoneNumberText.getText().clear();
+        pinText.getText().clear();
+        confirmPinText.getText().clear();
 
-    }*/
+        messageText.setText(message);
+        messageText.setTextColor(Color.RED);
+    }
+
+    private void resetAllFields(String message) {
+        nameText.getText().clear();
+        phoneNumberText.getText().clear();
+        pinText.getText().clear();
+        confirmPinText.getText().clear();
+
+        messageText.setText(message);
+        messageText.setTextColor(Color.RED);
+    }
 
     public void dependentButtonClick(View view) {
-        ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
         dependentButton.setChecked(true);
-
-        ToggleButton carerButton = (ToggleButton) findViewById(R.id.carerButton);
         carerButton.setChecked(false);
     }
 
     public void carerButtonClick(View view) {
-        ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
         dependentButton.setChecked(false);
-
-        ToggleButton carerButton = (ToggleButton) findViewById(R.id.carerButton);
         carerButton.setChecked(true);
     }
 
