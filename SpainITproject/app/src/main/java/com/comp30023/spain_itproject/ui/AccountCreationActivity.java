@@ -4,23 +4,26 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.domain.InvalidDetailsException;
 import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 public class AccountCreationActivity extends AppCompatActivity {
+
+    public static final int PIN_LENGTH = 4;
 
     public static final String PASSED_USER = "PASSED USER";
 
     public static final String invalidDetails = "Those details didn\'t work, please try again";
     public static final String incorrectPinLength = "PIN must be 4 digits, please try again";
     public static final String differentPins = "PINs don\'t match, please try again";
-
     private TextView messageText;
 
     private EditText nameText;
@@ -49,6 +52,11 @@ public class AccountCreationActivity extends AppCompatActivity {
         pinText = (EditText) findViewById(R.id.pinField);
         confirmPinText = (EditText) findViewById(R.id.confirmPinField);
 
+        InputFilter.LengthFilter maxPinLength = new InputFilter.LengthFilter(PIN_LENGTH);
+        InputFilter[] pinFilters = new InputFilter[1];
+        pinFilters[0] = maxPinLength;
+        pinText.setFilters(pinFilters);
+        confirmPinText.setFilters(pinFilters);
     }
 
     public void registerButtonClick(View view) {
@@ -61,37 +69,28 @@ public class AccountCreationActivity extends AppCompatActivity {
         ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
         Boolean isDependent = dependentButton.isChecked();
 
-        if (pin.length() != 4) {
-            resetPinFields(incorrectPinLength);
-            return;
-        } else if (!(confirmPin.equals(pin))) {
-            resetPinFields(differentPins);
+        try {
+            AccountController.registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
+        } catch (InvalidDetailsException e) {
+            messageText.setText(e.getMessage());
+            messageText.setTextColor(Color.RED);
             return;
         }
 
-        boolean success = AccountController.registerAccount(name, phoneNumber, pin, isDependent);
-        if (!success) {
-            resetAllFields(invalidDetails);
+        User user = AccountController.login(phoneNumber, pin, isDependent);
+
+        Intent intent;
+        if (isDependent) {
+            intent = new Intent(this, DependentHomeActivity.class);
         } else {
-
-            User user = AccountController.login(phoneNumber, pin, isDependent);
-
-            Intent intent;
-            if (isDependent) {
-                intent = new Intent(this, DependentHomeActivity.class);
-            } else {
-                intent = new Intent(this, CarerHomeActivity.class);
-            }
-
-            intent.putExtra(PASSED_USER, user);
-            startActivity(intent);
-
+            intent = new Intent(this, CarerHomeActivity.class);
         }
+
+        intent.putExtra(PASSED_USER, user);
+        startActivity(intent);
     }
 
     private void resetPinFields(String message) {
-        nameText.getText().clear();
-        phoneNumberText.getText().clear();
         pinText.getText().clear();
         confirmPinText.getText().clear();
 

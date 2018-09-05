@@ -1,12 +1,23 @@
 package com.comp30023.spain_itproject.uicontroller;
 
 import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.domain.DetailsValidator;
+import com.comp30023.spain_itproject.domain.InvalidDetailsException;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
 
 public class AccountController {
 
-    public static boolean registerAccount(String name, String phoneNumber, String pin, Boolean isDependent) {
+    private static DetailsValidator validator;
+
+    public static boolean registerAccount(String name, String phoneNumber, String pin, String confirmPin, Boolean isDependent) throws InvalidDetailsException {
+
+        if (validator == null) {
+            validator = DetailsValidator.getInstance();
+        }
+
+        validator.checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
+
         return true;
     }
 
@@ -17,7 +28,7 @@ public class AccountController {
         user.addLocation(new Location(null,"Church"));
         user.addLocation(new Location(null,"Shop"));
         user.addLocation(new Location(null,"Etc"));
-        //user.addLocation(new Location(null,"Shop2"));
+        user.addLocation(new Location(null,"Shop2"));
 
         return user;
     }

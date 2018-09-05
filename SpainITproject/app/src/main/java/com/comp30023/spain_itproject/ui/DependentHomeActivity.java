@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Space;
 
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
@@ -16,11 +18,12 @@ import java.util.ArrayList;
 public class DependentHomeActivity extends AppCompatActivity {
 
     public static final int LOCATIONS_PER_PAGE = 4;
+    public static final float BUTTON_SPACING_WEIGHT = 0.2f;
 
     private Button messagesButton;
     private Button callButton;
 
-    private ConstraintLayout locationsFrame;
+    private LinearLayout locationsFrame;
 
     private Button previousPageButton;
     private Button nextPageButton;
@@ -41,19 +44,24 @@ public class DependentHomeActivity extends AppCompatActivity {
         messagesButton = (Button) findViewById(R.id.messagesButton);
         callButton = (Button) findViewById(R.id.callButton);
 
-        locationsFrame = (ConstraintLayout) findViewById(R.id.locationsFrame);
+        locationsFrame = (LinearLayout) findViewById(R.id.locationsFrame);
 
         locationButtons = new Button[LOCATIONS_PER_PAGE];
 
-        locationButtons[0] = (Button) findViewById(R.id.locationOneButton);
-        locationButtons[1] = (Button) findViewById(R.id.locationTwoButton);
-        locationButtons[2] = (Button) findViewById(R.id.locationThreeButton);
-        locationButtons[3] = (Button) findViewById(R.id.locationFourButton);
+        boolean first = true;
+        for (int i = 0; i < LOCATIONS_PER_PAGE; i++) {
 
-        Button button = new Button(this);
-        button.setConst
-        locationsFrame.addView(button);
+            if (!first) {
+                Space space = new Space(this);
+                space.setLayoutParams(new LinearLayout.LayoutParams(0,1, BUTTON_SPACING_WEIGHT));
+                locationsFrame.addView(space);
+            }
 
+            locationButtons[i] = new Button(this);
+            locationsFrame.addView(locationButtons[i]);
+            locationButtons[i].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f));
+            first = false;
+        }
 
         previousPageButton = (Button) findViewById(R.id.previousPageButton);
         nextPageButton = (Button) findViewById(R.id.nextPageButton);
