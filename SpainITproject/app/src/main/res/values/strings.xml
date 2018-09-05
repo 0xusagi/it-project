@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Spain-ITproject</string>
+    <string name="dependents_list_name">Dependents</string>
 </resources>
