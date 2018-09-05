@@ -1,18 +1,13 @@
 package com.comp30023.spain_itproject;
 
-import android.app.ActionBar;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,7 +20,6 @@ import java.util.ArrayList;
 public class CarerHomeActivity extends AppCompatActivity {
 
     private ListView dependentsList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +42,7 @@ public class CarerHomeActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
     }
 
     private void displayDependentsList() {
@@ -64,5 +59,11 @@ public class CarerHomeActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, dependents);
 
         dependentsList.setAdapter(adapter);
+    }
+
+    public void displayAddDependentActivity(View view) {
+        Intent intent = new Intent(this, AddDependentActivity.class);
+
+        startActivity(intent);
     }
 }
