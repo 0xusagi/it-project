@@ -3,4 +3,6 @@
     <string name="dependents_list_name">Dependents</string>
     <string name="callIntent">Call</string>
     <string name="messageIntent">Message</string>
+    <string name="addDependentButton">Add Dependent</string>
+    <string name="addDependentActivityMessage">To add a dependent, enter their mobile number:</string>
 </resources>

@@ -19,8 +19,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/settings-512.png" />
-                                      <entry key="outputName" value="ic_settings_icon" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/add_sign.png" />
+                                      <entry key="outputName" value="ic_add_sign" />
                                     </map>
                                   </option>
                                 </PersistentState>
