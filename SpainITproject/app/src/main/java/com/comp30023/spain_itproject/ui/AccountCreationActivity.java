@@ -1,6 +1,7 @@
 package com.comp30023.spain_itproject.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,9 +22,6 @@ public class AccountCreationActivity extends AppCompatActivity {
 
     public static final String PASSED_USER = "PASSED USER";
 
-    public static final String invalidDetails = "Those details didn\'t work, please try again";
-    public static final String incorrectPinLength = "PIN must be 4 digits, please try again";
-    public static final String differentPins = "PINs don\'t match, please try again";
     private TextView messageText;
 
     private EditText nameText;
@@ -78,6 +76,8 @@ public class AccountCreationActivity extends AppCompatActivity {
         }
 
         User user = AccountController.login(phoneNumber, pin, isDependent);
+
+        LoginSharedPreference.setLogIn(this, phoneNumber, pin, isDependent);
 
         Intent intent;
         if (isDependent) {

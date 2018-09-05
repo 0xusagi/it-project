@@ -1,5 +1,7 @@
 package com.comp30023.spain_itproject.uicontroller;
 
+import android.content.SharedPreferences;
+
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.DetailsValidator;
 import com.comp30023.spain_itproject.domain.InvalidDetailsException;
