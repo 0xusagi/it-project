@@ -14,6 +14,10 @@ public class AccountController {
 
         DependentUser user = new DependentUser(null, null, null);
         user.addLocation(new Location(null,"Home"));
+        user.addLocation(new Location(null,"Church"));
+        user.addLocation(new Location(null,"Shop"));
+        user.addLocation(new Location(null,"Etc"));
+        //user.addLocation(new Location(null,"Shop2"));
 
         return user;
     }

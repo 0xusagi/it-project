@@ -50,6 +50,11 @@ public class DependentHomeActivity extends AppCompatActivity {
         locationButtons[2] = (Button) findViewById(R.id.locationThreeButton);
         locationButtons[3] = (Button) findViewById(R.id.locationFourButton);
 
+        Button button = new Button(this);
+        button.setConst
+        locationsFrame.addView(button);
+
+
         previousPageButton = (Button) findViewById(R.id.previousPageButton);
         nextPageButton = (Button) findViewById(R.id.nextPageButton);
 
@@ -60,33 +65,53 @@ public class DependentHomeActivity extends AppCompatActivity {
 
         locations = user.getLocations();
         topLocationsIndex = 0;
-
-        previousPageButton.setVisibility(View.INVISIBLE);
-        if (locations.size() <= LOCATIONS_PER_PAGE) {
-            nextPageButton.setVisibility(View.INVISIBLE);
-        }
-
         setLocationButtons(0);
     }
 
     private void setLocationButtons(int direction) {
+
         if (topLocationsIndex == 0) {
-
-            for (int i = 0; i < LOCATIONS_PER_PAGE; i++) {
-
-                if (i < locations.size()) {
-                    Location location = locations.get(i);
-                    locationButtons[i].setText(location.getTag());
-                    locationButtons[i].setVisibility(View.VISIBLE);
-                } else {
-                    locationButtons[i].setVisibility(View.INVISIBLE);
-                }
-
-            }
-
             topLocationsIndex = 1;
+        } else if (direction > 0) {
+            topLocationsIndex += LOCATIONS_PER_PAGE;
+        } else if (direction < 0) {
+            topLocationsIndex -= LOCATIONS_PER_PAGE;
+        }
 
-            return;
+        for (int i = topLocationsIndex; i < topLocationsIndex + LOCATIONS_PER_PAGE; i++) {
+
+            if (i-1 < locations.size()) {
+                Location location = locations.get(i-1);
+                locationButtons[i - topLocationsIndex].setText(location.getTag());
+                locationButtons[i - topLocationsIndex].setVisibility(View.VISIBLE);
+            } else {
+                locationButtons[i - topLocationsIndex].setVisibility(View.INVISIBLE);
+            }
+        }
+
+        if (topLocationsIndex < LOCATIONS_PER_PAGE) {
+            previousPageButton.setVisibility(View.INVISIBLE);
+        } else {
+            previousPageButton.setVisibility(View.VISIBLE);
+        }
+
+        if (topLocationsIndex + LOCATIONS_PER_PAGE > locations.size()) {
+            nextPageButton.setVisibility(View.INVISIBLE);
+        } else {
+            nextPageButton.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    public void nextPageButtonClick(View view) {
+        if (nextPageButton.getVisibility() == View.VISIBLE) {
+            setLocationButtons(1);
+        }
+    }
+
+    public void previousPageButton(View view) {
+        if (previousPageButton.getVisibility() == View.VISIBLE) {
+            setLocationButtons(-1);
         }
     }
 
