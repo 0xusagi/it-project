@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Spain-ITproject</string>
     <string name="dependents_list_name">Dependents</string>
+    <string name="callIntent">Call</string>
+    <string name="messageIntent">Message</string>
 </resources>
