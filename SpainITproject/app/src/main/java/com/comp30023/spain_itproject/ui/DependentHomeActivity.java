@@ -1,17 +1,23 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Space;
 
 import com.comp30023.spain_itproject.LoginHandler;
+import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
-import com.comp30023.spain_itproject.R;
 
 import java.util.ArrayList;
 
@@ -43,6 +49,10 @@ public class DependentHomeActivity extends AppCompatActivity {
 
     private Button[] locationButtons;
 
+    private Button signOutButton;
+
+    private DrawerLayout drawerLayout;
+
     //The currently signed in user
     private DependentUser user;
 
@@ -65,13 +75,18 @@ public class DependentHomeActivity extends AppCompatActivity {
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
         callButton = (Button) findViewById(R.id.callButton);
-        callButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intent = new Intent(getApplicationContext(), TestActivity.class);
-                //startActivity(intent);
-            }
-        });
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        signOutButton = findViewById(R.id.signOutButton);
+        setSignOutButtonListener(this);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionbar.setTitle("");
+        actionbar.setSubtitle("");
 
         locationsFrame = (LinearLayout) findViewById(R.id.locationsFrame);
 
@@ -103,6 +118,20 @@ public class DependentHomeActivity extends AppCompatActivity {
         topLocationsIndex = 0;
         setLocationButtons(0);
 
+    }
+
+    /**
+     * Respond to the menu button press
+     * @param item
+     * @return
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //Changes the buttons viewed on the screen
@@ -170,4 +199,17 @@ public class DependentHomeActivity extends AppCompatActivity {
         }
     }
 
+    private void setSignOutButtonListener(final Context context) {
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * When the button is clicked, logs out closes the activity
+             * @param v
+             */
+            @Override
+            public void onClick(View v) {
+                LoginHandler.logout(context);
+                finish();
+            }
+        });
+    }
 }

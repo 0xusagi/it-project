@@ -119,7 +119,7 @@ public class AccountCreationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
+                //Retrieve inputs from fields
                 String name = nameText.getText().toString();
                 String phoneNumber = phoneNumberText.getText().toString();
                 String pin = pinText.getText().toString();
@@ -128,6 +128,7 @@ public class AccountCreationActivity extends AppCompatActivity {
                 ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
                 Boolean isDependent = dependentButton.isChecked();
 
+                //Register the account, handle input errors
                 try {
                     AccountController.registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
                 } catch (InvalidDetailsException e) {
@@ -136,7 +137,9 @@ public class AccountCreationActivity extends AppCompatActivity {
                     return;
                 }
 
+                //Login the user
                 LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                finish();
             }
         });
     }
@@ -154,6 +157,13 @@ public class AccountCreationActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    /**
+     * Same functionality as if the cancel button
+     */
+    public void onBackPressed() {
+        cancelButton.performClick();
     }
 
 }
