@@ -10,31 +10,9 @@ import com.comp30023.spain_itproject.R;
 
 public class CarerHomeActivity extends AppCompatActivity {
 
-    private Button button;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_start);
-
-        button = (Button) findViewById(R.id.login_button);
-
-        button.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-
-                /*
-                 * Intent is just like glue which helps to navigate one activity
-                 * to another.
-                 */
-                Intent intent = new Intent(StartActivity.this,
-                        LoginActivity.class);
-                startActivity(intent); // startActivity allow you to move
-            }
-        });
-
+        setContentView(R.layout.activity_carer_home);
     }
 }
