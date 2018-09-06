@@ -21,6 +21,11 @@
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.DependentHomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.CarerHomeActivity" />
     </application>
 
