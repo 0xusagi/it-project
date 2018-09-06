@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.ui.CarerHomeActivity;
-import com.comp30023.spain_itproject.ui.DependentHomeActivity;
+import com.comp30023.spain_itproject.DependentHomeWithDrawerActivity;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.ui.StartActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
@@ -69,7 +69,7 @@ public class LoginHandler {
         user = AccountController.login(phoneNumber, pin, isDependent);
 
         if (isDependent) {
-            intent = new Intent(context, DependentHomeActivity.class);
+            intent = new Intent(context, DependentHomeWithDrawerActivity.class);
         } else {
             intent = new Intent(context, CarerHomeActivity.class);
         }

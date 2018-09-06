@@ -1,8 +1,15 @@
-package com.comp30023.spain_itproject.ui;
+package com.comp30023.spain_itproject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -19,7 +26,7 @@ import java.util.ArrayList;
  * Activity that opens when a DependentUser is logged in
  * Displays the stored locations of the DependentUser
  */
-public class DependentHomeActivity extends AppCompatActivity {
+public class DependentHomeWithDrawerActivity extends AppCompatActivity {
 
     /**
      * The maximum number of locations buttons that are viewed within the frame
@@ -52,6 +59,12 @@ public class DependentHomeActivity extends AppCompatActivity {
     //Index in the list of the location that is at the top of the frame
     private int topLocationsIndex;
 
+    private MenuItem signOutButton;
+
+    private DrawerLayout mDrawerLayout;
+    private NavigationView navigationView;
+
+
     /**
      * References the objects to the corresponding views
      * Sets up and displays the layout
@@ -61,7 +74,7 @@ public class DependentHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dependent_home);
+        setContentView(R.layout.activity_dependent_home_with_drawer);
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
         callButton = (Button) findViewById(R.id.callButton);
@@ -72,6 +85,18 @@ public class DependentHomeActivity extends AppCompatActivity {
                 //startActivity(intent);
             }
         });
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        navigationView = findViewById(R.id.nav_view);
+        setNavigationItemListener(this);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
 
         locationsFrame = (LinearLayout) findViewById(R.id.locationsFrame);
 
@@ -103,6 +128,15 @@ public class DependentHomeActivity extends AppCompatActivity {
         topLocationsIndex = 0;
         setLocationButtons(0);
 
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //Changes the buttons viewed on the screen
@@ -170,4 +204,20 @@ public class DependentHomeActivity extends AppCompatActivity {
         }
     }
 
+    private void setNavigationItemListener(final Context context) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        LoginHandler.logout(context);
+                        finish();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        return true;
+                    }
+                });
+    }
 }
