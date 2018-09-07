@@ -77,5 +77,6 @@
             android:textColor="@android:color/black" />
     </LinearLayout>
 
+    tools:context=".ui.CarerHomeActivity">
 
 </android.support.constraint.ConstraintLayout>
