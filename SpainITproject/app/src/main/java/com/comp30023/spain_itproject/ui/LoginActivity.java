@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setPinFields() {
 
-        pinText = (EditText) findViewById(R.id.pinField);
+        pinText = (EditText) findViewById(R.id.pinLoginField);
 
         InputFilter.LengthFilter maxPinLength = new InputFilter.LengthFilter(PIN_LENGTH);
         InputFilter[] pinFilters = new InputFilter[1];
