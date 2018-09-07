@@ -89,7 +89,6 @@ public class AccountCreationActivity extends AppCompatActivity {
 
         cancelButton = (Button) findViewById(R.id.cancelButton);
         setCancelButtonListener(this);
-
     }
 
     /**

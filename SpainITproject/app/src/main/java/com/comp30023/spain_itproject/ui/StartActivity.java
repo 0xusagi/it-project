@@ -61,16 +61,15 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
-    //REPLACE THE NAME OF AccountCreationActivity WITH NAME FOR LOGIN ACTIVITY AND UNCOMMENT
     private void setLoginButtonListener(final Context context) {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Intent intent = new Intent(context, AccountCreationActivity.class);
+
+                Intent intent = new Intent(context, LoginActivity.class);
                 startActivity(intent);
                 finish();
-                 */
+
             }
         });
     }
