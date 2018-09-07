@@ -5,4 +5,13 @@
     <string name="messageIntent">Message</string>
     <string name="addDependentButton">Add Dependent</string>
     <string name="addDependentActivityMessage">To add a dependent, enter their mobile number:</string>
+    <string name="searchButton">Search</string>
+
+    <!-- Dialog box titles -->
+    <string name="addDependent_displayInfoDialog">Dependent</string>
+
+    <!-- Error messages -->
+    <string name="invalidPhoneNumber">InvalidPhoneNumber</string>
+    <string name="invalidDependentPhoneNumberMessage">No Dependent found with phone number.
+        Please try again</string>
 </resources>

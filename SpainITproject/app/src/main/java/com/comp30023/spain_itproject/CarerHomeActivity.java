@@ -3,11 +3,15 @@ package com.comp30023.spain_itproject;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import com.comp30023.spain_itproject.controller.CarerController;
+import com.comp30023.spain_itproject.domain.Dependent;
 
 import java.util.ArrayList;
 
@@ -21,6 +25,8 @@ public class CarerHomeActivity extends AppCompatActivity {
 
     private ListView dependentsList;
 
+    private CarerController carerController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +34,8 @@ public class CarerHomeActivity extends AppCompatActivity {
 
         // Remove the action bar
         getSupportActionBar().hide();
+
+        carerController = new CarerController();
 
         dependentsList = findViewById(R.id.carerHome_dependentsList);
 
@@ -45,22 +53,35 @@ public class CarerHomeActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Display the list of dependents that the carer currently has
+     */
     private void displayDependentsList() {
 
+        // TODO Get the string of the current user
+        String phoneNumber = "";
+
         // TODO Change the string to dependents
-        ArrayList<String> dependents = new ArrayList<>();
+        ArrayList<Dependent> dependents = carerController.getDependentsOfCarer(phoneNumber);
+        ArrayList<String> dependentsName = new ArrayList<>();
 
         // TODO Populate the arraylist
-        dependents.add("asdf");
-        dependents.add("basdf");
+        dependentsName.add("asdf");
+        dependentsName.add("basdf");
+
 
         // Set array adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, dependents);
+                android.R.layout.simple_list_item_1, dependentsName);
 
         dependentsList.setAdapter(adapter);
     }
 
+    /**
+     * Takes the carer to the next screen where the carer can input a mobile number to search
+     * for a dependent to be added
+     * @param view
+     */
     public void displayAddDependentActivity(View view) {
         Intent intent = new Intent(this, AddDependentActivity.class);
 
