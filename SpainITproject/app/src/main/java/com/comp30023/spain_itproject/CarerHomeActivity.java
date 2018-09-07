@@ -69,7 +69,6 @@ public class CarerHomeActivity extends AppCompatActivity {
         dependentsName.add("asdf");
         dependentsName.add("basdf");
 
-
         // Set array adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, dependentsName);
