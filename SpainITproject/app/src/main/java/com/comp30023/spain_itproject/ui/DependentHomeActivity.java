@@ -155,7 +155,7 @@ public class DependentHomeActivity extends AppCompatActivity {
             //Attach a location to the button
             if (i-1 < locations.size()) {
                 Location location = locations.get(i-1);
-                locationButtons[i - topLocationsIndex].setText(location.getTag());
+                locationButtons[i - topLocationsIndex].setText(location.getDisplayName());
                 locationButtons[i - topLocationsIndex].setVisibility(View.VISIBLE);
 
             } else {
