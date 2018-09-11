@@ -1,4 +1,4 @@
-mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.connect('mongodb://localhost/spain-server', (err) => {
     if (!err) {

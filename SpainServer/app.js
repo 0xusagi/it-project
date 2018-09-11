@@ -2,14 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const db = require('./models/db');
-
-const routes = require('./routes');
+import { Location } from "./models/location";
+import { Dependent } from "./models/user";
+import { User } from "./models/user";
+import { Carer } from "./models/user";
 
 const app = express();
-
-app.use('view engine', 'ejs');
-//app.use(bodyParser.json());
-app.use('/', routes);
 
 console.log("Oli: start the mongo shell and run 'use spain-server'");
 console.log("Then run  db.placeholder.insert({name: \"Hello World});");

@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
-import { Location } from "./location";
+import { locationSchema } from "./location";
 
 const options = { discriminatorKey: 'kind' };
 
 const userSchema = new mongoose.Schema({
-    _userId: Schema.Types.ObjectId,
+    _userId: mongoose.Schema.Types.ObjectId,
     mobile: {
         type: String,
         required: true
@@ -26,8 +26,8 @@ export const User = mongoose.model('user', userSchema);
 
 const dependentSchema = new mongoose.Schema({
     carers: Array,
-    homeLocation: Location,
-    destinations: Array
+    homeLocation: locationSchema,
+    destinations: [locationSchema]
 }, options);
 
 const carerSchema = new mongoose.Schema({
