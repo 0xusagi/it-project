@@ -3,6 +3,7 @@ package com.comp30023.spain_itproject.uicontroller;
 import android.accounts.Account;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.network.AccountService;
 import com.comp30023.spain_itproject.network.RetrofitClientInstance;
@@ -24,7 +25,9 @@ public class AccountController {
 
     private static User user;
 
-    public static boolean registerAccount(String name, String phoneNumber, String pin, String confirmPin, Boolean isDependent) throws InvalidDetailsException {
+    public static void registerAccount(String name, String phoneNumber, String pin,
+                                          String confirmPin, Boolean isDependent)
+            throws InvalidDetailsException, IOException {
 
         checkService();
 
@@ -34,7 +37,16 @@ public class AccountController {
 
         validator.checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
 
-        return true;
+        User newUser;
+        if (isDependent) {
+            newUser = new User(name, phoneNumber, pin);
+        }
+        else {
+            newUser = new CarerUser(name, phoneNumber, pin);
+        }
+
+        Call<User> call = service.registerUser(newUser);
+        call.execute();
     }
 
     public static User login(String phoneNumber, String pin, boolean isDependent) throws IOException {
@@ -61,5 +73,4 @@ public class AccountController {
             service = RetrofitClientInstance.getRetrofitInstance().create(AccountService.class);
         }
     }
-
 }
