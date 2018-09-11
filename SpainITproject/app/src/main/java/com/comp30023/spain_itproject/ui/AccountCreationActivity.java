@@ -2,7 +2,6 @@ package com.comp30023.spain_itproject.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,8 +14,7 @@ import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.InvalidDetailsException;
-import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.validation.InvalidDetailsException;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 /**

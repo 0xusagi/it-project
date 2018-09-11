@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.domain;
+package com.comp30023.spain_itproject.validation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
