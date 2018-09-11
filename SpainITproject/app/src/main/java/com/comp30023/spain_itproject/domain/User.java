@@ -13,8 +13,17 @@ public class User implements Serializable {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.pin = pin;
-
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getPin() {
+        return pin;
+    }
 }

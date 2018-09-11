@@ -1,51 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-<<<<<<< HEAD
   <component name="ChangeListManager">
     <list default="true" id="0920926c-db90-479e-b886-d918f8e1568c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/SpainServer/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainITproject/app/src/androidTest/java/com/comp30023/spain_itproject/ExampleInstrumentedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/SpainITproject/app/src/androidTest/java/com/comp30023/spain_itproject/ExampleInstrumentedTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainITproject/app/src/main/java/com/comp30023/spain_itproject/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/SpainITproject/app/src/main/java/com/comp30023/spain_itproject/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainITproject/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SpainITproject/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainITproject/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/SpainITproject/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/models/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/models/db.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/models/location.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/models/location.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/models/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/.yarn-integrity" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/.yarn-integrity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/anymatch/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/anymatch/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/anymatch/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/anymatch/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/lib/fsevents-handler.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/lib/fsevents-handler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/lib/nodefs-handler.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/lib/nodefs-handler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/chokidar/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/changelog.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/lib/compilers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/lib/parsers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/lib/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/extglob/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/extglob/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/changelog.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/extglob/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/lib/compilers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/lib/extglob.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/lib/parsers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/lib/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/node_modules/define-property/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/node_modules/define-property/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/node_modules/define-property/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/node_modules/define-property/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/extglob/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/extglob/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/node_modules/is-glob/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/node_modules/is-glob/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/node_modules/is-glob/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/node_modules/is-glob/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/is-extglob/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/is-extglob/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/is-extglob/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/is-extglob/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/is-extglob/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/is-extglob/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/is-extglob/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/is-extglob/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/is-glob/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/is-glob/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/is-glob/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/is-glob/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/is-glob/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/is-glob/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/is-glob/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/is-glob/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/lib/cache.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/lib/compilers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/lib/parsers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/lib/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/lib/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/define-property/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/define-property/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/define-property/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/define-property/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/define-property/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/extend-shallow/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/extend-shallow/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/extend-shallow/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/extend-shallow/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/is-extendable/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/is-extendable/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/is-extendable/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/is-extendable/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/is-extendable/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/kind-of/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/kind-of/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/kind-of/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/kind-of/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/kind-of/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/node_modules/micromatch/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpainServer/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/SpainServer/yarn.lock" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-=======
-  <component name="AndroidLayouts">
-    <shared>
-      <config />
-    </shared>
-  </component>
-  <component name="ChangeListManager">
-    <list default="true" id="8d0dd910-b6a1-48c8-bb2b-257fa56355b3" name="Default" comment="" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
->>>>>>> AccountCreation-Sam
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-<<<<<<< HEAD
   <component name="FUSProjectUsageTrigger">
     <session id="-1405397936">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="2" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.11" value="1" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="1" />
-          <entry key="js" value="1" />
-          <entry key="json" value="1" />
+          <entry key="js" value="9" />
+          <entry key="json" value="2" />
           <entry key="lock" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JSON" value="1" />
-          <entry key="JavaScript" value="1" />
+          <entry key="JSON" value="2" />
+          <entry key="JavaScript" value="9" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="yarn.lock" value="1" />
         </counts>
@@ -53,102 +126,99 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="17" />
-          <entry key="js" value="463" />
+          <entry key="js" value="2415" />
           <entry key="json" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JSON" value="1" />
-          <entry key="JavaScript" value="463" />
+          <entry key="JavaScript" value="2415" />
           <entry key="PLAIN_TEXT" value="17" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/SpainServer/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="484">
-              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-=======
-  <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/SpainITproject/app/src/main/AndroidManifest.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="17" column="19" lean-forward="false" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
-              <folding />
->>>>>>> AccountCreation-Sam
-            </state>
-          </provider>
-        </entry>
-      </file>
-<<<<<<< HEAD
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SpainServer/models/db.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="6" column="48" selection-start-line="6" selection-start-column="48" selection-end-line="6" selection-end-column="48" />
-=======
-      <file leaf-file-name="styles.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SpainITproject/app/src/main/res/values/styles.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
->>>>>>> AccountCreation-Sam
-            </state>
-          </provider>
-        </entry>
-      </file>
-<<<<<<< HEAD
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SpainServer/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="484">
-              <caret line="11" column="3" lean-forward="true" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
-=======
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SpainITproject/app/src/main/java/com/comp30023/spain_itproject/MainActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-              <folding />
->>>>>>> AccountCreation-Sam
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.45402297">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/SpainServer/app.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="370">
+                  <caret line="11" selection-start-line="11" selection-end-line="11" />
+                  <folding>
+                    <element signature="e#144#189#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/SpainServer/models/db.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state>
+                  <caret column="32" selection-start-column="32" selection-end-column="32" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/SpainServer/models/user.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1036">
+                  <caret line="28" column="27" selection-start-line="28" selection-start-column="27" selection-end-line="28" selection-end-column="27" />
+                  <folding>
+                    <element signature="e#0#32#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/SpainServer/models/location.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="259">
+                  <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/SpainServer/app.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="370">
+                  <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+                  <folding>
+                    <element signature="e#144#189#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-<<<<<<< HEAD
-=======
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="AccountCreation" />
-      </map>
-    </option>
-  </component>
-  <component name="GradleLocalSettings">
-    <option name="externalProjectsViewState">
-      <projects_view />
-    </option>
->>>>>>> AccountCreation-Sam
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-<<<<<<< HEAD
-        <option value="$PROJECT_DIR$/SpainServer/package.json" />
         <option value="$PROJECT_DIR$/SpainServer/.gitignore" />
-        <option value="$PROJECT_DIR$/SpainServer/models/db.js" />
+        <option value="$PROJECT_DIR$/SpainServer/routes.js" />
+        <option value="$PROJECT_DIR$/SpainServer/package.json" />
         <option value="$PROJECT_DIR$/SpainServer/index.js" />
+        <option value="$PROJECT_DIR$/SpainServer/models/db.js" />
+        <option value="$PROJECT_DIR$/SpainServer/models/location.js" />
+        <option value="$PROJECT_DIR$/SpainServer/models/user.js" />
+        <option value="$PROJECT_DIR$/SpainServer/app.js" />
       </list>
     </option>
   </component>
@@ -163,304 +233,6 @@
   </component>
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths>
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/abbrev/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/accepts/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ansi-align/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ansi-styles/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/anymatch/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/arr-diff/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/arr-flatten/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/arr-union/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/array-flatten/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/array-unique/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/assign-symbols/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/async-each/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/async/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/atob/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/balanced-match/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/base/node_modules/define-property/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/base/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/binary-extensions/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/bluebird/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/body-parser/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/boxen/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/brace-expansion/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/braces/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/bson/browser_build/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/bson/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/bytes/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/cache-base/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/camelcase/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/capture-stack-trace/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/chalk/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/chokidar/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ci-info/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/class-utils/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/cli-boxes/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/collection-visit/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/color-convert/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/color-name/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/component-emitter/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/concat-map/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/configstore/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/content-disposition/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/content-type/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/cookie-signature/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/cookie/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/copy-descriptor/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/core-util-is/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/create-error-class/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/cross-spawn/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/crypto-random-string/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/debug/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/decode-uri-component/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/deep-extend/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/define-property/node_modules/is-accessor-descriptor/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/define-property/node_modules/is-accessor-descriptor/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/define-property/node_modules/is-data-descriptor/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/define-property/node_modules/is-data-descriptor/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/define-property/node_modules/is-descriptor/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/define-property/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/define-property/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/depd/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/destroy/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/dot-prop/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/duplexer/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/duplexer3/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ee-first/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/encodeurl/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/escape-html/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/escape-string-regexp/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/etag/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/event-stream/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/execa/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/expand-brackets/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/express/node_modules/safe-buffer/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/express/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/extend-shallow/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/extglob/node_modules/define-property/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/extglob/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/fill-range/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/finalhandler/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/for-in/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/forwarded/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/fragment-cache/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/fresh/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/from/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/get-stream/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/get-value/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/node_modules/is-glob/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/glob-parent/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/global-dirs/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/got/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/graceful-fs/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/has-flag/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/has-value/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/has-values/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/has-values/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/http-errors/node_modules/statuses/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/http-errors/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/iconv-lite/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ignore-by-default/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/import-lazy/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/imurmurhash/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/inherits/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ini/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ipaddr.js/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-accessor-descriptor/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-accessor-descriptor/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-binary-path/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-buffer/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-ci/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-data-descriptor/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-data-descriptor/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-descriptor/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-descriptor/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-extendable/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-extglob/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-fullwidth-code-point/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-glob/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-installed-globally/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-npm/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-number/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-obj/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-path-inside/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-plain-object/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-redirect/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-retry-allowed/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-stream/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/is-windows/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/isarray/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/isexe/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/isobject/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/kareem/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/latest-version/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/lodash.debounce/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/lodash.get/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/lodash/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/lowercase-keys/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/lru-cache/node_modules/yallist/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/lru-cache/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/make-dir/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/map-cache/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/map-stream/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/map-visit/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/media-typer/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/merge-descriptors/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/methods/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/define-property/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/extend-shallow/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/is-extendable/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/micromatch/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/micromatch/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mime-db/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mime-types/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mime/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/minimatch/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mixin-deep/node_modules/is-extendable/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mixin-deep/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongodb-core/node_modules/bson/browser_build/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongodb-core/node_modules/bson/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongodb-core/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongodb/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose-legacy-pluralize/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose/examples/aggregate/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose/examples/express/connection-sharing/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose/examples/geospatial/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose/examples/lean/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose/examples/mapreduce/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose/examples/promises/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose/examples/querybuilder/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose/examples/replicasets/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mongoose/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mpath/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mquery/node_modules/debug/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/mquery/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ms/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/nanomatch/node_modules/define-property/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/nanomatch/node_modules/extend-shallow/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/nanomatch/node_modules/is-extendable/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/nanomatch/node_modules/kind-of/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/nanomatch/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/negotiator/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/nodemon/node_modules/debug/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/nodemon/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/nopt/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/normalize-path/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/npm-run-path/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/object-copy/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/object-visit/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/object.pick/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/on-finished/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/p-finally/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/package-json/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/parseurl/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/pascalcase/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/path-dirname/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/path-is-absolute/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/path-is-inside/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/path-key/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/path-to-regexp/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/pause-stream/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/pify/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/posix-character-classes/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/prepend-http/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/process-nextick-args/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/proxy-addr/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ps-tree/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/pseudomap/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/pstree.remy/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/qs/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/range-parser/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/raw-body/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/rc/node_modules/minimist/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/rc/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/readable-stream/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/readdirp/examples/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/readdirp/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/regex-not/node_modules/extend-shallow/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/regex-not/node_modules/is-extendable/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/regex-not/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/regexp-clone/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/registry-auth-token/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/registry-url/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/remove-trailing-separator/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/repeat-element/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/repeat-string/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/require_optional/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/require_optional/test/nestedTest/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/resolve-from/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/resolve-url/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/ret/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/safe-buffer/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/safe-regex/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/saslprep/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/semver-diff/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/semver/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/send/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/serve-static/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/set-immediate-shim/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/set-value/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/setprototypeof/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/shebang-command/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/shebang-regex/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/signal-exit/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/sliced/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/snapdragon-node/node_modules/define-property/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/snapdragon-node/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/snapdragon-util/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/snapdragon/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/source-map-resolve/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/source-map-url/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/source-map/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/split-string/node_modules/extend-shallow/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/split-string/node_modules/is-extendable/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/split-string/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/split/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/static-extend/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/statuses/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/stream-combiner/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/string-width/node_modules/ansi-regex/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/string-width/node_modules/strip-ansi/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/string-width/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/string_decoder/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/strip-eof/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/strip-json-comments/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/supports-color/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/term-size/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/through/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/timed-out/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/to-object-path/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/to-regex-range/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/to-regex/node_modules/define-property/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/to-regex/node_modules/extend-shallow/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/to-regex/node_modules/is-extendable/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/to-regex/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/touch/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/type-is/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/undefsafe/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/union-value/node_modules/set-value/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/union-value/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/unique-string/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/unpipe/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/unset-value/node_modules/has-value/node_modules/isobject/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/unset-value/node_modules/has-value/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/unset-value/node_modules/has-values/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/unset-value/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/unzip-response/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/upath/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/update-notifier/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/urix/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/url-parse-lax/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/use/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/util-deprecate/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/utils-merge/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/vary/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/which/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/widest-line/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/write-file-atomic/package.json" />
-      <path value="$PROJECT_DIR$/SpainServer/node_modules/xdg-basedir/package.json" />
       <path value="$PROJECT_DIR$/SpainServer/package.json" />
     </packageJsonPaths>
   </component>
@@ -476,68 +248,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-=======
-        <option value="$PROJECT_DIR$/SpainITproject/app/src/main/AndroidManifest.xml" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1070" />
-    <option name="width" value="1100" />
-    <option name="height" value="1390" />
-  </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>Android</id>
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>AndroidDomInspection</id>
-          </State>
-        </selected-state>
-      </profile-state>
-    </entry>
-  </component>
-  <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
-      <flattenPackages />
-      <showMembers />
-      <showModules />
-      <showLibraryContents />
-      <hideEmptyPackages />
-      <abbreviatePackageNames />
-      <autoscrollToSource />
-      <autoscrollFromSource />
-      <sortByType />
-      <manualOrder />
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <expand>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="Spain" type="cbb8eebc:String" user="Spain" />
-            </path>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="Spain" type="cbb8eebc:String" user="Spain" />
-              <item name="SpainITproject" type="cbb8eebc:String" user="SpainITproject" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
->>>>>>> AccountCreation-Sam
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -548,36 +258,13 @@
             <path>
               <item name="Spain" type="b2602c69:ProjectViewProjectNode" />
               <item name="Spain" type="462c0819:PsiDirectoryNode" />
-<<<<<<< HEAD
               <item name="SpainServer" type="462c0819:PsiDirectoryNode" />
-=======
-              <item name="SpainITproject" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Spain" type="b2602c69:ProjectViewProjectNode" />
               <item name="Spain" type="462c0819:PsiDirectoryNode" />
-              <item name="SpainITproject" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Spain" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Spain" type="462c0819:PsiDirectoryNode" />
-              <item name="SpainITproject" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Spain" type="1abcf292:AndroidViewProjectNode" />
-              <item name="Spain" type="e9137016:NonAndroidModuleNode" />
->>>>>>> AccountCreation-Sam
+              <item name="SpainServer" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -586,19 +273,12 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-<<<<<<< HEAD
     <property name="SearchEverywhereHistoryKey" value="db&#9;FILE&#9;file:///home/hector/unisem2/Spain/SpainServer/models/db.js" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-=======
-    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Example" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
->>>>>>> AccountCreation-Sam
+    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -612,216 +292,74 @@
       </list>
     </option>
   </component>
-<<<<<<< HEAD
-=======
-  <component name="RunManager">
-    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
-    <configuration default="true" type="Application" factoryName="Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
-      <envs />
-    </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-    </configuration>
-    <configuration default="true" type="TestNG" factoryName="TestNG">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" />
-      <envs />
-      <properties />
-      <listeners />
-    </configuration>
-    <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-    </configuration>
-    <configuration name="&lt;template&gt;" type="JUnit" default="true" selected="false">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-    </configuration>
-    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-    </configuration>
-  </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
-  </component>
->>>>>>> AccountCreation-Sam
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-<<<<<<< HEAD
       <changelist id="0920926c-db90-479e-b886-d918f8e1568c" name="Default Changelist" comment="" />
       <created>1535689719953</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1535689719953</updated>
-      <workItem from="1535689721185" duration="2821000" />
+      <workItem from="1535689721185" duration="5515000" />
+      <workItem from="1536019869222" duration="24000" />
+      <workItem from="1536655970343" duration="3785000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2821000" />
+    <option name="totallyTimeSpent" value="9324000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="48" width="2560" height="1334" extended-state="6" />
+    <frame x="0" y="41" width="2560" height="1349" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24990067" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1009654" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info active="true" anchor="bottom" x="1280" y="90" width="1280" height="1292" id="Terminal" type="WINDOWED" visible="true" weight="0.32953465" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32910246" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info active="true" anchor="bottom" x="1270" y="103" width="1290" height="1284" id="Terminal" order="9" type="WINDOWED" visible="true" weight="0.32953465" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="right" id="Jenkins" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Favorites" order="0" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24990067" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" x="1280" y="90" width="1280" height="1292" id="Terminal" order="1" type="WINDOWED" visible="true" weight="0.32953465" />
+      <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="3" />
+      <window_info anchor="bottom" id="Message" order="4" />
+      <window_info anchor="bottom" id="Find" order="5" />
+      <window_info anchor="bottom" id="Run" order="6" />
+      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-=======
-      <changelist id="8d0dd910-b6a1-48c8-bb2b-257fa56355b3" name="Default" comment="" />
-      <created>1534995745594</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1534995745594</updated>
-    </task>
-    <servers />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="-11" y="-11" width="2182" height="1402" extended-state="6" />
-    <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37375414" sideWeight="0.5033493" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3745847" sideWeight="0.49665073" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32890365" sideWeight="0.49808612" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22488038" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24988236" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Device File Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-    </layout>
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="RECENTLY_FILTERED_USER_GROUPS">
-                <collection />
-              </option>
-              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-                <collection />
-              </option>
-              <option name="COLUMN_ORDER">
-                <list>
-                  <option value="0" />
-                  <option value="1" />
-                  <option value="2" />
-                  <option value="3" />
-                </list>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
->>>>>>> AccountCreation-Sam
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-<<<<<<< HEAD
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/SpainServer/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
@@ -830,162 +368,56 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/SpainServer/yarn.lock">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/SpainServer/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="11" column="3" lean-forward="true" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
+        <state relative-caret-position="370">
+          <caret line="10" column="19" lean-forward="true" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SpainServer/routes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SpainServer/models/db.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="6" column="48" selection-start-line="6" selection-start-column="48" selection-end-line="6" selection-end-column="48" />
+        <state>
+          <caret column="32" selection-start-column="32" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SpainServer/yarn.lock">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SpainServer/index.js">
+    <entry file="file://$PROJECT_DIR$/SpainServer/models/user.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-=======
-  <component name="XDebuggerManager">
-    <breakpoint-manager />
-    <watches-manager />
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/SpainITproject/app/src/main/java/com/comp30023/spain_itproject/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="1036">
+          <caret line="28" column="27" selection-start-line="28" selection-start-column="27" selection-end-line="28" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SpainITproject/app/src/main/res/layout/activity_main.xml">
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+    <entry file="file://$PROJECT_DIR$/SpainServer/models/location.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SpainITproject/app/build.gradle">
+    <entry file="file://$PROJECT_DIR$/SpainServer/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SpainITproject/app/src/main/res/values/styles.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SpainITproject/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="17" column="19" lean-forward="false" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
-          <folding />
->>>>>>> AccountCreation-Sam
+        <state relative-caret-position="370">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="e#144#189#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
   </component>
-<<<<<<< HEAD
-=======
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <last-edited>Android</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>Spain</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-                <option value="0.6" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
-  </component>
->>>>>>> AccountCreation-Sam
 </project>
