@@ -11,10 +11,18 @@ import com.comp30023.spain_itproject.validation.InvalidDetailsException;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
 
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AccountController {
 
     private static AccountService service;
     private static DetailsValidator validator;
+
+    private static User user;
 
     public static boolean registerAccount(String name, String phoneNumber, String pin, String confirmPin, Boolean isDependent) throws InvalidDetailsException {
 
@@ -29,18 +37,23 @@ public class AccountController {
         return true;
     }
 
-    public static User login(String phoneNumber, String pin, boolean isDependent) {
+    public static User login(String phoneNumber, String pin, boolean isDependent) throws IOException {
 
         checkService();
 
-        DependentUser user = new DependentUser(null, null, null);
-        user.addLocation(new Location(null,"Home"));
-        user.addLocation(new Location(null,"Church"));
-        user.addLocation(new Location(null,"Shop"));
-        user.addLocation(new Location(null,"Etc"));
-        user.addLocation(new Location(null,"Shop2"));
+        Call<User> call = service.loginUser(phoneNumber, pin);
 
-        return user;
+        User user = call.execute().body();
+
+
+        DependentUser dependentUser = new DependentUser(null, null, null);
+        dependentUser.addLocation(new Location(null,"Home"));
+        dependentUser.addLocation(new Location(null,"Church"));
+        dependentUser.addLocation(new Location(null,"Shop"));
+        dependentUser.addLocation(new Location(null,"Etc"));
+        dependentUser.addLocation(new Location(null,"Shop2"));
+
+        return dependentUser;
     }
 
     public static void checkService() {
