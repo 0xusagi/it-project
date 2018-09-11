@@ -15,6 +15,8 @@ import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 
+import java.io.IOException;
+
 public class LoginActivity extends AppCompatActivity {
 
     public static final int PIN_LENGTH = 4;
@@ -116,7 +118,11 @@ public class LoginActivity extends AppCompatActivity {
                 Boolean isDependent = dependentButton.isChecked();
 
                 //Login the user
-                LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                try {
+                    LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                } catch (IOException e) {
+                    return;
+                }
                 finish();
             }
         });

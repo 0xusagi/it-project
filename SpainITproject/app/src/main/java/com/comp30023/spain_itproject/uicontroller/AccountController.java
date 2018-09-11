@@ -53,14 +53,7 @@ public class AccountController {
 
         User user = call.execute().body();
 
-        DependentUser dependentUser = new DependentUser(null, null, null);
-        dependentUser.addLocation(new Location(null,"Home"));
-        dependentUser.addLocation(new Location(null,"Church"));
-        dependentUser.addLocation(new Location(null,"Shop"));
-        dependentUser.addLocation(new Location(null,"Etc"));
-        dependentUser.addLocation(new Location(null,"Shop2"));
-
-        return dependentUser;
+        return user;
     }
 
     public ArrayList<Location> getLocations(DependentUser dependent) throws IOException {
@@ -74,7 +67,7 @@ public class AccountController {
     public void addDependent(CarerUser carer, String dependentPhoneNumber) {
         checkService();
 
-        Call<DependentUser> call = service.addDependent(carer.getId(), dependentPhoneNumber);
+        //Call<DependentUser> call = service.addDependent(carer.getId(), dependentPhoneNumber);
     }
 
     private static void checkService() {

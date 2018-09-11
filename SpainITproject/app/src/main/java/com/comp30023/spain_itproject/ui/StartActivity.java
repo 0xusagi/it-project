@@ -15,6 +15,8 @@ import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.ui.AccountCreationActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
+import java.io.IOException;
+
 /**
  * Launching activity
  * Initialises the LoginSharedPreferences
@@ -38,7 +40,11 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         if (LoginHandler.isLoggedIn(this)) {
-            LoginHandler.login(this);
+            try {
+                LoginHandler.login(this);
+            } catch (IOException e) {
+                return;
+            }
             finish();
         }
 

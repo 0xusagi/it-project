@@ -10,6 +10,8 @@ import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.ui.StartActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
+import java.io.IOException;
+
 /**
  * Logs in users and starts appropriate activity
  *      For DependentUser, starts DependentHomeActivity
@@ -38,7 +40,7 @@ public class LoginHandler {
      * @param pin The pin of the user to be logged in
      * @param isDependent Whether the user to be logged in is a Dependent
      */
-    public static void newLogin(Context context, String phoneNumber, String pin, boolean isDependent) {
+    public static void newLogin(Context context, String phoneNumber, String pin, boolean isDependent) throws IOException {
 
         LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent);
 
@@ -52,7 +54,7 @@ public class LoginHandler {
      * Log in the existing user
      * @param context
      */
-    public static void login(Context context) {
+    public static void login(Context context) throws IOException {
 
         if (!LoginSharedPreference.checkLogIn(context)) {
             return;

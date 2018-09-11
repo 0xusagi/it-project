@@ -28,6 +28,6 @@ public interface AccountService {
     Call<ArrayList<Location>> getLocations(DependentUser dependent);
 
     //CONFIRM
-    @POST("")
-    Call<> addDependent(@Field("id") int carerId, String dependentPhoneNumber);
+    //@POST("")
+    //Call<> addDependent(@Field("id") int carerId, String dependentPhoneNumber);
 }

@@ -17,6 +17,8 @@ import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.validation.InvalidDetailsException;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
+import java.io.IOException;
+
 /**
  * Activity for uses to create/register an account
  * When an account is registered, logs in the account and launches the corresponding HomeActivity (either CarerHomeActivity or DependentHomeActivity)
@@ -132,10 +134,16 @@ public class AccountCreationActivity extends AppCompatActivity {
                     messageText.setText(e.getMessage());
                     messageText.setTextColor(Color.RED);
                     return;
+                } catch (Exception e) {
+                    return;
                 }
 
                 //Login the user
-                LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                try {
+                    LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                } catch (IOException e) {
+                    return;
+                }
                 finish();
             }
         });
