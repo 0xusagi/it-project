@@ -33,6 +33,7 @@
         </activity>
         <activity android:name=".ui.CarerHomeActivity" />
         <activity android:name=".ui.LoginActivity"></activity>
+        <activity android:name=".ui.AddDependentActivity"></activity>
     </application>
 
 </manifest>

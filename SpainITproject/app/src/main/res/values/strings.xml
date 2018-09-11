@@ -1,5 +1,20 @@
 <resources>
     <string name="app_name">Spain-ITproject</string>
+    <string name="dependents_list_name">Dependents</string>
+    <string name="callIntent">Call</string>
+    <string name="messageIntent">Message</string>
+    <string name="addDependentButton">Add Dependent</string>
+    <string name="addDependentActivityMessage">To add a dependent, enter their mobile number:</string>
+    <string name="searchButton">Search</string>
+
+    <!-- Dialog box titles -->
+    <string name="addDependent_displayInfoDialog">Dependent</string>
+
+    <!-- Error messages -->
+    <string name="invalidPhoneNumber">InvalidPhoneNumber</string>
+    <string name="invalidDependentPhoneNumberMessage">No Dependent found with phone number.
+        Please try again</string>
+
     <string name="welcome_message">Welcome</string>
     <string name="login_txt">Login to existing account</string>
     <string name="create_account">Create a new account</string>
