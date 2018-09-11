@@ -25,7 +25,7 @@ public class AccountController {
 
     private static User user;
 
-    public static void registerAccount(String name, String phoneNumber, String pin,
+    public static User registerAccount(String name, String phoneNumber, String pin,
                                           String confirmPin, Boolean isDependent)
             throws InvalidDetailsException, IOException {
 
@@ -37,16 +37,11 @@ public class AccountController {
 
         validator.checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
 
-        User newUser;
-        if (isDependent) {
-            newUser = new User(name, phoneNumber, pin);
-        }
-        else {
-            newUser = new CarerUser(name, phoneNumber, pin);
-        }
+        Call<User> call = service.registerUser(name, phoneNumber, pin, isDependent);
 
-        Call<User> call = service.registerUser(newUser);
-        call.execute();
+        User newUser = call.execute().body();
+
+        return newUser;
     }
 
     public static User login(String phoneNumber, String pin, boolean isDependent) throws IOException {

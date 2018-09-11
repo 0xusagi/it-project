@@ -18,13 +18,12 @@ public class User implements Serializable {
     @SerializedName("pin")
     private String pin;
 
-    public User(String name, String phoneNumber, String pin) {
+    public User(String name, String phoneNumber, String pin, int id) {
 
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.pin = pin;
+        this.id = id;
 
     }
-
-
 }

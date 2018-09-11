@@ -14,5 +14,6 @@ public interface AccountService {
     Call<User> loginUser(@Field("phone_number") String phoneNumber, @Field("pin") String pin);
 
     @POST("user/new")
-    Call<User> registerUser(@Body User user);
+    Call<User> registerUser(@Field("name") String name, @Field("phone_number") String phoneNumber,
+                            @Field("pin") String pin, Boolean isDependent);
 }
