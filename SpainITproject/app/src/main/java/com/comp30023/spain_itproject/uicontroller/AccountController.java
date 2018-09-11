@@ -13,6 +13,7 @@ import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,7 +53,6 @@ public class AccountController {
 
         User user = call.execute().body();
 
-
         DependentUser dependentUser = new DependentUser(null, null, null);
         dependentUser.addLocation(new Location(null,"Home"));
         dependentUser.addLocation(new Location(null,"Church"));
@@ -63,7 +63,21 @@ public class AccountController {
         return dependentUser;
     }
 
-    public static void checkService() {
+    public ArrayList<Location> getLocations(DependentUser dependent) throws IOException {
+        checkService();
+
+        Call<ArrayList<Location>> call = service.getLocations(dependent);
+
+        return call.execute().body();
+    }
+
+    public void addDependent(CarerUser carer, String dependentPhoneNumber) {
+        checkService();
+
+        Call<DependentUser> call = service.addDependent(carer.getId(), dependentPhoneNumber);
+    }
+
+    private static void checkService() {
         if (service == null) {
             service = RetrofitClientInstance.getRetrofitInstance().create(AccountService.class);
         }

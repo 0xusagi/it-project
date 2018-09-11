@@ -26,4 +26,8 @@ public class User implements Serializable {
         this.id = id;
 
     }
+
+    public int getId() {
+        return id;
+    }
 }
