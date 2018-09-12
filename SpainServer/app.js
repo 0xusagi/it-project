@@ -1,14 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const index = require('./routes/index');
-import { router } from './routes/index';
-import { createUser } from "./controllers/users"
+const db = require('./models/db');
+import { Location } from "./models/location";
+import { Dependent } from "./models/user";
+import { User } from "./models/user";
+import { Carer } from "./models/user";
 
-createUser('0457 813 001', 'Oliver Murray', 'mypassword');
-
-export var app = express();
-app.use('/', index);
+const app = express();
 
 app.listen(process.env.PORT || 3000, () => {
     console.log("App listening on port 3000");
