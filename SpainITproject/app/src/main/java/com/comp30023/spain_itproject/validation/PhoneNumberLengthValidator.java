@@ -13,4 +13,12 @@ public class PhoneNumberLengthValidator extends DetailsValidator {
         }
 
     }
+
+    public static boolean isValid(String phoneNumber) {
+
+        if (phoneNumber.length() != PHONE_NUMBER_LENGTH)
+            return false;
+
+        return true;
+    }
 }

@@ -27,7 +27,7 @@ public class AccountController {
     private static User user;
 
     public static User registerAccount(String name, String phoneNumber, String pin,
-                                          String confirmPin, Boolean isDependent)
+                                       String confirmPin, Boolean isDependent)
             throws InvalidDetailsException, IOException {
 
         checkService();

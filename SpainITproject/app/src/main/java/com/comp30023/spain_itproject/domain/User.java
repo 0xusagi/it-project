@@ -24,10 +24,22 @@ public class User implements Serializable {
         this.phoneNumber = phoneNumber;
         this.pin = pin;
         this.id = id;
-
     }
+
+    public String getName() {
+        return name;
+    }
+
 
     public int getId() {
         return id;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getPin() {
+        return pin;
     }
 }

@@ -8,10 +8,9 @@ import java.util.ArrayList;
 public class CarerUser extends User implements Serializable {
 
     @SerializedName("dependents")
-    public ArrayList<DependentUser> dependents;
+    private ArrayList<DependentUser> dependents;
 
     public CarerUser(String name, String phoneNumber, String pin, int id) {
         super(name, phoneNumber, pin, id);
     }
-
 }
