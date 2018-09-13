@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import config from '../config/config';
 
 mongoose.connect('mongodb://localhost/spain-server',  { useNewUrlParser: true }, (err) => {
     if (!err) {

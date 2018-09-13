@@ -1,11 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+
+// Tells node what the environment is (So we can use a 'clean' test database when using mocha for tests)
+process.env.NODE_ENV = 'dev';
+
 const db = require('./models/db');
-import { Location } from "./models/location";
-import { Dependent } from "./models/user";
-import { User } from "./models/user";
-import { Carer } from "./models/user";
 
 const app = express();
 
