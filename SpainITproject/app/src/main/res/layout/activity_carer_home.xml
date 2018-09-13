@@ -7,10 +7,54 @@
     tools:context=".CarerHomeActivity"
     tools:layout_editor_absoluteY="25dp">
 
+    <TextView
+        android:id="@+id/carerHome_screenName"
+        android:layout_width="296dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/dependents_list_name"
+        android:textSize="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/carerHome_dependentsList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/carerHome_settingsButton"
+        android:layout_width="62dp"
+        android:layout_height="54dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_settings_icon"
+        app:layout_constraintBottom_toTopOf="@+id/carerHome_dependentsList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/carerHome_screenName"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/carerHome_dependentsList"
+        android:layout_width="match_parent"
+        android:layout_height="420dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:scrollbars="vertical"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
-    </android.support.v7.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/carerHome_settingsButton"
+        app:layout_constraintBottom_toTopOf="@+id/carerHome_addDependentButton"
+        tools:layout_editor_absoluteY="68dp" />
+
+    <Button
+        android:id="@+id/carerHome_addDependentButton"
+        android:text="@string/addDependentButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carerHome_dependentsList"
+        tools:layout_editor_absoluteX="123dp" />
 </android.support.constraint.ConstraintLayout>
