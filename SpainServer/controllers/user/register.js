@@ -31,7 +31,6 @@ const newUserFromType = (data) => {
  * @param next
  */
 const newUser = (req, res, next) => {
-    console.log(req.body);
     const newUser = newUserFromType(req.body);
 
     if (newUser === false) {
