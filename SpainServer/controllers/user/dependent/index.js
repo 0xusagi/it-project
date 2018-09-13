@@ -35,7 +35,7 @@ const updateDependent = (req, res, next) => {
             if (err) {
                 return res.status(400).send(err);
             }
-            return res.status(200).send(dependent);
+            return res.status(200).json(dependent);
         });
 
     return response;
@@ -55,7 +55,7 @@ const deleteDependent = (req, res, next) => {
             return res.status(400).send(err);
         }
 
-        return res.status(200).send(dependent);
+        return res.status(200).json(dependent);
     });
 
     return response;

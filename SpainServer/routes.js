@@ -9,11 +9,7 @@ const router = express.Router();
  * Users
  */
 
-// POST /user/new
-
 router.post('/users/new', registrationController.new);
-
-// POST /user/login
 
 //router.post('/user/login', loginController.login);
 
@@ -31,5 +27,14 @@ router.delete('/carers/:id', carerIndex.delete);
 router.get('/dependents/:id', dependentIndex.get);
 router.put('/dependents/:id', dependentIndex.put);
 router.delete('/dependents/:id', dependentIndex.delete);
+
+/**
+ * Locations
+ */
+router.get('/locations');
+router.post('/locations/new');
+router.get('/locations/:id');
+router.put('/locations/:id');
+router.delete('/locations/:id');
 
 export { router };

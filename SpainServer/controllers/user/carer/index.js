@@ -35,7 +35,7 @@ const updateCarer = (req, res, next) => {
         if (err) {
             return res.status(400).send(err);
         }
-        return res.status(200).send(carer);
+        return res.status(200).json(carer);
     });
 
     return response;
@@ -55,7 +55,7 @@ const deleteCarer = (req, res, next) => {
             return res.status(400).send(err);
         }
 
-        return res.status(200).send(carer);
+        return res.status(200).json(carer);
     });
 
     return response;
