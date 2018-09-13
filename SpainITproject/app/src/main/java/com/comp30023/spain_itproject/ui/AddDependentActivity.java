@@ -5,6 +5,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,26 +17,42 @@ import com.comp30023.spain_itproject.validation.PhoneNumberLengthValidator;
 public class AddDependentActivity extends AppCompatActivity {
 
     private EditText mobileNumberField;
+    private Button searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_dependent);
+
+        // Setup the mobile number field
+        mobileNumberField = findViewById(R.id.addDependent_addMobileNumberEditText);
+
+        setupSearchButton();
     }
 
-    // TODO
-    public void search(View view) {
-        mobileNumberField = findViewById(R.id.addDependent_addMobileNumberEditText);
-        String mobileNumber = mobileNumberField.getText().toString();
+    /**
+     * Setup the search button
+     */
+    private void setupSearchButton() {
+        searchButton = findViewById(R.id.addDependent_searchButton);
 
-        // Do some validity checking here
-        // If valid pass the phone number to the account controller to get the data from the
-        // server
-
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO send the query to the server
+                if (true) {
+                    displayInfoDialog("");
+                }
+                else {
+                    // Display an error message as a toast
+                    Toast errorMsg = Toast.makeText(getApplicationContext(), "Dependent does not exist", Toast.LENGTH_SHORT);
+                }
+            }
+        });
     }
 
     private void displayInfoDialog(String dependentName) {
-        AlertDialog.Builder dependentInfoDialogBuilder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder dependentInfoDialogBuilder = new AlertDialog.Builder(this);
 
         // Set the title of the alert dialog
         dependentInfoDialogBuilder.setTitle("Add Dependent");
@@ -58,7 +75,7 @@ public class AddDependentActivity extends AppCompatActivity {
             // Close the alert dialog
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+
             }
         });
 
