@@ -1,4 +1,4 @@
-import {Carer, Dependent} from "../models/user";
+import {Carer, Dependent} from "../../models/user";
 
 /**
  * Create a new user on the supplied user type.
@@ -6,14 +6,14 @@ import {Carer, Dependent} from "../models/user";
  * @param data
  * @returns boolean | User
  */
-const newUserFromType = (userType, data) => {
-    if (userType === 'Dependent') {
+const newUserFromType = (data) => {
+    if (data.userType === 'Dependent') {
         return new Dependent({
             mobile: data.mobile,
             name: data.name,
             password: data.password
         });
-    } else if (userType === 'Carer') {
+    } else if (data.userType === 'Carer') {
         return new Carer({
             mobile: data.mobile,
             name: data.name,
@@ -31,10 +31,10 @@ const newUserFromType = (userType, data) => {
  * @param next
  */
 const newUser = (req, res, next) => {
-    const userType = req.body.userType;
-    const newUser = newUserFromType(userType, req.body);
+    console.log(req.body);
+    const newUser = newUserFromType(req.body);
 
-    if (user === false) {
+    if (newUser === false) {
         return res.status(400).json({message: "User Error (Wrong user type inputted)"});
     }
 
@@ -48,6 +48,6 @@ const newUser = (req, res, next) => {
     return response;
 };
 
-export const loginController = {
+export const registrationController = {
     new: newUser
 };
