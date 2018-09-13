@@ -1,14 +1,17 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 
 import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
@@ -25,9 +28,8 @@ import java.util.ArrayList;
 public class CarerHomeActivity extends AppCompatActivity {
 
     // Dependents list
-    private RecyclerView dependentsListView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private ListView dependentsList;
+    private ArrayAdapter<String> arrayAdapter;
 
     // Settings button
     private ImageButton settingsButton;
@@ -47,31 +49,61 @@ public class CarerHomeActivity extends AppCompatActivity {
         setupSettingsButton(this);
     }
 
-
     /**
      * Setup displaying the dependents list
      * Dynamically gets the list of dependents from the server
      */
     private void displayDependentsList() {
         // TODO Get dependents list from server
+        /*
+        CarerUser carerUser = (CarerUser) getIntent().getSerializableExtra(LoginHandler.PASSED_USER);
+
+        // Get the dependents list from the server
+        // Throws an IO exception if a problem occured when talking to the server, so when this
+        // happens, then just retry
+        try {
+            ArrayList<DependentUser> dependentUsers = AccountController.getDependentsOfCarer(carerUser.getPhoneNumber());
+        } catch (IOException e) {
+            // When cannot get prompt whether to try again
+
+        }
+*/
+
+        dependentsList = findViewById(R.id.carerHome_dependentsList);
+
         // For now display a fake list
         ArrayList<DependentUser> dependentUsers = new ArrayList<>();
         dependentUsers.add(new DependentUser("John","0402849382", "1234", 1));
+        dependentUsers.add(new DependentUser("Asdf","0402849382", "1234", 2));
 
-        /* Create the list to display dependent users */
-        // Set the dependents list recycler view
-        dependentsListView = (RecyclerView)findViewById(R.id.carerHome_dependentsList);
+        // Get the name of the user to display in the list
+        ArrayList<String> dependentNames = new ArrayList<>();
+        for (DependentUser dependent : dependentUsers) {
+            dependentNames.add(dependent.getName());
+        }
 
-        // Use this setting to improve performance
-        dependentsListView.setHasFixedSize(true);
+        // Make the array adapter
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dependentNames);
 
-        // Use linear layout manager
-        layoutManager = new LinearLayoutManager(this);
-        dependentsListView.setLayoutManager(layoutManager);
+        dependentsList.setAdapter(arrayAdapter);
 
-        // Set an adapter
-        adapter = new DependentsListAdapter(dependentUsers);
-        dependentsListView.setAdapter(adapter);
+        // Set an on click listener
+        dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] options = {"Call", "Message"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
+                builder.setTitle("Choose");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 
     /**
@@ -92,6 +124,10 @@ public class CarerHomeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Setup the settings button
+     * @param context
+     */
     private void setupSettingsButton(final Context context) {
         settingsButton = (ImageButton) findViewById(R.id.carerHome_settingsButton);
 

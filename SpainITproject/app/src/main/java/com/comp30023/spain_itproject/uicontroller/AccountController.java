@@ -19,6 +19,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+/**
+ * Account controller acts as a bridge between the client and the server and makes use of the
+ * Retrofit REST API for exchanging messages between client and server
+ */
 public class AccountController {
 
     private static AccountService service;
@@ -68,6 +73,20 @@ public class AccountController {
         checkService();
 
         //Call<DependentUser> call = service.addDependent(carer.getId(), dependentPhoneNumber);
+    }
+
+    /**
+     * Get a dependents list which corresponds to a carer
+     * @param carerId
+     * @return
+     * @throws IOException
+     */
+    public static ArrayList<DependentUser> getDependentsOfCarer(String carerPhoneNumber) throws IOException {
+        checkService();
+
+        Call<ArrayList<DependentUser>> call = service.getDependentsOfCarer(carerPhoneNumber);
+
+        return call.execute().body();
     }
 
     private static void checkService() {
