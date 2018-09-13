@@ -14,6 +14,8 @@ import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.comp30023.spain_itproject.validation.PhoneNumberLengthValidator;
 
+import java.io.IOException;
+
 public class AddDependentActivity extends AppCompatActivity {
 
     private EditText mobileNumberField;
@@ -40,11 +42,15 @@ public class AddDependentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO send the query to the server
-                if (true) {
-                    displayInfoDialog("");
-                }
-                else {
-                    // Display an error message as a toast
+                // Get the mobile number to query
+                String phoneNumber = mobileNumberField.getText().toString();
+
+                // Send to server
+                try {
+                    DependentUser dependentUser = AccountController.getDependent(phoneNumber);
+                    displayInfoDialog(dependentUser.getName());
+                } catch (IOException e) {
+                    // Display error message as a toast
                     Toast errorMsg = Toast.makeText(getApplicationContext(), "Dependent does not exist", Toast.LENGTH_SHORT);
                 }
             }

@@ -89,6 +89,14 @@ public class AccountController {
         return call.execute().body();
     }
 
+    public static DependentUser getDependent(String phoneNumber) throws IOException {
+        checkService();
+
+        Call<DependentUser> call = service.getDependent(phoneNumber);
+
+        return call.execute().body();
+    }
+
     private static void checkService() {
         if (service == null) {
             service = RetrofitClientInstance.getRetrofitInstance().create(AccountService.class);
