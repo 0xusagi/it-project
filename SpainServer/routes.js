@@ -1,8 +1,10 @@
-const express = require('express');
+import express from 'express';
+
 const router = express.Router();
+// POST /user/new
 
-router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
-});
+router.post('/user/new', userController.new);
 
-module.exports = router;
+// POST /user/login
+
+router.post('/user/login', loginController.login);
