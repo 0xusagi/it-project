@@ -6,6 +6,7 @@ import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
+import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
@@ -30,4 +31,8 @@ public interface AccountService {
     //CONFIRM
     //@POST("")
     //Call<> addDependent(@Field("id") int carerId, String dependentPhoneNumber);
+
+    //CONFIRM
+    //@GET("user/new")
+    //Call<ArrayList<DependentUser>> getDependentsOfCarer(@Body String carerId);
 }
