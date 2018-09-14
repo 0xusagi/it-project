@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,11 +53,17 @@ public class AddDependentActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     // Display error message as a toast
                     Toast errorMsg = Toast.makeText(getApplicationContext(), "Dependent does not exist", Toast.LENGTH_SHORT);
+                    errorMsg.setGravity(Gravity.CENTER, 0, 0);
+                    errorMsg.show();
                 }
             }
         });
     }
 
+    /**
+     * Display the dialogue whether to add the dependent or not
+     * @param dependentName
+     */
     private void displayInfoDialog(String dependentName) {
         final AlertDialog.Builder dependentInfoDialogBuilder = new AlertDialog.Builder(this);
 
@@ -72,7 +79,7 @@ public class AddDependentActivity extends AppCompatActivity {
             // Send the request to the dependent
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                // TODO send a request to the server
             }
         });
 
