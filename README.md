@@ -21,3 +21,18 @@ Dependencies:
 - Yarn
 - NodeJS
 - MongoDB
+
+To install the server: 
+- cd into the 'Spain-Server' directory.
+- run 'yarn install'
+- Go into the mongo shell and type 
+'use spain-server'
+- Then run db.placeholder.insert({placeholder: 'hello-world'})
+- Check if the database was created by running 'show dbs' in mongo
+
+To run the server: 
+- Run 'yarn nodemon-babel'
+It should be available in your browser on localhost:3000.
+
+To run tests: 
+- Run 'yarn test'
