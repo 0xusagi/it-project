@@ -7,6 +7,7 @@ import {Carer, Dependent} from "../../models/user";
  * @returns boolean | User
  */
 const newUserFromType = (data) => {
+    console.log(data);
     if (data.userType === 'Dependent') {
         return new Dependent({
             mobile: data.mobile,

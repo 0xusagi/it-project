@@ -5,9 +5,9 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "babel": "NODE_ENV=dev babel-node app.js --presets es2015",
+    "babel": "babel-node app.js --presets es2015",
     "nodemon-babel": "nodemon --exec yarn run babel",
-    "test": "mocha --compilers js:babel-register test"
+    "test": "NODE_ENV=test mocha --compilers js:babel-register test"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

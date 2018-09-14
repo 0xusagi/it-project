@@ -25,7 +25,7 @@ describe('Users', () => {
 
     /**
      * Test POST /users/new
-     */
+     */node
     const sampleCarer = {
         mobile: '12345678',
         password: '1234',
