@@ -14,3 +14,10 @@ To edit:
     Open ./Spain/SpainItproject
 
 3. Click the 'Build' button on the toolbar
+
+# Spain Server
+
+Dependencies: 
+- Yarn
+- NodeJS
+- MongoDB
