@@ -10,7 +10,7 @@ public class CarerUser extends User implements Serializable {
     @SerializedName("dependents")
     private ArrayList<DependentUser> dependents;
 
-    public CarerUser(String name, String phoneNumber, String pin, int id) {
+    public CarerUser(String name, String phoneNumber, String pin, String id) {
         super(name, phoneNumber, pin, id);
     }
 }

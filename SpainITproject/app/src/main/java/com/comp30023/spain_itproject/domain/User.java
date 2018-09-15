@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     @SerializedName("id")
-    private int id;
+    private String id;
 
     @SerializedName("name")
     private String name;
@@ -18,7 +18,7 @@ public class User implements Serializable {
     @SerializedName("pin")
     private String pin;
 
-    public User(String name, String phoneNumber, String pin, int id) {
+    public User(String name, String phoneNumber, String pin, String id) {
 
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -31,7 +31,7 @@ public class User implements Serializable {
     }
 
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

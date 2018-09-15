@@ -31,6 +31,12 @@ public class AccountController {
 
     private static User user;
 
+    private static void checkService() {
+        if (service == null) {
+            service = RetrofitClientInstance.getRetrofitInstance().create(AccountService.class);
+        }
+    }
+
     public static User registerAccount(String name, String phoneNumber, String pin,
                                        String confirmPin, Boolean isDependent)
             throws InvalidDetailsException, IOException {
@@ -40,10 +46,10 @@ public class AccountController {
         if (validator == null) {
             validator = DetailsValidator.getInstance();
         }
-
         validator.checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
 
-        Call<User> call = service.registerUser(name, phoneNumber, pin, isDependent);
+        String userType = isDependent ? AccountService.DEPENDENT_TYPE : AccountService.CARER_TYPE;
+        Call<User> call= service.registerUser(name, phoneNumber, pin, userType);
 
         User newUser = call.execute().body();
 
@@ -95,11 +101,5 @@ public class AccountController {
         Call<DependentUser> call = service.getDependent(phoneNumber);
 
         return call.execute().body();
-    }
-
-    private static void checkService() {
-        if (service == null) {
-            service = RetrofitClientInstance.getRetrofitInstance().create(AccountService.class);
-        }
     }
 }

@@ -17,13 +17,16 @@ import java.util.ArrayList;
 
 public interface AccountService {
 
+    public static final String CARER_TYPE = "Carer";
+    public static final String DEPENDENT_TYPE = "Dependent";
+
     //CONFIRM
     @POST("user/login")
     Call<User> loginUser(@Field("phone_number") String phoneNumber, @Field("pin") String pin);
 
     @POST("user/new")
     Call<User> registerUser(@Field("name") String name, @Field("phone_number") String phoneNumber,
-                            @Field("pin") String pin, Boolean isDependent);
+                            @Field("pin") String pin, String userType);
 
     //CONFIRM
     @GET("user/new")
