@@ -15,6 +15,9 @@ import com.comp30023.spain_itproject.domain.User;
 import java.util.ArrayList;
 
 
+/**
+ * Retrofit-compatible interface that co-ordinates all our different HTTP requests.
+ */
 public interface AccountService {
 
     public static final String CARER_TYPE = "Carer";
