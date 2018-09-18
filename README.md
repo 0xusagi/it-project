@@ -7,7 +7,7 @@ To edit:
 2. Open Android Studio
     Download link: https://developer.android.com/studio/
     Install instructions: https://developer.android.com/studio/install
-    
+
 2. Open project
     'Open an existing Android Studio project'
     Navigate to the cloned repository
@@ -17,22 +17,22 @@ To edit:
 
 # Spain Server
 
-Dependencies: 
+Dependencies:
 - Yarn
 - NodeJS
 - MongoDB
 
-To install the server: 
+To install the server:
 - cd into the 'Spain-Server' directory.
 - run 'yarn install'
-- Go into the mongo shell and type 
+- Go into the mongo shell and type
 'use spain-server'
 - Then run db.placeholder.insert({placeholder: 'hello-world'})
 - Check if the database was created by running 'show dbs' in mongo
 
-To run the server: 
+To run the server:
 - Run 'yarn nodemon-babel'
 It should be available in your browser on localhost:3000.
 
-To run tests: 
+To run tests:
 - Run 'yarn test'
