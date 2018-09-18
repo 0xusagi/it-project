@@ -5,16 +5,27 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "babel": "babel-node app.js --presets es2015",
-    "nodemon-babel": "nodemon --exec yarn run babel"
+    "babel": "NODE_ENV=dev babel-node app.js --presets es2015",
+    "nodemon-babel": "nodemon --exec yarn run babel",
+    "test": "mocha --compilers js:babel-register test"
   },
   "dependencies": {
-    "babel": "^6.23.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "mongoose": "^5.2.10",
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.18.3",
+    "win-node-env": "^0.3.0"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-core": "^6.26.3",
+    "babel-plugin-dynamic-import-node": "^2.1.0",
+    "babel-polyfill": "^6.26.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0",
+    "pathfinder-ui": "^1.0.3"
   }
 }
