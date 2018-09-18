@@ -1,9 +1,15 @@
 import mongoose from 'mongoose';
 
-mongoose.connect('mongodb://localhost/spain-server', (err) => {
+mongoose.connect('mongodb://localhost/spain-server',  { useNewUrlParser: true }, (err) => {
     if (!err) {
-        console.log("Connected to spain-server :D");
+        console.log("Connected to db: spain-server");
     } else {
         console.log(err);
     }
 });
+
+export function submitUser(user) {
+    user.save(function(error){
+        if(error) console.log("error: '"+error+"' when saving "+name+" to db");
+    });
+}
