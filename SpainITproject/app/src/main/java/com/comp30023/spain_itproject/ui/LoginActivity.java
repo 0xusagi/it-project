@@ -2,18 +2,21 @@ package com.comp30023.spain_itproject.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.domain.User;
 
 import java.io.IOException;
 
@@ -111,19 +114,28 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Retrieve inputs from fields
-                String phoneNumber = phoneNumberText.getText().toString();
-                String pin = pinText.getText().toString();
+                final String phoneNumber = phoneNumberText.getText().toString();
+                final String pin = pinText.getText().toString();
 
                 ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
-                Boolean isDependent = dependentButton.isChecked();
+                final Boolean isDependent = dependentButton.isChecked();
 
-                //Login the user
-                try {
-                    LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
-                } catch (IOException e) {
-                    return;
-                }
-                finish();
+                //Asynchronous task for logging in
+                AsyncTask task = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        try {
+                            LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                            finish();
+                        } catch (Exception e) {
+                            Toast.makeText(context, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                        return null;
+                    }
+                };
+
+                task.execute();
+
             }
         });
     }

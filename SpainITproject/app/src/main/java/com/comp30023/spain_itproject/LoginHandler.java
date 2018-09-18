@@ -40,12 +40,9 @@ public class LoginHandler {
      * @param pin The pin of the user to be logged in
      * @param isDependent Whether the user to be logged in is a Dependent
      */
-    public static void newLogin(Context context, String phoneNumber, String pin, boolean isDependent) throws IOException {
+    public static void newLogin(Context context, String phoneNumber, String pin, boolean isDependent) throws Exception {
 
         LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent);
-
-        System.out.println(phoneNumber+pin+isDependent);
-
         login(context);
 
     }
@@ -54,7 +51,7 @@ public class LoginHandler {
      * Log in the existing user
      * @param context
      */
-    public static void login(Context context) throws IOException {
+    public static void login(Context context) throws Exception {
 
         if (!LoginSharedPreference.checkLogIn(context)) {
             return;

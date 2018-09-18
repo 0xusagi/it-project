@@ -7,17 +7,16 @@ import java.util.ArrayList;
 
 public class DependentUser extends User implements Serializable {
 
-    @SerializedName("locations")
+    private static final String userType = "Dependent";
+
     private ArrayList<Location> locations;
 
-    @SerializedName("currentLocation")
     private Location currentLocation;
 
-    @SerializedName("carers")
     private ArrayList<CarerUser> carers;
 
-    public DependentUser(String name, String phoneNumber, String pin, String id) {
-        super(name, phoneNumber, pin, id);
+    public DependentUser(String name, String phoneNumber, String pin) {
+        super(name, phoneNumber, pin, userType);
 
         locations = new ArrayList<Location>();
     }

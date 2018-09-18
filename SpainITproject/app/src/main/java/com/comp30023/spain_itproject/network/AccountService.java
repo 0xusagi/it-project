@@ -3,6 +3,7 @@ package com.comp30023.spain_itproject.network;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -27,9 +28,12 @@ public interface AccountService {
     @POST("user/login")
     Call<User> loginUser(@Field("phone_number") String phoneNumber, @Field("pin") String pin);
 
-    @POST("user/new")
-    Call<User> registerUser(@Field("name") String name, @Field("phone_number") String phoneNumber,
-                            @Field("pin") String pin, String userType);
+    @FormUrlEncoded
+    @POST("/users/new")
+    Call<User> registerUser(@Field("name") String name,
+                            @Field("mobile") String phoneNumber,
+                            @Field("password") String pin,
+                            @Field("userType") String userType);
 
     //CONFIRM
     @GET("user/new")

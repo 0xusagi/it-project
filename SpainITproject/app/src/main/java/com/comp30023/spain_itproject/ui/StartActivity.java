@@ -4,10 +4,12 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
@@ -40,12 +42,7 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         if (LoginHandler.isLoggedIn(this)) {
-            try {
-                LoginHandler.login(this);
-            } catch (IOException e) {
-                return;
-            }
-            finish();
+            login(this);
         }
 
         createAccountButton = (Button) findViewById(R.id.createAccountButton);
@@ -54,6 +51,21 @@ public class StartActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         setLoginButtonListener(this);
 
+    }
+
+    private void login(final Context context) {
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                try {
+                    LoginHandler.login(context);
+                    finish();
+                } catch (Exception e) {
+                    LoginHandler.logout(context);
+                }
+                return null;
+            }
+        };
     }
 
     private void setCreateAccountButtonListener(final Context context) {

@@ -6,24 +6,22 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    @SerializedName("id")
+    private String userType;
+
     private String id;
 
-    @SerializedName("name")
     private String name;
 
-    @SerializedName("phoneNumber")
-    private String phoneNumber;
+    private String mobile;
 
-    @SerializedName("pin")
-    private String pin;
+    private String password;
 
-    public User(String name, String phoneNumber, String pin, String id) {
+    public User(String name, String phoneNumber, String pin, String userType) {
 
         this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.pin = pin;
-        this.id = id;
+        this.mobile = phoneNumber;
+        this.password = pin;
+        this.userType = userType;
     }
 
     public String getName() {
@@ -36,10 +34,14 @@ public class User implements Serializable {
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return mobile;
     }
 
     public String getPin() {
-        return pin;
+        return password;
+    }
+
+    public boolean equals(User other) {
+        return mobile.equals(other.mobile) && password.equals(other.password);
     }
 }

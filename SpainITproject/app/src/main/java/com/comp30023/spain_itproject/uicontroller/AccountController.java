@@ -1,14 +1,10 @@
 package com.comp30023.spain_itproject.uicontroller;
 
-import android.accounts.Account;
-import android.widget.Toast;
-
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.network.AccountService;
 import com.comp30023.spain_itproject.network.RetrofitClientInstance;
 import com.comp30023.spain_itproject.validation.DetailsValidator;
-import com.comp30023.spain_itproject.validation.InvalidDetailsException;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
 
@@ -16,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 
@@ -29,7 +24,11 @@ public class AccountController {
     private static AccountService service;
     private static DetailsValidator validator;
 
-    private static User user;
+    private static User user = null;
+
+    public User getUser() {
+        return user;
+    }
 
     private static void checkService() {
         if (service == null) {
@@ -39,7 +38,7 @@ public class AccountController {
 
     public static User registerAccount(String name, String phoneNumber, String pin,
                                        String confirmPin, Boolean isDependent)
-            throws InvalidDetailsException, IOException {
+            throws Exception {
 
         checkService();
 
@@ -49,22 +48,81 @@ public class AccountController {
         validator.checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
 
         String userType = isDependent ? AccountService.DEPENDENT_TYPE : AccountService.CARER_TYPE;
-        Call<User> call= service.registerUser(name, phoneNumber, pin, userType);
 
-        User newUser = call.execute().body();
+        Call<User> call = service.registerUser(name, phoneNumber, pin, userType);
 
+        User newUser = null;
+        Response<User> response = null;
+
+        System.out.println("Before execute");
+        try {
+            response = call.execute();
+
+        } catch (Exception e){
+
+            System.out.println("Error occurred on execute:" + e.getMessage());
+        }
+
+        System.out.println("After execute");
+
+
+        if (response.isSuccessful()) {
+            System.out.println("Response body: " + response.body().toString());
+            switch (response.code()) {
+                case 201:
+                    newUser = response.body();
+                    break;
+
+                default:
+                    throw new Exception(response.errorBody().string());
+            }
+        } else {
+            System.out.println("Error body:    " + response.errorBody().string());
+        }
+
+        user = newUser;
         return newUser;
     }
 
-    public static User login(String phoneNumber, String pin, boolean isDependent) throws IOException {
+    public static User login(String phoneNumber, String pin, boolean isDependent) throws Exception {
 
-        checkService();
+        /*checkService();
 
         Call<User> call = service.loginUser(phoneNumber, pin);
 
-        User user = call.execute().body();
+        Response<User> response = call.execute();
 
-        return user;
+        User user = null;
+        if (response.isSuccessful()) {
+
+            switch (response.code()) {
+                case 201:
+                    user = response.body();
+                    break;
+                case 404:
+                    throw new Exception(response.errorBody().string());
+                default:
+                    break;
+            }
+
+        } else {
+            throw new NetworkConnectionFailureException();
+        }
+
+        return user;*/
+
+        User loginUser;
+        if (isDependent) {
+            loginUser = new DependentUser(null, phoneNumber, pin);
+        } else {
+            loginUser = new CarerUser(null, phoneNumber, pin);
+        }
+
+        if (loginUser.equals(user)) {
+            return user;
+        } else {
+            throw new Exception("User not created");
+        }
     }
 
     public ArrayList<Location> getLocations(DependentUser dependent) throws IOException {
@@ -83,7 +141,7 @@ public class AccountController {
 
     /**
      * Get a dependents list which corresponds to a carer
-     * @param carerId
+     * @param carerPhoneNumber
      * @return
      * @throws IOException
      */

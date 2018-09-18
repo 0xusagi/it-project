@@ -3,6 +3,7 @@ package com.comp30023.spain_itproject.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.LoginHandler;
@@ -18,6 +20,10 @@ import com.comp30023.spain_itproject.validation.InvalidDetailsException;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 import java.io.IOException;
+
+import retrofit2.Call;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 /**
  * Activity for uses to create/register an account
@@ -119,32 +125,49 @@ public class AccountCreationActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Retrieve inputs from fields
-                String name = nameText.getText().toString();
-                String phoneNumber = phoneNumberText.getText().toString();
-                String pin = pinText.getText().toString();
-                String confirmPin = confirmPinText.getText().toString();
+                final String name = nameText.getText().toString();
+                final String phoneNumber = phoneNumberText.getText().toString();
+                final String pin = pinText.getText().toString();
+                final String confirmPin = confirmPinText.getText().toString();
 
                 ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
-                Boolean isDependent = dependentButton.isChecked();
+                final Boolean isDependent = dependentButton.isChecked();
 
                 //Register the account, handle input errors
-                try {
-                    AccountController.registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
-                } catch (InvalidDetailsException e) {
-                    messageText.setText(e.getMessage());
-                    messageText.setTextColor(Color.RED);
-                    return;
-                } catch (Exception e) {
-                    return;
-                }
 
-                //Login the user
-                try {
-                    LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
-                } catch (IOException e) {
-                    return;
-                }
-                finish();
+                //Logs in on new thread asynchronously
+                AsyncTask task = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        try {
+                            AccountController.registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
+                        } catch (InvalidDetailsException e) {
+                            messageText.setText(e.getMessage());
+                            messageText.setTextColor(Color.RED);
+                            return null;
+                        } catch (Exception e) {
+                            String message = e.getMessage();
+                            //Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                            System.out.println("Register account: " + message);
+                            return null;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        //Login the user
+                        try {
+                            LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                            finish();
+                        } catch (Exception e) {
+                            System.out.println("Login: " + e.getMessage());
+                        }
+                    }
+                };
+
+                task.execute();
+
             }
         });
     }
