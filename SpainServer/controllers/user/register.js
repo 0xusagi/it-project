@@ -1,4 +1,5 @@
 import {Carer, Dependent} from "../../models/user";
+import bcrypt from 'bcryptjs';
 
 /**
  * Create a new user on the supplied user type.
@@ -8,17 +9,23 @@ import {Carer, Dependent} from "../../models/user";
  */
 const newUserFromType = (data) => {
     console.log(data);
+
+    // salt and hash password
+    let salt = bcrypt.genSaltSync(10);
+	let hash = bcrypt.hashSync(data.password, salt);
+    // console.log("password hashed: ", hash);
+
     if (data.userType === 'Dependent') {
         return new Dependent({
             mobile: data.mobile,
             name: data.name,
-            password: data.password
+            password: hash
         });
     } else if (data.userType === 'Carer') {
         return new Carer({
             mobile: data.mobile,
             name: data.name,
-            password: data.password
+            password: hash
         });
     } else {
         return false;
