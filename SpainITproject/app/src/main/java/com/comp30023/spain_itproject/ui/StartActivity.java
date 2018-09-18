@@ -38,7 +38,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
+        /*
         if (LoginHandler.isLoggedIn(this)) {
             try {
                 LoginHandler.login(this);
@@ -47,7 +47,7 @@ public class StartActivity extends AppCompatActivity {
             }
             finish();
         }
-
+        */
         createAccountButton = (Button) findViewById(R.id.createAccountButton);
         setCreateAccountButtonListener(this);
 
@@ -72,7 +72,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(context, LoginActivity.class);
+                Intent intent = new Intent(context, MapsActivity.class);
                 startActivity(intent);
                 finish();
 
