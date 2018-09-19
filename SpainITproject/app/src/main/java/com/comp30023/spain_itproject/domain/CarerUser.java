@@ -12,7 +12,11 @@ public class CarerUser extends User implements Serializable {
     @SerializedName("dependents")
     private ArrayList<DependentUser> dependents;
 
-    public CarerUser(String name, String phoneNumber, String pin) {
-        super(name, phoneNumber, pin, userType);
+    public CarerUser(String id, String name, String phoneNumber, String pin) {
+        super(id, name, phoneNumber, pin, userType);
+    }
+
+    public ArrayList<DependentUser> getDependents() {
+        return dependents;
     }
 }

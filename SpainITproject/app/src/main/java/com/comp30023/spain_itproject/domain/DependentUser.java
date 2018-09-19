@@ -15,8 +15,8 @@ public class DependentUser extends User implements Serializable {
 
     private ArrayList<CarerUser> carers;
 
-    public DependentUser(String name, String phoneNumber, String pin) {
-        super(name, phoneNumber, pin, userType);
+    public DependentUser(String id, String name, String phoneNumber, String pin) {
+        super(id, name, phoneNumber, pin, userType);
 
         locations = new ArrayList<Location>();
     }

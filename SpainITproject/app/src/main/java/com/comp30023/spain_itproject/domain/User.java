@@ -8,16 +8,21 @@ public class User implements Serializable {
 
     private String userType;
 
+    @SerializedName("_id")
     private String id;
 
+    @SerializedName("name")
     private String name;
 
+    @SerializedName("mobile")
     private String mobile;
 
+    @SerializedName("password")
     private String password;
 
-    public User(String name, String phoneNumber, String pin, String userType) {
+    public User(String id, String name, String phoneNumber, String pin, String userType) {
 
+        this.id = id;
         this.name = name;
         this.mobile = phoneNumber;
         this.password = pin;

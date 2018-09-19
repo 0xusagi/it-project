@@ -45,12 +45,10 @@ public interface AccountService {
 
     //CONFIRM
     // Subject to change whether using phone number as id or not
-    @GET("user/{id}")
-    Call<ArrayList<DependentUser>> getDependentsOfCarer(@Path("id") String phoneNumber);
+    @GET("/carers/{id}")
+    Call<CarerUser> getCarer(@Path("id") String id);
 
     //CONFIRM
     @GET("user/{id}")
     Call<DependentUser> getDependent(@Path("id") String phoneNumber);
-
-
 }

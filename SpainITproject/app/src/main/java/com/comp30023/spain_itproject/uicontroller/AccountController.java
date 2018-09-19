@@ -3,6 +3,7 @@ package com.comp30023.spain_itproject.uicontroller;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.network.AccountService;
+import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.RetrofitClientInstance;
 import com.comp30023.spain_itproject.validation.DetailsValidator;
 import com.comp30023.spain_itproject.domain.Location;
@@ -113,9 +114,9 @@ public class AccountController {
 
         User loginUser;
         if (isDependent) {
-            loginUser = new DependentUser(null, phoneNumber, pin);
+            loginUser = new DependentUser(null, null, phoneNumber, pin);
         } else {
-            loginUser = new CarerUser(null, phoneNumber, pin);
+            loginUser = new CarerUser(null,null, phoneNumber, pin);
         }
 
         if (loginUser.equals(user)) {
@@ -141,22 +142,39 @@ public class AccountController {
 
     /**
      * Get a dependents list which corresponds to a carer
-     * @param carerPhoneNumber
+     * @param id
      * @return
      * @throws IOException
      */
-    public static ArrayList<DependentUser> getDependentsOfCarer(String carerPhoneNumber) throws IOException {
+    public static CarerUser getCarer(String id) throws IOException, BadRequestException {
         checkService();
 
-        Call<ArrayList<DependentUser>> call = service.getDependentsOfCarer(carerPhoneNumber);
+        // Contact the server to request the list of dependents for a carer
+        Call<CarerUser> call = service.getCarer(id);
+        Response<CarerUser> response = call.execute();
 
-        return call.execute().body();
+        // TODO this returns the whole user so need to just get the dependents
+        // Check the status codes of the response and handle accordingly
+        if (response.code() == 200) {
+            // Could be null or there exists a carer
+            if (response.body() != null) {
+                return response.body();
+            }
+            else {
+                return null;
+            }
+        }
+        // Bad request
+        else {
+            // TODO maybe change to another exception for bad request
+            throw new BadRequestException("ERROR! Bad request");
+        }
     }
 
-    public static DependentUser getDependent(String phoneNumber) throws IOException {
+    public static DependentUser getDependent(String id) throws IOException {
         checkService();
 
-        Call<DependentUser> call = service.getDependent(phoneNumber);
+        Call<DependentUser> call = service.getDependent(id);
 
         return call.execute().body();
     }
