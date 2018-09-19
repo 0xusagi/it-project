@@ -3,7 +3,9 @@ package com.comp30023.spain_itproject.uicontroller;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.network.AccountService;
+import com.comp30023.spain_itproject.network.HttpResponses;
 import com.comp30023.spain_itproject.network.RetrofitClientInstance;
+import com.comp30023.spain_itproject.network.UserModel;
 import com.comp30023.spain_itproject.validation.DetailsValidator;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
@@ -36,48 +38,49 @@ public class AccountController {
         }
     }
 
+    private static void checkValidator() {
+        if (validator == null) {
+            validator = DetailsValidator.getInstance();
+        }
+    }
+
     public static User registerAccount(String name, String phoneNumber, String pin,
                                        String confirmPin, Boolean isDependent)
             throws Exception {
 
         checkService();
+        checkValidator();
 
-        if (validator == null) {
-            validator = DetailsValidator.getInstance();
-        }
         validator.checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
 
         String userType = isDependent ? AccountService.DEPENDENT_TYPE : AccountService.CARER_TYPE;
 
-        Call<User> call = service.registerUser(name, phoneNumber, pin, userType);
+        Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType);
+        Response<UserModel> response = call.execute();
 
+        UserModel userModel = null;
         User newUser = null;
-        Response<User> response = null;
-
-        System.out.println("Before execute");
-        try {
-            response = call.execute();
-
-        } catch (Exception e){
-
-            System.out.println("Error occurred on execute:" + e.getMessage());
-        }
-
-        System.out.println("After execute");
-
 
         if (response.isSuccessful()) {
-            System.out.println("Response body: " + response.body().toString());
+
             switch (response.code()) {
-                case 201:
-                    newUser = response.body();
+                case HttpResponses.CREATED:
+
+                    userModel = response.body();
+
+                    if (isDependent) {
+                        newUser = new DependentUser(name, phoneNumber, pin, userModel.userId);
+                    } else {
+                        newUser = new CarerUser(name, phoneNumber, pin, userModel.userId);
+                    }
+
                     break;
 
                 default:
                     throw new Exception(response.errorBody().string());
             }
         } else {
-            System.out.println("Error body:    " + response.errorBody().string());
+            throw new Exception(response.errorBody().string());
         }
 
         user = newUser;
@@ -113,9 +116,9 @@ public class AccountController {
 
         User loginUser;
         if (isDependent) {
-            loginUser = new DependentUser(null, phoneNumber, pin);
+            loginUser = new DependentUser(null, phoneNumber, pin, null);
         } else {
-            loginUser = new CarerUser(null, phoneNumber, pin);
+            loginUser = new CarerUser(null, phoneNumber, pin, null);
         }
 
         if (loginUser.equals(user)) {

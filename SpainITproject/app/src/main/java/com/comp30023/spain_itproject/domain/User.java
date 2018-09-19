@@ -4,24 +4,26 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public abstract class User implements Serializable {
 
-    private String userType;
-
+    @SerializedName("id")
     private String id;
 
+    @SerializedName("name")
     private String name;
 
+    @SerializedName("mobile")
     private String mobile;
 
+    @SerializedName("password")
     private String password;
 
-    public User(String name, String phoneNumber, String pin, String userType) {
+    public User(String name, String phoneNumber, String pin, String id) {
 
         this.name = name;
         this.mobile = phoneNumber;
         this.password = pin;
-        this.userType = userType;
+        this.id = id;
     }
 
     public String getName() {
