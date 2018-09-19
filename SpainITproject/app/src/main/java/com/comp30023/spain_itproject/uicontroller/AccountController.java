@@ -117,15 +117,9 @@ public class AccountController {
 
         User loginUser;
         if (isDependent) {
-<<<<<<< HEAD
-            loginUser = new DependentUser(null, null, phoneNumber, pin);
-        } else {
-            loginUser = new CarerUser(null,null, phoneNumber, pin);
-=======
             loginUser = new DependentUser(null, phoneNumber, pin, null);
         } else {
             loginUser = new CarerUser(null, phoneNumber, pin, null);
->>>>>>> bf3dd284183840fb3297923d398d43fcbe5c1b69
         }
 
         if (loginUser.equals(user)) {
