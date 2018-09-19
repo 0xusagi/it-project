@@ -7,13 +7,11 @@ import java.util.ArrayList;
 
 public class CarerUser extends User implements Serializable {
 
-    private static final String userType = "Carer";
-
     @SerializedName("dependents")
     private ArrayList<DependentUser> dependents;
 
-    public CarerUser(String id, String name, String phoneNumber, String pin) {
-        super(id, name, phoneNumber, pin, userType);
+    public CarerUser(String name, String phoneNumber, String pin, String id) {
+        super(name, phoneNumber, pin, id);
     }
 
     public ArrayList<DependentUser> getDependents() {

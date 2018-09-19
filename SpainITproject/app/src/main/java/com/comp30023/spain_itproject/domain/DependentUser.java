@@ -7,17 +7,14 @@ import java.util.ArrayList;
 
 public class DependentUser extends User implements Serializable {
 
-    private static final String userType = "Dependent";
-
     private ArrayList<Location> locations;
 
     private Location currentLocation;
 
     private ArrayList<CarerUser> carers;
 
-    public DependentUser(String id, String name, String phoneNumber, String pin) {
-        super(id, name, phoneNumber, pin, userType);
-
+    public DependentUser(String name, String phoneNumber, String pin, String id) {
+        super(name, phoneNumber, pin, id);
         locations = new ArrayList<Location>();
     }
 
