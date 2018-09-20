@@ -159,14 +159,9 @@ public class AccountController {
 
         // TODO this returns the whole user so need to just get the dependents
         // Check the status codes of the response and handle accordingly
-        if (response.code() == 200) {
+        if (response.isSuccessful()) {
             // Could be null or there exists a carer
-            if (response.body() != null) {
-                return response.body();
-            }
-            else {
-                return null;
-            }
+            return response.body();
         }
         // Bad request
         else {
