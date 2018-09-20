@@ -8,15 +8,19 @@ import com.google.gson.annotations.SerializedName;
 public class UserModel {
 
     @SerializedName("_id")
-    public String userId;
+    private String userId;
 
     @SerializedName("__t")
-    public String userType;
+    private String userType;
 
-    public String name;
+    private String name;
 
-    public String mobile;
+    private String mobile;
 
-    public String password;
+    private String password;
+
+    public String getId() {
+        return userId;
+    }
 
 }

@@ -69,10 +69,11 @@ public class AccountController {
 
                     userModel = response.body();
 
+                    System.out.println("User id in response: " + userModel.getId());
                     if (isDependent) {
-                        newUser = new DependentUser(name, phoneNumber, pin, userModel.userId);
+                        newUser = new DependentUser(name, phoneNumber, pin, userModel.getId());
                     } else {
-                        newUser = new CarerUser(name, phoneNumber, pin, userModel.userId);
+                        newUser = new CarerUser(name, phoneNumber, pin, userModel.getId());
                     }
 
                     break;

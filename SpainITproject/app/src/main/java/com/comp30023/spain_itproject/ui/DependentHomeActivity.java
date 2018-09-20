@@ -88,6 +88,9 @@ public class DependentHomeActivity extends AppCompatActivity {
         actionbar.setTitle("");
         actionbar.setSubtitle("");
 
+        Intent intent = getIntent();
+        user = (DependentUser) intent.getSerializableExtra(LoginHandler.PASSED_USER);
+
         locationsFrame = (LinearLayout) findViewById(R.id.locationsFrame);
 
         locationButtons = new Button[LOCATIONS_PER_PAGE];
@@ -111,12 +114,11 @@ public class DependentHomeActivity extends AppCompatActivity {
 
         helpButton = (Button) findViewById(R.id.helpButton);
 
-        Intent intent = getIntent();
-        user = (DependentUser) intent.getSerializableExtra(LoginHandler.PASSED_USER);
-
         locations = user.getLocations();
         topLocationsIndex = 0;
         setLocationButtons(0);
+
+        System.out.println("User ID once started: " + user.getId());
 
     }
 

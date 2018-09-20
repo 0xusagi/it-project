@@ -45,10 +45,16 @@ public class CarerHomeActivity extends AppCompatActivity {
     // Add Dependent button
     private Button addDependentsButton;
 
+    private User carerUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carer_home);
+
+        carerUser = (User) getIntent().getSerializableExtra(LoginHandler.PASSED_USER);
+
+        System.out.println("User id: " + carerUser.getId());
 
         dependentsList = findViewById(R.id.carerHome_dependentsList);
         displayDependentsList();
@@ -56,6 +62,8 @@ public class CarerHomeActivity extends AppCompatActivity {
         setupAddDependentButton();
 
         setupSettingsButton(this);
+
+
     }
 
     /**
@@ -63,7 +71,7 @@ public class CarerHomeActivity extends AppCompatActivity {
      * Dynamically gets the list of dependents from the server
      */
     private void displayDependentsList() {
-        User carerUser = (User) getIntent().getSerializableExtra(LoginHandler.PASSED_USER);
+
 
         // Get the dependents list from the server
         new DownloadDependentsListTask().execute(carerUser.getId());
