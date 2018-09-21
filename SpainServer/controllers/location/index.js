@@ -38,10 +38,53 @@ const newLocation = (req, res, next) => {
 };
 
 const getAllLocations = (req, res, next) => {
-    return res.status(200).json({message: "test"});
+    let response = Location.find({}, (err, locations) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        return res.status(200).json(locations);
+    });
+
+    return response;
+};
+
+const getLocation = (req, res, next) => {
+    let response = Location.findById(req.params.id, (err, location) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        return res.status(200).json(location);
+    });
+    return response;
+};
+
+const updateLocation = (req, res, next) => {
+    let options = {new: true};
+    let response = Location.findByIdAndUpdate(req.params.id,
+    req.body, options,
+    (err, location) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        return res.status(200).json(location);
+    });
+    return response;
+};
+
+const deleteLocation = (req, res, next) => {
+    let response = Location.findByIdAndDelete(req.params.id, (err, location) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        return res.status(200).json(location);
+    });
+    return response;
 };
 
 export const locationIndex = {
     new: newLocation,
-    getAll: getAllLocations
+    get: getLocation,
+    getAll: getAllLocations,
+    put: updateLocation,
+    delete: deleteLocation
 };
