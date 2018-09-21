@@ -76,25 +76,11 @@ public class CarerHomeActivity extends AppCompatActivity {
         // Get the dependents list from the server
         new DownloadDependentsListTask().execute(carerUser.getId());
 
-        dependentsList.setAdapter(arrayAdapter);
 
-        // Set an on click listener
-        dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String[] options = {"Call", "Message"};
+    }
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
-                builder.setTitle("Choose");
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // the user clicked on options[which]
-                    }
-                });
-                builder.show();
-            }
-        });
+    private void setArrayAdapter(ArrayList<String> dependentNames) {
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dependentNames);
     }
 
     /**
@@ -139,6 +125,8 @@ public class CarerHomeActivity extends AppCompatActivity {
             try {
                 CarerUser carer= AccountController.getCarer(strings[0]);
 
+                System.out.println(carer.getName());
+
                 // The null body so the carer doesn't exist
                 if (carer == null) {
                     return null;
@@ -162,9 +150,8 @@ public class CarerHomeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<DependentUser> dependentUsers) {
             // TODO Handle null request
-            // Carer has no dependent users
+            // If there are no dependentUsers, then print an error messaeg
             if (dependentUsers == null) {
-
                 return;
             }
 
@@ -174,7 +161,32 @@ public class CarerHomeActivity extends AppCompatActivity {
                 dependentNames.add(dependent.getName());
             }
 
-            arrayAdapter = new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_list_item_1,dependentNames);
+            // Carer has no dependent users
+            if (dependentUsers.size() == 0) {
+                dependentNames.add("No dependents on display :(");
+            }
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(CarerHomeActivity.this, android.R.layout.simple_list_item_1, dependentNames);
+
+            dependentsList.setAdapter(arrayAdapter);
+
+            // Set an on click listener
+            dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String[] options = {"Call", "Message"};
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
+                    builder.setTitle("Choose");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // the user clicked on options[which]
+                        }
+                    });
+                    builder.show();
+                }
+            });
         }
     }
 }
