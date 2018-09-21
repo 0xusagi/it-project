@@ -71,19 +71,10 @@ const deleteCarer = (req, res, next) => {
  * @returns {Query}
  */
 const addDependentToCarer = (req, res, next) => {
-    // console.log("here");
-    // console.log("req.body", req.body);
     let depId = req.body.dependentId;
-    console.log("depId", depId);
-    // let depUpdate = {
-    //     dependents: []
-    // };
-    // depUpdate.dependents.push(depId);
-    // console.log("depUpdate", depUpdate);
-
     let options = {new: true};
     const response = Carer.findByIdAndUpdate(req.params.id,
-        { $push: { dependents: depId } }, options,
+        { $addToSet: { dependents: depId } }, options,
         (err, carer) => {
         if (err) {
             return res.status(400).send(err);
