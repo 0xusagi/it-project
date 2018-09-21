@@ -15,6 +15,12 @@ chai.use(chaiHttp);
 import { Location } from "../models/location";
 
 describe('Locations', () => {
+    beforeEach((done) => {
+        Location.deleteMany({}, (err) => {
+            done();
+        });
+    });
+
     /**
      * Test POST /locations/new
      */
@@ -41,4 +47,41 @@ describe('Locations', () => {
                 done();
             })
     });
+
+    it('should get a location', (done) => {
+        Location.create(sampleLocation, (err, location) => {
+            chai.request(app)
+                .get(`/locations/${location._id}`)
+                .end((err,res) => {
+                    res.body.displayName.should.equal(location.displayName);
+                    done();
+                });
+        });
+    });
+
+    it('should update a location', (done) => {
+        Location.create(sampleLocation, (err, location) => {
+            const newDisplayName = {displayName: "Brunetti's"};
+
+            chai.request(app)
+                .put(`/locations/${location._id}`)
+                .type('form')
+                .send(newDisplayName)
+                .end((err, res) => {
+                    res.body.displayName.should.equal(newDisplayName.displayName);
+                    done();
+                })
+        })
+    });
+
+    it('should delete a location', (done) => {
+        Location.create(sampleLocation, (err, location) => {
+            chai.request(app)
+                .delete(`/locations/${location._id}`)
+                .end((err, res) => {
+                    res.body.displayName.should.equal(location.displayName);
+                    done();
+                })
+        })
+    })
 });

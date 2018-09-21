@@ -26,7 +26,7 @@ describe('Users', () => {
     let salt = bcrypt.genSaltSync(10);
 
     /**
-     * Test POST /users/new
+     * Some mock test objects
      */
     const sampleCarer = {
         mobile: '12345678',
@@ -42,19 +42,24 @@ describe('Users', () => {
         userType: 'Dependent'
     };
 
-    const sampleDependent_v2 = {
+
+    const sampleDependent2_hashed = {
         mobile: '12345678',
         password: bcrypt.hashSync('my-password', salt),
         name: 'Joel Smith',
         userType: 'Dependent'
     };
 
-    const sampleDependent_v3 = {
+    const sampleDependent2_nohash = {
         mobile: '12345678',
         password: 'my-password',
         name: 'Joel Smith',
         userType: 'Dependent'
     };
+
+    /*
+    * Actual tests
+    */
 
     it('should create a new carer', (done) => {
         chai.request(app)
@@ -64,7 +69,7 @@ describe('Users', () => {
             .end((err, res) => {
                 res.should.have.status(201);
                 done();
-            })
+            });
     });
 
     it('should create a new dependent', (done) => {
@@ -75,7 +80,7 @@ describe('Users', () => {
             .end((err, res) => {
                 res.should.have.status(201);
                 done();
-            })
+            });
     });
 
     it('should get a carer', (done) => {
@@ -86,7 +91,7 @@ describe('Users', () => {
                     res.body.name.should.equal(carer.name);
                     done();
                 });
-        })
+        });
     });
 
     it('should update a carer', (done) => {
@@ -100,8 +105,8 @@ describe('Users', () => {
                 .end((err, res) => {
                     res.body.name.should.equal(newName.name);
                     done();
-                })
-        })
+                });
+        });
     });
 
     it('should delete a carer', (done) => {
@@ -111,9 +116,9 @@ describe('Users', () => {
                 .end((err, res) => {
                     res.body.name.should.equal(carer.name);
                     done();
-                })
-        })
-    })
+                });
+        });
+    });
 
 
     it('should get a dependent', (done) => {
@@ -124,7 +129,7 @@ describe('Users', () => {
                     res.body.name.should.equal(dependent.name);
                     done();
                 });
-        })
+        });
     });
 
     it('should update a dependent', (done) => {
@@ -138,8 +143,8 @@ describe('Users', () => {
                 .end((err, res) => {
                     res.body.name.should.equal(newName.name);
                     done();
-                })
-        })
+                });
+        });
     });
 
     it('should delete a dependent', (done) => {
@@ -149,17 +154,17 @@ describe('Users', () => {
                 .end((err, res) => {
                     res.body.name.should.equal(dependent.name);
                     done();
-                })
-        })
+                });
+        });
     });
 
     it('should login a dependent with correct credentials', (done) => {
         // console.log("sampleDependent", sampleDependent_v3);
-        Dependent.create(sampleDependent_v2, (err, dependent) => {
+        Dependent.create(sampleDependent2_hashed, (err, dependent) => {
             chai.request(app)
                 .post('/user/login')
                 .type('form')
-                .send(sampleDependent_v3)
+                .send(sampleDependent2_nohash)
                 .end((err, res) => {
                     // console.log(res.message);
                     res.should.have.status(200);
@@ -173,7 +178,7 @@ describe('Users', () => {
             chai.request(app)
                 .post('/user/login')
                 .type('form')
-                .send(sampleDependent_v2)
+                .send(sampleDependent2_nohash)
                 .end((err, res) => {
                     // console.log(res.message);
                     res.should.have.status(401);
