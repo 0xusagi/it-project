@@ -48,6 +48,6 @@ public interface AccountService {
     Call<CarerUser> getCarer(@Path("id") String id);
 
     //CONFIRM
-    @GET("user/{id}")
-    Call<DependentUser> getDependent(@Path("id") String phoneNumber);
+    @GET("/dependents/{id}")
+    Call<DependentUser> getDependent(@Path("id") String id);
 }

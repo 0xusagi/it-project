@@ -101,6 +101,8 @@ public class DependentHomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         user = (DependentUser) intent.getSerializableExtra(LoginHandler.PASSED_USER);
 
+        System.out.println(user.getId());
+
         locationsFrame = (LinearLayout) findViewById(R.id.locationsFrame);
 
         locationButtons = new Button[LOCATIONS_PER_PAGE];
