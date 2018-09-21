@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -136,19 +137,15 @@ public class AccountCreationActivity extends AppCompatActivity {
                 //Register the account, handle input errors
 
                 //Logs in on new thread asynchronously
+                @SuppressLint("StaticFieldLeak")
                 AsyncTask task = new AsyncTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
                         try {
                             AccountController.registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
-                        } catch (InvalidDetailsException e) {
-                            messageText.setText(e.getMessage());
-                            messageText.setTextColor(Color.RED);
-                            return null;
                         } catch (Exception e) {
                             String message = e.getMessage();
-                            //Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                            System.out.println("Register account: " + message);
+                            setErrorText(message);
                             return null;
                         }
                         return null;
@@ -161,7 +158,8 @@ public class AccountCreationActivity extends AppCompatActivity {
                             LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
                             finish();
                         } catch (Exception e) {
-                            System.out.println("Login: " + e.getMessage());
+                            String message = e.getMessage();
+                            setErrorText(message);
                         }
                     }
                 };
@@ -194,4 +192,15 @@ public class AccountCreationActivity extends AppCompatActivity {
         cancelButton.performClick();
     }
 
+    public void setErrorText(final String message) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messageText.setTextColor(Color.RED);
+                messageText.setText(message);
+            }
+        });
+
+    }
 }
