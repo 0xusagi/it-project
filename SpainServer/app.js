@@ -7,7 +7,7 @@ import { router } from "./routes";
 const db = require('./models/db');
 const app = express();
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use('/', router);
 
 app.listen(process.env.PORT || 3000, () => {
