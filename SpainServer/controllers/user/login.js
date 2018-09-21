@@ -5,13 +5,13 @@ import bcrypt from 'bcryptjs';
 
 const loginUser = (req, res, next) => {
     // console.log("req.body", req.body);
-    const response = User.find({mobile: req.body.mobile})
-        .then(users => {
-            // console.log("users", users);
-            if (users.length == 0) {
+    const response = User.findOne({mobile: req.body.mobile})
+        .then(user => {
+            // console.log("user", user);
+            if (!user) {
                 return res.status(404).json({message: "User not found"});
             } else {
-                return users[0];
+                return user;
             }
         })
         .then(user => {
