@@ -20,6 +20,7 @@ router.put('/carers/:id', carerIndex.put);
 router.delete('/carers/:id', carerIndex.delete);
 
 router.put('/carers/:id/addDependent', carerIndex.addDependent);
+router.get('/carers/:id/getDependents', carerIndex.getDependents);
 
 /**
  * Dependents
