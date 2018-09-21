@@ -1,4 +1,5 @@
 import { Carer } from "../../../models/user";
+import { Dependent } from "../../../models/user";
 
 /**
  * Gets a carer from the database from a supplied id parameter.
@@ -85,9 +86,49 @@ const addDependentToCarer = (req, res, next) => {
     return response;
 };
 
+/**
+ * Gets all dependents of a carer from the database
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Query}
+ */
+const getDependentsOfCarer = (req, res, next) => {
+    const response = Carer.findById(req.params.id, (err, carer) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        // console.log("carer", carer);
+        let dependents_array = handleCarerDependents(carer.dependents);
+        return res.status(200).json(dependents_array);
+    });
+
+    return response;
+};
+
+function handleCarerDependents(dependents) {
+    var response2, dependents_arr = [];
+    dependents.forEach((dependent_id) => {
+        // console.log("dependent_id", dependent_id);
+        response2 = Dependent.findById(dependent_id, (err, dep) => {
+            if (err) {
+                return res.status(400).send(err);
+            }
+            console.log("dep",dep);
+            dependents_arr.push(dep);
+            console.log("dependents_arr (1)",dependents_arr);
+        });
+        console.log("dependents_arr (2)",dependents_arr);
+    });
+    console.log("returning dependents_arr", dependents_arr);
+    return dependents_arr;
+}
+
 export const carerIndex = {
     get: getCarer,
     put: updateCarer,
     delete: deleteCarer,
-    addDependent: addDependentToCarer
+    addDependent: addDependentToCarer,
+    getDependents: getDependentsOfCarer
 };
