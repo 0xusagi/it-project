@@ -18,7 +18,7 @@ chai.use(chaiHttp);
 
 describe('Users', () => {
     beforeEach((done) => {
-        User.remove({}, (err) => {
+        User.deleteMany({}, (err) => {
             done();
         });
     });
@@ -173,7 +173,7 @@ describe('Users', () => {
             chai.request(app)
                 .post('/user/login')
                 .type('form')
-                .send(sampleDependent_v3)
+                .send(sampleDependent_v2)
                 .end((err, res) => {
                     // console.log(res.message);
                     res.should.have.status(401);

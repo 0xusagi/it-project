@@ -60,7 +60,7 @@ const getLocation = (req, res, next) => {
 
 const updateLocation = (req, res, next) => {
     let options = {new: true};
-    let response = Location.findByIdAndUpdate(req.params.id,
+    let response = Location.findOneAndUpdate(req.params.id,
     req.body, options,
     (err, location) => {
         if (err) {
@@ -72,7 +72,7 @@ const updateLocation = (req, res, next) => {
 };
 
 const deleteLocation = (req, res, next) => {
-    let response = Location.findByIdAndDelete(req.params.id, (err, location) => {
+    let response = Location.findOneAndDelete(req.params.id, (err, location) => {
         if (err) {
             return res.status(400).send(err);
         }

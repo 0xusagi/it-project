@@ -1,6 +1,5 @@
 import {Carer, Dependent} from "../../models/user";
 import {User} from "../../models/user";
-// import {Carer, Dependent} from "../../models/user";
 import bcrypt from 'bcryptjs';
 
 const loginUser = (req, res, next) => {
