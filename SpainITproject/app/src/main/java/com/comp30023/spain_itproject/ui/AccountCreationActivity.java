@@ -143,24 +143,14 @@ public class AccountCreationActivity extends AppCompatActivity {
                     protected Object doInBackground(Object[] objects) {
                         try {
                             AccountController.registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
+                            LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                            finish();
                         } catch (Exception e) {
                             String message = e.getMessage();
                             setErrorText(message);
                             return null;
                         }
                         return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Object o) {
-                        //Login the user
-                        try {
-                            LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
-                            finish();
-                        } catch (Exception e) {
-                            String message = e.getMessage();
-                            setErrorText(message);
-                        }
                     }
                 };
 
