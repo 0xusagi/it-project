@@ -3,6 +3,7 @@ import {registrationController} from "./controllers/user/register";
 import {loginController} from "./controllers/user/login";
 import {carerIndex} from "./controllers/user/carer";
 import {dependentIndex} from "./controllers/user/dependent";
+import {locationIndex} from "./controllers/location/index";
 
 const router = express.Router();
 
@@ -29,11 +30,13 @@ router.get('/dependents/:id', dependentIndex.get);
 router.put('/dependents/:id', dependentIndex.put);
 router.delete('/dependents/:id', dependentIndex.delete);
 
+router.put('/dependents/:id/addCarer', dependentIndex.addCarer);
+
 /**
  * Locations
  */
-router.get('/locations')
-router.post('/locations/new');
+router.get('/locations');
+router.post('/locations/new', locationIndex.new);
 router.get('/locations/:id');
 router.put('/locations/:id');
 router.delete('/locations/:id');

@@ -64,7 +64,8 @@ const deleteCarer = (req, res, next) => {
 };
 
 /**
- * Specifically adds a dependent to a carer based on supplied dependent id from the client.
+ * Specifically adds a dependent to a carer's list of dependents
+ * based on supplied dependent id from the client.
  *
  * @param req
  * @param res

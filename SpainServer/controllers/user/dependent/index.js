@@ -62,8 +62,33 @@ const deleteDependent = (req, res, next) => {
     return response;
 };
 
+/**
+ * Specifically adds a carer to a dependent's list of carers
+ * based on supplied dependent id from the client.
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Query}
+ */
+const addCarerToDependent = (req, res, next) => {
+    let carerId = req.body.carerId;
+    let options = {new: true};
+    const response = Dependent.findByIdAndUpdate(req.params.id,
+        { $addToSet: { carers: carerId } }, options,
+        (err, dependent) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        return res.status(200).json(dependent);
+    });
+
+    return response;
+};
+
 export const dependentIndex = {
     get: getDependent,
     put: updateDependent,
-    delete: deleteDependent
+    delete: deleteDependent,
+    addCarer: addCarerToDependent
 };
