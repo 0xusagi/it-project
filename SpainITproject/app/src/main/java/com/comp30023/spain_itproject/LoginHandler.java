@@ -42,9 +42,12 @@ public class LoginHandler {
      */
     public static void newLogin(Context context, String phoneNumber, String pin, boolean isDependent) throws Exception {
 
-        LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent);
-        login(context);
-
+        try {
+            LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent);
+            login(context);
+        } catch (Exception e) {
+            LoginSharedPreference.setLogOut(context);
+        }
     }
 
     /**

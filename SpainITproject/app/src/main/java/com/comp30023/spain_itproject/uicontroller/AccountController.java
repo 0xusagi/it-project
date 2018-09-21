@@ -29,6 +29,8 @@ public class AccountController {
 
     private static User user = null;
 
+    private static String id;
+
     public User getUser() {
         return user;
     }
@@ -45,7 +47,7 @@ public class AccountController {
         }
     }
 
-    public static User registerAccount(String name, String phoneNumber, String pin,
+    public static void registerAccount(String name, String phoneNumber, String pin,
                                        String confirmPin, Boolean isDependent)
             throws Exception {
 
@@ -86,7 +88,6 @@ public class AccountController {
         }
 
         user = newUser;
-        return newUser;
     }
 
     public static User login(String phoneNumber, String pin, boolean isDependent) throws Exception {
@@ -124,6 +125,7 @@ public class AccountController {
         }
 
         if (loginUser.equals(user)) {
+            id = user.getId();
             return user;
         } else {
             throw new Exception("User not created");
