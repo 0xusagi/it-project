@@ -26,6 +26,7 @@ router.get('/carers/:id/getDependents', carerIndex.getDependents);
 /**
  * Dependents
  */
+
 router.get('/dependents/:id', dependentIndex.get);
 router.put('/dependents/:id', dependentIndex.put);
 router.delete('/dependents/:id', dependentIndex.delete);
