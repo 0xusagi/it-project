@@ -7,14 +7,17 @@
   "scripts": {
     "babel": "NODE_ENV=dev babel-node app.js --presets es2015",
     "nodemon-babel": "nodemon --exec yarn run babel",
-    "test": "mocha --compilers js:babel-register test"
+    "test": "NODE_ENV=test mocha --require babel-register test"
   },
   "dependencies": {
+    "basic-auth": "^2.0.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.10",
     "nodemon": "^1.18.3",
-    "win-node-env": "^0.3.0"
+    "randomstring": "^1.1.5"
   },
   "devDependencies": {
     "babel": "^6.23.0",

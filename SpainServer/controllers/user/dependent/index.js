@@ -29,8 +29,9 @@ const getDependent = (req, res, next) => {
  * @returns {Query}
  */
 const updateDependent = (req, res, next) => {
-    const response = Dependent.findByIdAndUpdate(req.params.id,
-        req.body, {new: true},
+    let options = {new: true};
+    const response = Dependent.findOneAndUpdate(req.params.id,
+        req.body, options,
         (err, dependent) => {
             if (err) {
                 return res.status(400).send(err);
@@ -50,7 +51,7 @@ const updateDependent = (req, res, next) => {
  * @returns {Query}
  */
 const deleteDependent = (req, res, next) => {
-    const response = Dependent.findByIdAndDelete(req.params.id, (err, dependent) => {
+    const response = Dependent.findOneAndDelete(req.params.id, (err, dependent) => {
         if (err) {
             return res.status(400).send(err);
         }
@@ -61,8 +62,33 @@ const deleteDependent = (req, res, next) => {
     return response;
 };
 
+/**
+ * Specifically adds a carer to a dependent's list of carers
+ * based on supplied dependent id from the client.
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Query}
+ */
+const addCarerToDependent = (req, res, next) => {
+    let carerId = req.body.carerId;
+    let options = {new: true};
+    const response = Dependent.findOneAndUpdate(req.params.id,
+        { $addToSet: { carers: carerId } }, options,
+        (err, dependent) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        return res.status(200).json(dependent);
+    });
+
+    return response;
+};
+
 export const dependentIndex = {
     get: getDependent,
     put: updateDependent,
-    delete: deleteDependent
+    delete: deleteDependent,
+    addCarer: addCarerToDependent
 };
