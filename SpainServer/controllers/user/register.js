@@ -8,7 +8,7 @@ import bcrypt from 'bcryptjs';
  * @returns boolean | User
  */
 const newUserFromType = (data) => {
-    console.log(data);
+    // console.log(data);
     // salt and hash password
     let salt = bcrypt.genSaltSync(10);
 	let hash = bcrypt.hashSync(data.password, salt);
@@ -40,7 +40,7 @@ const newUserFromType = (data) => {
 const newUser = (req, res, next) => {
     const newUser = newUserFromType(req.body);
 
-    console.log(newUser);
+    // console.log(newUser);
     if (newUser === false) {
         return res.status(400).json({message: "User Error (Wrong user type inputted)"});
     }

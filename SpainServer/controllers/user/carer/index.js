@@ -116,13 +116,13 @@ function handleCarerDependents(dependents) {
             if (err) {
                 return res.status(400).send(err);
             }
-            console.log("dep",dep);
+            // console.log("dep",dep);
             dependents_arr.push(dep);
-            console.log("dependents_arr (1)",dependents_arr);
+            // console.log("dependents_arr (1)",dependents_arr);
         });
-        console.log("dependents_arr (2)",dependents_arr);
+        // console.log("dependents_arr (2)",dependents_arr);
     });
-    console.log("returning dependents_arr", dependents_arr);
+    // console.log("returning dependents_arr", dependents_arr);
     return dependents_arr;
 }
 

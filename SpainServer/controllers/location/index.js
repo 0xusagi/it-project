@@ -37,6 +37,11 @@ const newLocation = (req, res, next) => {
     return response;
 };
 
+const getAllLocations = (req, res, next) => {
+    return res.status(200).json({message: "test"});
+};
+
 export const locationIndex = {
-    new: newLocation
+    new: newLocation,
+    getAll: getAllLocations
 };
