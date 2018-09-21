@@ -30,7 +30,7 @@ const getDependent = (req, res, next) => {
  */
 const updateDependent = (req, res, next) => {
     let options = {new: true};
-    const response = Dependent.findByIdAndUpdate(req.params.id,
+    const response = Dependent.findOneAndUpdate(req.params.id,
         req.body, options,
         (err, dependent) => {
             if (err) {
@@ -51,7 +51,7 @@ const updateDependent = (req, res, next) => {
  * @returns {Query}
  */
 const deleteDependent = (req, res, next) => {
-    const response = Dependent.findByIdAndDelete(req.params.id, (err, dependent) => {
+    const response = Dependent.findOneAndDelete(req.params.id, (err, dependent) => {
         if (err) {
             return res.status(400).send(err);
         }
@@ -74,7 +74,7 @@ const deleteDependent = (req, res, next) => {
 const addCarerToDependent = (req, res, next) => {
     let carerId = req.body.carerId;
     let options = {new: true};
-    const response = Dependent.findByIdAndUpdate(req.params.id,
+    const response = Dependent.findOneAndUpdate(req.params.id,
         { $addToSet: { carers: carerId } }, options,
         (err, dependent) => {
         if (err) {
