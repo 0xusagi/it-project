@@ -31,7 +31,7 @@ const dependentSchema = new mongoose.Schema({
 }, options);
 
 const carerSchema = new mongoose.Schema({
-    dependents: Array
+    dependents: [String]
 });
 
 export const Carer = User.discriminator('Carer', carerSchema);

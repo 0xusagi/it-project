@@ -29,8 +29,9 @@ const getDependent = (req, res, next) => {
  * @returns {Query}
  */
 const updateDependent = (req, res, next) => {
+    let options = {new: true};
     const response = Dependent.findByIdAndUpdate(req.params.id,
-        req.body, {new: true},
+        req.body, options,
         (err, dependent) => {
             if (err) {
                 return res.status(400).send(err);
