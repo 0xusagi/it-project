@@ -1,5 +1,6 @@
 // Switch to the test database for testing
 require('babel-polyfill');
+import bcrypt from 'bcryptjs';
 
 let mongoose = require('mongoose');
 let chai = require('chai');
@@ -22,26 +23,35 @@ describe('Users', () => {
         });
     });
 
+    let salt = bcrypt.genSaltSync(10);
+
     /**
      * Test POST /users/new
      */
     const sampleCarer = {
         mobile: '12345678',
-        password: '1234',
+        password: bcrypt.hashSync('1234', salt),
         name: 'John Smith',
         userType: 'Carer'
     };
 
     const sampleDependent = {
         mobile: '12345678',
-        password: '1234',
+        password: bcrypt.hashSync('1234', salt),
         name: 'Joel Smith',
         userType: 'Dependent'
     };
 
     const sampleDependent_v2 = {
         mobile: '12345678',
-        password: 'incorrect-password',
+        password: bcrypt.hashSync('my-password', salt),
+        name: 'Joel Smith',
+        userType: 'Dependent'
+    };
+
+    const sampleDependent_v3 = {
+        mobile: '12345678',
+        password: 'my-password',
         name: 'Joel Smith',
         userType: 'Dependent'
     };
@@ -144,11 +154,12 @@ describe('Users', () => {
     });
 
     it('should login a dependent with correct credentials', (done) => {
-        Dependent.create(sampleDependent, (err, dependent) => {
+        // console.log("sampleDependent", sampleDependent_v3);
+        Dependent.create(sampleDependent_v2, (err, dependent) => {
             chai.request(app)
                 .post('/user/login')
                 .type('form')
-                .send(sampleDependent)
+                .send(sampleDependent_v3)
                 .end((err, res) => {
                     // console.log(res.message);
                     res.should.have.status(200);
@@ -162,7 +173,7 @@ describe('Users', () => {
             chai.request(app)
                 .post('/user/login')
                 .type('form')
-                .send(sampleDependent_v2)
+                .send(sampleDependent_v3)
                 .end((err, res) => {
                     // console.log(res.message);
                     res.should.have.status(401);
