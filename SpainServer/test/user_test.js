@@ -39,6 +39,13 @@ describe('Users', () => {
         userType: 'Dependent'
     };
 
+    const sampleDependent_v2 = {
+        mobile: '12345678',
+        password: 'incorrect-password',
+        name: 'Joel Smith',
+        userType: 'Dependent'
+    };
+
     it('should create a new carer', (done) => {
         chai.request(app)
             .post('/users/new')
@@ -89,7 +96,6 @@ describe('Users', () => {
 
     it('should delete a carer', (done) => {
         Carer.create(sampleCarer, (err, carer) => {
-
             chai.request(app)
                 .delete(`/carers/${carer._id}`)
                 .end((err, res) => {
@@ -128,7 +134,6 @@ describe('Users', () => {
 
     it('should delete a dependent', (done) => {
         Dependent.create(sampleDependent, (err, dependent) => {
-
             chai.request(app)
                 .delete(`/dependents/${dependent._id}`)
                 .end((err, res) => {
@@ -136,5 +141,33 @@ describe('Users', () => {
                     done();
                 })
         })
-    })
+    });
+
+    it('should login a dependent with correct credentials', (done) => {
+        Dependent.create(sampleDependent, (err, dependent) => {
+            chai.request(app)
+                .post('/user/login')
+                .type('form')
+                .send(sampleDependent)
+                .end((err, res) => {
+                    // console.log(res.message);
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+
+    it('should deny login for a dependent with incorrect credentials', (done) => {
+        Dependent.create(sampleDependent, (err, dependent) => {
+            chai.request(app)
+                .post('/user/login')
+                .type('form')
+                .send(sampleDependent_v2)
+                .end((err, res) => {
+                    // console.log(res.message);
+                    res.should.have.status(401);
+                    done();
+                });
+        });
+    });
 });
