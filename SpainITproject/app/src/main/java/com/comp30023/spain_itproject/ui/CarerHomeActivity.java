@@ -174,7 +174,7 @@ public class CarerHomeActivity extends AppCompatActivity {
             dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String[] options = {"Call", "Message"};
+                    String[] options = {"Call", "Message", "Add Dependent"};
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
                     builder.setTitle("Choose");

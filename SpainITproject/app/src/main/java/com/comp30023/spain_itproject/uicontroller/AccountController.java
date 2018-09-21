@@ -170,11 +170,19 @@ public class AccountController {
         }
     }
 
-    public static DependentUser getDependent(String id) throws IOException {
+    public static DependentUser getDependent(String id) throws IOException, BadRequestException {
         checkService();
 
         Call<DependentUser> call = service.getDependent(id);
+        Response<DependentUser> response = call.execute();
 
-        return call.execute().body();
+        if (response.isSuccessful()) {
+            // Could be null or there exists a dependent
+            return response.body();
+        }
+        // Bad request
+        else {
+            throw new BadRequestException("ERROR! Bad request");
+        }
     }
 }

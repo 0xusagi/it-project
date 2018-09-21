@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class DependentUser extends User implements Serializable {
 
+    @SerializedName("destinations")
     private ArrayList<Location> locations;
 
     private Location currentLocation;

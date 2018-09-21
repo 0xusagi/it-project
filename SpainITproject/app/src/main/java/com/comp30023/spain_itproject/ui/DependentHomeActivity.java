@@ -1,7 +1,10 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -10,15 +13,22 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Space;
+import android.widget.Toast;
 
 import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.uicontroller.AccountController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -114,7 +124,11 @@ public class DependentHomeActivity extends AppCompatActivity {
 
         helpButton = (Button) findViewById(R.id.helpButton);
 
+        // Make a call to the server
+        new DownloadDependentTask().execute(user.getId());
+
         locations = user.getLocations();
+
         topLocationsIndex = 0;
         setLocationButtons(0);
 
@@ -213,5 +227,37 @@ public class DependentHomeActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void storeDependentUser(DependentUser dependentUser) {
+        this.user = dependentUser;
+    }
+
+    private class DownloadDependentTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            try {
+                DependentUser dependent = AccountController.getDependent(strings[0]);
+
+                // The null body so the carer doesn't exist
+                if (dependent == null) {
+                    return null;
+                }
+
+                storeDependentUser(dependent);
+            }
+            // Exception when can't connect to the server
+            catch (IOException e) {
+                // When cannot get prompt whether to try again
+                Toast.makeText(getApplicationContext(), "Cannot get dependents. Please try again", Toast.LENGTH_SHORT).show();
+            }
+            // Exception when using invalid request
+            catch (BadRequestException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 }
