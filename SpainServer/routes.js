@@ -35,7 +35,7 @@ router.put('/dependents/:id/addCarer', dependentIndex.addCarer);
 /**
  * Locations
  */
-router.get('/locations');
+router.get('/locations', locationIndex.getAll);
 router.post('/locations/new', locationIndex.new);
 router.get('/locations/:id');
 router.put('/locations/:id');

@@ -4,10 +4,10 @@ import {User} from "../../models/user";
 import bcrypt from 'bcryptjs';
 
 const loginUser = (req, res, next) => {
-    console.log("req.body", req.body);
+    // console.log("req.body", req.body);
     const response = User.find({mobile: req.body.mobile})
         .then(users => {
-            console.log("users", users);
+            // console.log("users", users);
             if (users.length == 0) {
                 return res.status(404).json({message: "User not found"});
             } else {
