@@ -24,8 +24,9 @@ public interface AccountService {
     public static final String DEPENDENT_TYPE = "Dependent";
 
     //CONFIRM
+    @FormUrlEncoded
     @POST("user/login")
-    Call<User> loginUser(@Field("phone_number") String phoneNumber, @Field("pin") String pin);
+    Call<UserModel> loginUser(@Field("mobile") String phoneNumber, @Field("password") String pin);
 
     @FormUrlEncoded
     @POST("/users/new")

@@ -23,4 +23,8 @@ public class UserModel {
         return userId;
     }
 
+    public String getName() {
+        return name;
+    }
+
 }

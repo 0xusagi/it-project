@@ -92,18 +92,25 @@ public class AccountController {
 
     public static User login(String phoneNumber, String pin, boolean isDependent) throws Exception {
 
-        /*checkService();
+        checkService();
 
-        Call<User> call = service.loginUser(phoneNumber, pin);
+        Call<UserModel> call = service.loginUser(phoneNumber, pin);
 
-        Response<User> response = call.execute();
+        Response<UserModel> response = call.execute();
 
         User user = null;
         if (response.isSuccessful()) {
 
             switch (response.code()) {
-                case 201:
-                    user = response.body();
+                case 200:
+                    UserModel userModel = response.body();
+
+                    if (isDependent) {
+                        user = new DependentUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    }
+                    else {
+                        user = new CarerUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    }
                     break;
                 case 404:
                     throw new Exception(response.errorBody().string());
@@ -112,11 +119,11 @@ public class AccountController {
             }
 
         } else {
-            throw new NetworkConnectionFailureException();
+            throw new BadRequestException("ERROR");
         }
 
-        return user;*/
-
+        return user;
+/*
         User loginUser;
         if (isDependent) {
             loginUser = new DependentUser(null, phoneNumber, pin, null);
@@ -129,7 +136,7 @@ public class AccountController {
             return user;
         } else {
             throw new Exception("User not created");
-        }
+        } */
     }
 
     public ArrayList<Location> getLocations(DependentUser dependent) throws IOException {
