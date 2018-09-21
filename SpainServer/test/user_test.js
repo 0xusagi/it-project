@@ -1,5 +1,4 @@
 // Switch to the test database for testing
-process.env.NODE_ENV = 'test';
 require('babel-polyfill');
 
 let mongoose = require('mongoose');
@@ -25,7 +24,7 @@ describe('Users', () => {
 
     /**
      * Test POST /users/new
-     */node
+     */
     const sampleCarer = {
         mobile: '12345678',
         password: '1234',
@@ -43,6 +42,7 @@ describe('Users', () => {
     it('should create a new carer', (done) => {
         chai.request(app)
             .post('/users/new')
+            .type('form')
             .send(sampleCarer)
             .end((err, res) => {
                 res.should.have.status(201);
@@ -53,6 +53,7 @@ describe('Users', () => {
     it('should create a new dependent', (done) => {
         chai.request(app)
             .post('/users/new')
+            .type('form')
             .send(sampleDependent)
             .end((err, res) => {
                 res.should.have.status(201);
@@ -77,6 +78,7 @@ describe('Users', () => {
 
             chai.request(app)
                 .put(`/carers/${carer._id}`)
+                .type('form')
                 .send(newName)
                 .end((err, res) => {
                     res.body.name.should.equal(newName.name);
@@ -115,6 +117,7 @@ describe('Users', () => {
 
             chai.request(app)
                 .put(`/dependents/${dependent._id}`)
+                .type('form')
                 .send(newName)
                 .end((err, res) => {
                     res.body.name.should.equal(newName.name);
