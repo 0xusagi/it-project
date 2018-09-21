@@ -23,7 +23,7 @@ const loginUser = (req, res, next) => {
         })
         .catch(error => {
             // handle error
-            return res.status(500).json({message: "Internal server error"});
+            return res.status(500).json(error);
         });
     return response;
 };
