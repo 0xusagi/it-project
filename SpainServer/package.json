@@ -7,7 +7,7 @@
   "scripts": {
     "babel": "NODE_ENV=dev babel-node app.js --presets es2015",
     "nodemon-babel": "nodemon --exec yarn run babel",
-    "test": "NODE_ENV=test mocha --compilers js:babel-register test"
+    "test": "NODE_ENV=test mocha --require babel-register test"
   },
   "dependencies": {
     "basic-auth": "^2.0.0",
