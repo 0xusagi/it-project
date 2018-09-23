@@ -23,31 +23,32 @@ import retrofit2.Response;
  * Retrofit REST API for exchanging messages between client and server
  */
 public class AccountController {
+    private static AccountController instance;
 
     private static AccountService service;
     private static DetailsValidator validator;
 
-    private static User user = null;
+    public static AccountController getInstance() {
+        if (instance == null) {
+            instance = new AccountController();
+        }
 
-    private static String id;
-
-    public User getUser() {
-        return user;
+        return instance;
     }
 
-    private static void checkService() {
+    private void checkService() {
         if (service == null) {
             service = RetrofitClientInstance.getRetrofitInstance().create(AccountService.class);
         }
     }
 
-    private static void checkValidator() {
+    private void checkValidator() {
         if (validator == null) {
             validator = DetailsValidator.getInstance();
         }
     }
 
-    public static void registerAccount(String name, String phoneNumber, String pin,
+    public User registerAccount(String name, String phoneNumber, String pin,
                                        String confirmPin, Boolean isDependent)
             throws Exception {
 
@@ -58,64 +59,49 @@ public class AccountController {
 
         String userType = isDependent ? AccountService.DEPENDENT_TYPE : AccountService.CARER_TYPE;
 
-        Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType);
-        Response<UserModel> response = call.execute();
+        Call<User> call = service.registerUser(name, phoneNumber, pin, userType);
+        Response<User> response = call.execute();
 
-        UserModel userModel = null;
-        User newUser = null;
+        User user;
 
         if (response.isSuccessful()) {
 
             switch (response.code()) {
                 case HttpResponses.CREATED:
 
-                    userModel = response.body();
-
-                    System.out.println("User id in response: " + userModel.getId());
-                    if (isDependent) {
-                        newUser = new DependentUser(name, phoneNumber, pin, userModel.getId());
-                    } else {
-                        newUser = new CarerUser(name, phoneNumber, pin, userModel.getId());
-                    }
-
+                    user = response.body();
                     break;
 
                 default:
-                    throw new Exception(response.errorBody().string());
+                    // Default: good response but user is not created
+                    return null;
             }
         } else {
-            throw new Exception(response.errorBody().string());
+            // TODO check whether to use erroBOdy()
+            throw new BadRequestException(response.errorBody().string());
         }
 
-        user = newUser;
+        return user;
     }
 
-    public static User login(String phoneNumber, String pin, boolean isDependent) throws Exception {
+    public User login(String phoneNumber, String pin) throws Exception {
 
         checkService();
 
-        Call<UserModel> call = service.loginUser(phoneNumber, pin);
+        Call<User> call = service.loginUser(phoneNumber, pin);
 
-        Response<UserModel> response = call.execute();
+        Response<User> response = call.execute();
 
-        User user = null;
+        User user;
         if (response.isSuccessful()) {
 
             switch (response.code()) {
                 case 200:
-                    UserModel userModel = response.body();
-
-                    if (isDependent) {
-                        user = new DependentUser(userModel.getName(), phoneNumber, pin, userModel.getId());
-                    }
-                    else {
-                        user = new CarerUser(userModel.getName(), phoneNumber, pin, userModel.getId());
-                    }
+                    user = response.body();
                     break;
-                case 404:
-                    throw new Exception(response.errorBody().string());
                 default:
-                    break;
+                    // Default: good response but user is not created
+                    return null;
             }
 
         } else {
@@ -159,7 +145,7 @@ public class AccountController {
      * @return
      * @throws IOException
      */
-    public static CarerUser getCarer(String id) throws IOException, BadRequestException {
+    public CarerUser getCarer(String id) throws IOException, BadRequestException {
         checkService();
 
         // Contact the server to request the list of dependents for a carer
@@ -179,7 +165,7 @@ public class AccountController {
         }
     }
 
-    public static DependentUser getDependent(String id) throws IOException, BadRequestException {
+    public DependentUser getDependent(String id) throws IOException, BadRequestException {
         checkService();
 
         Call<DependentUser> call = service.getDependent(id);

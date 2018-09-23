@@ -49,7 +49,7 @@ public class AddDependentActivity extends AppCompatActivity {
 
                 // Send to server
                 try {
-                    DependentUser dependentUser = AccountController.getDependent(phoneNumber);
+                    DependentUser dependentUser = AccountController.getInstance().getDependent(phoneNumber);
                     displayInfoDialog(dependentUser.getName());
                 } catch (IOException e) {
                     // Display error message as a toast

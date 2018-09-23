@@ -26,7 +26,6 @@ import java.io.IOException;
  * If previously signed in, directs to appropriate HomeActivity (depending on whether signed in as a Dependent or Carer)
  */
 public class StartActivity extends AppCompatActivity {
-
     private Button createAccountButton;
     private Button loginButton;
 
@@ -41,18 +40,19 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        if (LoginHandler.isLoggedIn(this)) {
-            login(this);
+        // Login the user if the user has already logged in without logging out
+        if (LoginHandler.getInstance().isLoggedIn(this)) {
+            LoginHandler.getInstance().login(this);
         }
 
-        createAccountButton = (Button) findViewById(R.id.createAccountButton);
+        createAccountButton = findViewById(R.id.createAccountButton);
         setCreateAccountButtonListener(this);
 
-        loginButton = (Button) findViewById(R.id.loginButton);
+        loginButton = findViewById(R.id.loginButton);
         setLoginButtonListener(this);
-
     }
 
+    /*
     private void login(final Context context) {
         AsyncTask task = new AsyncTask() {
             @Override
@@ -66,7 +66,7 @@ public class StartActivity extends AppCompatActivity {
                 return null;
             }
         };
-    }
+    } */
 
     private void setCreateAccountButtonListener(final Context context) {
         createAccountButton.setOnClickListener(new View.OnClickListener() {

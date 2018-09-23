@@ -20,16 +20,20 @@ import java.io.IOException;
  */
 public class LoginHandler {
 
-    /**
-     * String to store the ...User in the intent when passed to the ...HomeActivity
-     */
-    public static final String PASSED_USER = "PASSED USER";
+    private static LoginHandler instance;
 
+    public static LoginHandler getInstance() {
+        if (instance == null) {
+            instance = new LoginHandler();
+        }
+
+        return instance;
+    }
     /**
      * Determines whether a user has been logged in
      * @return Boolean value of whether a user's credentials are stored
      */
-    public static boolean isLoggedIn(Context context) {
+    public boolean isLoggedIn(Context context) {
         return LoginSharedPreference.checkLogIn(context);
     }
 
@@ -40,42 +44,36 @@ public class LoginHandler {
      * @param pin The pin of the user to be logged in
      * @param isDependent Whether the user to be logged in is a Dependent
      */
-    public static void newLogin(Context context, String phoneNumber, String pin, boolean isDependent) throws Exception {
+    public void login(Context context, String name, String phoneNumber, String pin,
+                                boolean isDependent, String id) {
+        LoginSharedPreference.setLogIn(context, name, phoneNumber, pin, isDependent, id);
 
-        try {
-            LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent);
-            login(context);
-        } catch (Exception e) {
-            LoginSharedPreference.setLogOut(context);
-        }
+        displayHomeScreen(context, isDependent);
     }
 
     /**
      * Log in the existing user
      * @param context
      */
-    public static void login(Context context) throws Exception {
+    public void login(Context context) {
+        displayHomeScreen(context, LoginSharedPreference.getIsDependent(context));
+    }
 
-        if (!LoginSharedPreference.checkLogIn(context)) {
-            return;
-        }
-
+    /**
+     * Helper function to display the correct home screen for corresponding user
+     * after logging in
+     * @param context
+     * @param isDependent
+     */
+    private void displayHomeScreen(Context context, boolean isDependent) {
         Intent intent;
-
-        String phoneNumber = LoginSharedPreference.getPhoneNumber(context);
-        String pin = LoginSharedPreference.getPin(context);
-        boolean isDependent = LoginSharedPreference.getIsDependent(context);
-
-        User user;
-        user = AccountController.login(phoneNumber, pin, isDependent);
-
         if (isDependent) {
             intent = new Intent(context, DependentHomeActivity.class);
         } else {
             intent = new Intent(context, CarerHomeActivity.class);
         }
 
-        intent.putExtra(PASSED_USER, user);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -87,8 +85,8 @@ public class LoginHandler {
 
         LoginSharedPreference.setLogOut(context);
         Intent intent = new Intent(context, StartActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
-
     }
 
 }

@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.validation.InvalidDetailsException;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
@@ -142,8 +143,8 @@ public class AccountCreationActivity extends AppCompatActivity {
                     @Override
                     protected Object doInBackground(Object[] objects) {
                         try {
-                            AccountController.registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
-                            LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                            User user = new AccountController().registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
+                            LoginHandler.getInstance().login(context, user.getName(), phoneNumber, pin, isDependent, user.getId());
                             finish();
                         } catch (Exception e) {
                             String message = e.getMessage();

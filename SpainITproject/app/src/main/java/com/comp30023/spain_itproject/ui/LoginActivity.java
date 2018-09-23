@@ -17,6 +17,7 @@ import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 import java.io.IOException;
 
@@ -125,7 +126,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     protected Object doInBackground(Object[] objects) {
                         try {
-                            LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
+                            User user = AccountController.getInstance().login(phoneNumber, pin);
+                            LoginHandler.getInstance().login(context, user.getName(), phoneNumber, pin, user.isDependent(), user.getId());
                             finish();
                         } catch (Exception e) {
                             Toast.makeText(context, e.getMessage().toString(), Toast.LENGTH_SHORT).show();

@@ -26,14 +26,14 @@ public interface AccountService {
     //CONFIRM
     @FormUrlEncoded
     @POST("user/login")
-    Call<UserModel> loginUser(@Field("mobile") String phoneNumber, @Field("password") String pin);
+    Call<User> loginUser(@Field("mobile") String phoneNumber, @Field("password") String pin);
 
     @FormUrlEncoded
     @POST("/users/new")
-    Call<UserModel> registerUser(@Field("name") String name,
-                                 @Field("mobile") String phoneNumber,
-                                 @Field("password") String pin,
-                                 @Field("userType") String userType);
+    Call<User> registerUser(@Field("name") String name,
+                            @Field("mobile") String phoneNumber,
+                            @Field("password") String pin,
+                            @Field("userType") String userType);
 
     //CONFIRM
     @GET("user/new")

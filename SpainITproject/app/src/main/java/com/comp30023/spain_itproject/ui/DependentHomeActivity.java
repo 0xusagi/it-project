@@ -63,8 +63,8 @@ public class DependentHomeActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
 
-    //The currently signed in user
-    private DependentUser user;
+    // Store the dependent user
+    DependentUser user;
 
     //Reference to signed in user's list of locations
     private ArrayList<Location> locations;
@@ -98,11 +98,6 @@ public class DependentHomeActivity extends AppCompatActivity {
         actionbar.setTitle("");
         actionbar.setSubtitle("");
 
-        Intent intent = getIntent();
-        user = (DependentUser) intent.getSerializableExtra(LoginHandler.PASSED_USER);
-
-        System.out.println(user.getId());
-
         locationsFrame = (LinearLayout) findViewById(R.id.locationsFrame);
 
         locationButtons = new Button[LOCATIONS_PER_PAGE];
@@ -127,14 +122,8 @@ public class DependentHomeActivity extends AppCompatActivity {
         helpButton = (Button) findViewById(R.id.helpButton);
 
         // Make a call to the server
-        new DownloadDependentTask().execute(user.getId());
+        new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
 
-        locations = user.getLocations();
-
-        topLocationsIndex = 0;
-        setLocationButtons(0);
-
-        System.out.println("User ID once started: " + user.getId());
 
     }
 
@@ -235,19 +224,14 @@ public class DependentHomeActivity extends AppCompatActivity {
         this.user = dependentUser;
     }
 
-    private class DownloadDependentTask extends AsyncTask<String, Void, Void> {
+    private class DownloadDependentTask extends AsyncTask<String, Void, DependentUser> {
 
         @Override
-        protected Void doInBackground(String... strings) {
+        protected DependentUser doInBackground(String... strings) {
             try {
-                DependentUser dependent = AccountController.getDependent(strings[0]);
+                DependentUser dependent = AccountController.getInstance().getDependent(strings[0]);
 
-                // The null body so the carer doesn't exist
-                if (dependent == null) {
-                    return null;
-                }
-
-                storeDependentUser(dependent);
+                return dependent;
             }
             // Exception when can't connect to the server
             catch (IOException e) {
@@ -260,6 +244,14 @@ public class DependentHomeActivity extends AppCompatActivity {
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(DependentUser dependentUser) {
+            locations = dependentUser.getLocations();
+
+            topLocationsIndex = 0;
+            setLocationButtons(0);
         }
     }
 }

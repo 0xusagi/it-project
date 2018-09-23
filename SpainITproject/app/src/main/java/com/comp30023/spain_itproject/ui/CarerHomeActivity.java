@@ -45,16 +45,10 @@ public class CarerHomeActivity extends AppCompatActivity {
     // Add Dependent button
     private Button addDependentsButton;
 
-    private User carerUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carer_home);
-
-        carerUser = (User) getIntent().getSerializableExtra(LoginHandler.PASSED_USER);
-
-        System.out.println("User id: " + carerUser.getId());
 
         dependentsList = findViewById(R.id.carerHome_dependentsList);
         displayDependentsList();
@@ -74,7 +68,7 @@ public class CarerHomeActivity extends AppCompatActivity {
 
 
         // Get the dependents list from the server
-        new DownloadDependentsListTask().execute(carerUser.getId());
+        new DownloadDependentsListTask().execute(LoginSharedPreference.getId(this));
 
 
     }
@@ -123,7 +117,7 @@ public class CarerHomeActivity extends AppCompatActivity {
         @Override
         protected ArrayList<DependentUser> doInBackground(String... strings) {
             try {
-                CarerUser carer= AccountController.getCarer(strings[0]);
+                CarerUser carer= AccountController.getInstance().getCarer(strings[0]);
 
                 System.out.println(carer.getName());
 

@@ -4,10 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public abstract class User implements Serializable {
+public class User implements Serializable {
 
     @SerializedName("_id")
     private String id;
+
+    @SerializedName("__t")
+    private String type;
 
     @SerializedName("name")
     private String name;
@@ -31,7 +34,6 @@ public abstract class User implements Serializable {
         return name;
     }
 
-
     public String getId() {
         return id;
     }
@@ -42,6 +44,14 @@ public abstract class User implements Serializable {
 
     public String getPin() {
         return password;
+    }
+
+    public boolean isDependent() {
+        if (type == "Dependent") {
+            return true;
+        }
+
+        return false;
     }
 
     public boolean equals(User other) {
