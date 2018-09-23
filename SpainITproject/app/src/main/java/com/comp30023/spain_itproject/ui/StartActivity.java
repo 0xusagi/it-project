@@ -74,7 +74,6 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(context, AccountCreationActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }
@@ -86,7 +85,6 @@ public class StartActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(context, LoginActivity.class);
                 startActivity(intent);
-                finish();
 
             }
         });
