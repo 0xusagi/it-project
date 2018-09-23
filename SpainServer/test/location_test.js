@@ -45,7 +45,7 @@ describe('Locations', () => {
             .end((err, res) => {
                 res.should.have.status(201);
                 done();
-            })
+            });
     });
 
     it('should get a location', (done) => {
@@ -54,6 +54,17 @@ describe('Locations', () => {
                 .get(`/locations/${location._id}`)
                 .end((err,res) => {
                     res.body.displayName.should.equal(location.displayName);
+                    done();
+                });
+        });
+    });
+
+    it('should get all locations', (done) => {
+        Location.create(sampleLocation, (err, location) => {
+            chai.request(app)
+                .get('/locations')
+                .end((err,res) => {
+                    res.body.should.be.an('array');
                     done();
                 });
         });
@@ -70,8 +81,8 @@ describe('Locations', () => {
                 .end((err, res) => {
                     res.body.displayName.should.equal(newDisplayName.displayName);
                     done();
-                })
-        })
+                });
+        });
     });
 
     it('should delete a location', (done) => {
@@ -81,7 +92,7 @@ describe('Locations', () => {
                 .end((err, res) => {
                     res.body.displayName.should.equal(location.displayName);
                     done();
-                })
-        })
-    })
+                });
+        });
+    });
 });
