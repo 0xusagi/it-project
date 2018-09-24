@@ -24,15 +24,16 @@ public interface AccountService {
     public static final String DEPENDENT_TYPE = "Dependent";
 
     //CONFIRM
+    @FormUrlEncoded
     @POST("user/login")
-    Call<User> loginUser(@Field("phone_number") String phoneNumber, @Field("pin") String pin);
+    Call<UserModel> loginUser(@Field("mobile") String phoneNumber, @Field("password") String pin);
 
     @FormUrlEncoded
     @POST("/users/new")
     Call<UserModel> registerUser(@Field("name") String name,
-                                 @Field("mobile") String phoneNumber,
-                                 @Field("password") String pin,
-                                 @Field("userType") String userType);
+                            @Field("mobile") String phoneNumber,
+                            @Field("password") String pin,
+                            @Field("userType") String userType);
 
     //CONFIRM
     @GET("user/new")
@@ -48,6 +49,6 @@ public interface AccountService {
     Call<CarerUser> getCarer(@Path("id") String id);
 
     //CONFIRM
-    @GET("user/{id}")
-    Call<DependentUser> getDependent(@Path("id") String phoneNumber);
+    @GET("/dependents/{id}")
+    Call<DependentUser> getDependent(@Path("id") String id);
 }

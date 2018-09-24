@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.comp30023.spain_itproject.validation.PhoneNumberLengthValidator;
 
@@ -48,13 +49,15 @@ public class AddDependentActivity extends AppCompatActivity {
 
                 // Send to server
                 try {
-                    DependentUser dependentUser = AccountController.getDependent(phoneNumber);
+                    DependentUser dependentUser = AccountController.getInstance().getDependent(phoneNumber);
                     displayInfoDialog(dependentUser.getName());
                 } catch (IOException e) {
                     // Display error message as a toast
                     Toast errorMsg = Toast.makeText(getApplicationContext(), "Dependent does not exist", Toast.LENGTH_SHORT);
                     errorMsg.setGravity(Gravity.CENTER, 0, 0);
                     errorMsg.show();
+                } catch (BadRequestException e) {
+                    // TODO handle error
                 }
             }
         });

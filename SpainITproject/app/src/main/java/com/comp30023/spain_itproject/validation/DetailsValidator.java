@@ -1,5 +1,7 @@
 package com.comp30023.spain_itproject.validation;
 
+import android.telecom.Call;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -34,6 +36,10 @@ public class DetailsValidator implements Serializable {
 
     public static void addValidator(DetailsValidator validator) {
         singleton.validators.add(validator);
+    }
+
+    public ArrayList<DetailsValidator> getValidators() {
+        return validators;
     }
 
 }

@@ -19,8 +19,16 @@ public class UserModel {
 
     private String password;
 
+    public String getUserType() {
+        return userType;
+    }
+
     public String getId() {
         return userId;
+    }
+
+    public String getName() {
+        return name;
     }
 
 }

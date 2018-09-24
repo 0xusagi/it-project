@@ -15,7 +15,7 @@ import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
-import com.comp30023.spain_itproject.LoginHandler;
+import com.comp30023.spain_itproject.ui.LoginHandler;
 
 import java.util.ArrayList;
 
@@ -23,6 +23,8 @@ import java.util.ArrayList;
  * Display fragment of the dependent's list of locations
  */
 public class DependentListFragment extends Fragment {
+
+    public static final String USER_ARGUMENT = "USER";
 
     /**
      * The maximum number of locations buttons that are viewed within the frame
@@ -56,7 +58,7 @@ public class DependentListFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_locations_list, container, false);
 
-        user = (User) getActivity().getIntent().getSerializableExtra(LoginHandler.PASSED_USER);
+        user = (User) getArguments().getSerializable(USER_ARGUMENT);
         locations = ((DependentUser) user).getLocations();
 
         locationsFrame = (LinearLayout) view.findViewById(R.id.locationsFrame);
@@ -81,6 +83,8 @@ public class DependentListFragment extends Fragment {
         });
 
         setLocationButtons(0);
+
+
 
         // Inflate the layout for this fragment
         return view;

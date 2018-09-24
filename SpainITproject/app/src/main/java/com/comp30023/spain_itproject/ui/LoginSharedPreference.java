@@ -2,98 +2,129 @@ package com.comp30023.spain_itproject.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
+// TODO determine whether pin needs to be stored
 /**
  * Contains the current login status and information as saved in a SharedPreferences
  */
 public class LoginSharedPreference {
+    // Instance of Shared preference
+    private static SharedPreferences instance;
 
-    public static final String LOGIN = "LOGIN";
+    private static final String PREF_PATH = "com.comp30023.spain_itproject.LOGIN_PREF";
 
-    private static final String PREF_IS_LOGGED_IN = "IS_LOGGED_IN";
-    private static final String PREF_PHONE_NUMBER = "PHONE_NUMBER";
-    private static final String PREF_PIN = "PIN";
-    private static final String PREF_IS_DEPENDENT = "IS_DEPENDENT";
-
-    //Status of whether the SharedPreference has been set
-    private static boolean set = false;
+    private enum Pref {
+        IS_LOGGED_IN,
+        ID,
+        NAME,
+        PHONE_NUMBER,
+        PIN,
+        IS_DEPENDENT
+    }
 
     /**
-     * The SharedPreferences Instance being used
+     * Check if there exists a shared preference otherwise get it
+     * @param context
      */
-    private static SharedPreferences instance;
+    private static void checkInstance(Context context) {
+        if (instance == null) {
+            instance = context.getSharedPreferences(PREF_PATH, Context.MODE_PRIVATE);
+        }
+    }
 
     /**
      * Saves the login information in the SharedPreferences instance
-     *
-     * @param phoneNumber The phone number of the user
-     * @param pin The pin of the user
-     * @param isDependent Whether the user is a dependent
+     * @param context
+     * @param phoneNumber
+     * @param pin
+     * @param isDependent
+     * @param id
      */
-    public static void setLogIn(Context context, String phoneNumber, String pin, boolean isDependent) {
+    public static void setLogIn(Context context, String phoneNumber, String pin,
+                                boolean isDependent, String id) {
+        checkInstance(context);
 
-        checkSharedPreferences(context);
+        // Store the information of the user
+        SharedPreferences.Editor editor = instance.edit();
+        editor.putBoolean(Pref.IS_LOGGED_IN.name(), true);
+        editor.putString(Pref.PHONE_NUMBER.name(), phoneNumber);
+        editor.putString(Pref.PIN.name(), pin);
+        editor.putBoolean(Pref.IS_DEPENDENT.name(), isDependent);
+        editor.putString(Pref.ID.name(), id);
 
-        SharedPreferences.Editor edit = instance.edit();
-        edit.putBoolean(PREF_IS_LOGGED_IN, true);
-        edit.putString(PREF_PHONE_NUMBER, phoneNumber);
-        edit.putString(PREF_PIN, pin);
-        edit.putBoolean(PREF_IS_DEPENDENT, isDependent);
-
-        edit.commit();
+        editor.commit();
     }
 
     /**
      * Clears the login information in the SharedPreferences
+     * @param context
      */
     public static void setLogOut(Context context) {
-        checkSharedPreferences(context);
-        SharedPreferences.Editor edit = instance.edit().clear();
-        edit.commit();
+        checkInstance(context);
+
+        SharedPreferences.Editor editor = instance.edit();
+
+        editor.clear();
+        editor.commit();
     }
 
     /**
      * Determines whether the user has signed in
+     * @param context
      * @return Boolean value to represent whether the user has signed in
      */
     public static boolean checkLogIn(Context context) {
-        checkSharedPreferences(context);
-        return instance.getBoolean(PREF_IS_LOGGED_IN, false);
+        checkInstance(context);
+        return instance.getBoolean(Pref.IS_LOGGED_IN.name(), false);
     }
 
     /**
-     * @return The phone number of the current user
+     * Get name of user
+     * @param context
+     * @return name if exists, null otherwise
+     */
+    public static String getName(Context context) {
+        checkInstance(context);
+        return instance.getString(Pref.NAME.name(), null);
+    }
+
+    /**
+     * Get the id of user
+     * @param context
+     * @return id if exists, null otherwise
+     */
+    public static String getId(Context context) {
+        checkInstance(context);
+        return instance.getString(Pref.ID.name(), null);
+    }
+
+    /**
+     * Get phone number of user
+     * @param context
+     * @return phone number if exists, null otherwise
      */
     public static String getPhoneNumber(Context context) {
-        checkSharedPreferences(context);
-        return instance.getString(PREF_PHONE_NUMBER, "");
+        checkInstance(context);
+        return instance.getString(Pref.PHONE_NUMBER.name(), null);
     }
 
     /**
-     * @return The pin of the current user
+     * Get the pin of user
+     * @param context
+     * @return pin if exists, null otherwise
      */
     public static String getPin(Context context) {
-        checkSharedPreferences(context);
-        return instance.getString(PREF_PIN, "");
+        checkInstance(context);
+        return instance.getString(Pref.PIN.name(), null);
     }
 
     /**
-     * @return Boolean value representing whether the user is a dependent
+     * Get whether user is a dependent or not
+     * @param context
+     * @return
      */
     public static boolean getIsDependent(Context context) {
-        checkSharedPreferences(context);
-        return instance.getBoolean(PREF_IS_DEPENDENT, true);
+        checkInstance(context);
+        return instance.getBoolean(Pref.IS_DEPENDENT.name(), true);
     }
-
-    /**
-     * Retrieves the SharedPreferences from the application context
-     * @param context
-     */
-    private static void checkSharedPreferences(Context context) {
-        if (instance == null) {
-            instance = PreferenceManager.getDefaultSharedPreferences(context);
-        }
-    }
-
 }

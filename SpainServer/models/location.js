@@ -29,7 +29,7 @@ export const locationSchema = mongoose.Schema({
     description: {
         type: String
     },
-    avatarLink: {
+    imageUrl: {
         type: String
     },
     popularity: {

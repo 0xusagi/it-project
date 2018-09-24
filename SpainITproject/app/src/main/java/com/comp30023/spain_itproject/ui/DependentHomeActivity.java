@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -15,11 +16,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.comp30023.spain_itproject.LoginHandler;
+import android.widget.LinearLayout;
+import android.widget.Space;
+import android.widget.Toast;
+
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.uicontroller.AccountController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -41,8 +48,8 @@ public class DependentHomeActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
 
-    //The currently signed in user
-    private DependentUser user;
+    // Store the dependent user
+    DependentUser user;
 
     //Reference to signed in user's list of locations
     private ArrayList<Location> locations;
@@ -58,18 +65,11 @@ public class DependentHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dependent_home);
 
-        Intent intent = getIntent();
-        user = (DependentUser) intent.getSerializableExtra(LoginHandler.PASSED_USER);
+        // Make a call to the server
+        new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
 
         fragmentManager = getSupportFragmentManager();
-
-        listFragment = new DependentListFragment();
-
         ViewGroup fragmentContainer = (ViewGroup) findViewById(R.id.fragment_container);
-
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_container, listFragment);
-        transaction.commit();
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
         callButton = (Button) findViewById(R.id.callButton);
@@ -85,9 +85,7 @@ public class DependentHomeActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionbar.setTitle("");
         actionbar.setSubtitle("");
-
         helpButton = (Button) findViewById(R.id.helpButton);
-
     }
 
     /**
@@ -119,4 +117,53 @@ public class DependentHomeActivity extends AppCompatActivity {
         });
     }
 
+    private void storeDependentUser(DependentUser dependentUser) {
+        this.user = dependentUser;
+    }
+
+    private class DownloadDependentTask extends AsyncTask<String, Void, DependentUser> {
+
+        @Override
+        protected DependentUser doInBackground(String... strings) {
+
+            try {
+
+                DependentUser dependent = AccountController.getInstance().getDependent(strings[0]);
+                storeDependentUser(dependent);
+
+                return null;
+            }
+            // Exception when can't connect to the server
+            catch (IOException e) {
+                // When cannot get prompt whether to try again
+                Toast.makeText(getApplicationContext(), "Cannot get dependents. Please try again", Toast.LENGTH_SHORT).show();
+            }
+            // Exception when using invalid request
+            catch (BadRequestException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        /**
+         * Load the list fragment of the dependent's locations
+         * @param dependentUser
+         */
+        @Override
+        protected void onPostExecute(DependentUser dependentUser) {
+            super.onPostExecute(dependentUser);
+
+            Bundle arguments = new Bundle();
+            arguments.putSerializable(DependentListFragment.USER_ARGUMENT, user);
+
+            listFragment = new DependentListFragment();
+            listFragment.setArguments(arguments);
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+            transaction.add(R.id.fragment_container, listFragment);
+            transaction.commit();
+        }
+    }
 }

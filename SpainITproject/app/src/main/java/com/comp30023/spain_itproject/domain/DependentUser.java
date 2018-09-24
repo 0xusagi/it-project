@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class DependentUser extends User implements Serializable {
 
+    @SerializedName("destinations")
     private ArrayList<Location> locations;
 
     private Location currentLocation;
@@ -16,7 +17,7 @@ public class DependentUser extends User implements Serializable {
 
     public DependentUser(String name, String phoneNumber, String pin, String id) {
         super(name, phoneNumber, pin, id);
-        locations = new ArrayList<Location>();
+        locations = new ArrayList<>();
     }
 
     public ArrayList<Location> getLocations() {
@@ -25,6 +26,10 @@ public class DependentUser extends User implements Serializable {
 
     public void addLocation(Location location) {
         locations.add(location);
+    }
+
+    public boolean isDependent() {
+        return true;
     }
 
 }

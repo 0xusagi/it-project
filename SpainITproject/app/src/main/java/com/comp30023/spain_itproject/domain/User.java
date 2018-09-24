@@ -9,6 +9,9 @@ public abstract class User implements Serializable {
     @SerializedName("_id")
     private String id;
 
+    @SerializedName("__t")
+    private String type;
+
     @SerializedName("name")
     private String name;
 
@@ -31,7 +34,6 @@ public abstract class User implements Serializable {
         return name;
     }
 
-
     public String getId() {
         return id;
     }
@@ -47,4 +49,6 @@ public abstract class User implements Serializable {
     public boolean equals(User other) {
         return mobile.equals(other.mobile) && password.equals(other.password);
     }
+
+    public abstract boolean isDependent();
 }

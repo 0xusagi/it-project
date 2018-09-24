@@ -1,6 +1,5 @@
 package com.comp30023.spain_itproject.ui;
 
-import android.accounts.Account;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,11 +15,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
@@ -45,16 +42,10 @@ public class CarerHomeActivity extends AppCompatActivity {
     // Add Dependent button
     private Button addDependentsButton;
 
-    private User carerUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carer_home);
-
-        carerUser = (User) getIntent().getSerializableExtra(LoginHandler.PASSED_USER);
-
-        System.out.println("User id: " + carerUser.getId());
 
         dependentsList = findViewById(R.id.carerHome_dependentsList);
         displayDependentsList();
@@ -74,7 +65,7 @@ public class CarerHomeActivity extends AppCompatActivity {
 
 
         // Get the dependents list from the server
-        new DownloadDependentsListTask().execute(carerUser.getId());
+        new DownloadDependentsListTask().execute(LoginSharedPreference.getId(this));
 
 
     }
@@ -123,7 +114,7 @@ public class CarerHomeActivity extends AppCompatActivity {
         @Override
         protected ArrayList<DependentUser> doInBackground(String... strings) {
             try {
-                CarerUser carer= AccountController.getCarer(strings[0]);
+                CarerUser carer= AccountController.getInstance().getCarer(strings[0]);
 
                 System.out.println(carer.getName());
 
@@ -174,7 +165,7 @@ public class CarerHomeActivity extends AppCompatActivity {
             dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String[] options = {"Call", "Message"};
+                    String[] options = {"Call", "Message", "Add Dependent"};
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
                     builder.setTitle("Choose");
