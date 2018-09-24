@@ -76,6 +76,7 @@ const addCarerToDependent = (req, res, next) => {
     let carerMobile = req.body.carerMobile;
     let carerId = getCarerIdFromMobile(carerMobile);
     // console.log("carerId", carerId);
+    // some sort of Asynchronous stuff going on here 
     let options = {new: true};
     const response = Dependent.findOneAndUpdate(req.params.id,
         { $addToSet: { carers: carerId } }, options,
@@ -95,7 +96,7 @@ function getCarerIdFromMobile(m) {
         if (err) {
             return -1;
         }
-        console.log("carer[0].id;", carer[0].id);
+        // console.log("carer[0].id;", carer[0].id);
         return carer[0].id;
     });
 }
