@@ -26,11 +26,11 @@ public interface AccountService {
     //CONFIRM
     @FormUrlEncoded
     @POST("user/login")
-    Call<User> loginUser(@Field("mobile") String phoneNumber, @Field("password") String pin);
+    Call<UserModel> loginUser(@Field("mobile") String phoneNumber, @Field("password") String pin);
 
     @FormUrlEncoded
     @POST("/users/new")
-    Call<User> registerUser(@Field("name") String name,
+    Call<UserModel> registerUser(@Field("name") String name,
                             @Field("mobile") String phoneNumber,
                             @Field("password") String pin,
                             @Field("userType") String userType);

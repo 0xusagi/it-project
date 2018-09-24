@@ -35,20 +35,18 @@ public class LoginSharedPreference {
     /**
      * Saves the login information in the SharedPreferences instance
      * @param context
-     * @param name
      * @param phoneNumber
      * @param pin
      * @param isDependent
      * @param id
      */
-    public static void setLogIn(Context context, String name, String phoneNumber, String pin,
+    public static void setLogIn(Context context, String phoneNumber, String pin,
                                 boolean isDependent, String id) {
         checkInstance(context);
 
         // Store the information of the user
         SharedPreferences.Editor editor = instance.edit();
         editor.putBoolean(Pref.IS_LOGGED_IN.name(), true);
-        editor.putString(Pref.NAME.name(), name);
         editor.putString(Pref.PHONE_NUMBER.name(), phoneNumber);
         editor.putString(Pref.PIN.name(), pin);
         editor.putBoolean(Pref.IS_DEPENDENT.name(), isDependent);

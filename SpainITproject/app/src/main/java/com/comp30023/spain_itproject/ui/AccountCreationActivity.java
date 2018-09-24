@@ -12,20 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.User;
-import com.comp30023.spain_itproject.validation.InvalidDetailsException;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
-
-import java.io.IOException;
-
-import retrofit2.Call;
-
-import static android.widget.Toast.LENGTH_SHORT;
 
 /**
  * Activity for uses to create/register an account
@@ -143,9 +134,7 @@ public class AccountCreationActivity extends AppCompatActivity {
                     @Override
                     protected Object doInBackground(Object[] objects) {
                         try {
-                            User user = new AccountController().registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
-                            LoginHandler.getInstance().login(context, user.getName(), phoneNumber, pin, isDependent, user.getId());
-                            finish();
+                            LoginHandler.getInstance().register(context, name, phoneNumber, pin, confirmPin, isDependent);
                         } catch (Exception e) {
                             String message = e.getMessage();
                             setErrorText(message);

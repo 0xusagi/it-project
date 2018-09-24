@@ -1,6 +1,5 @@
 package com.comp30023.spain_itproject.ui;
 
-import android.accounts.Account;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,11 +15,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 

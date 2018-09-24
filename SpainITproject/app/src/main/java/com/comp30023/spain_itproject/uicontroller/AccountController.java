@@ -59,17 +59,25 @@ public class AccountController {
 
         String userType = isDependent ? AccountService.DEPENDENT_TYPE : AccountService.CARER_TYPE;
 
-        Call<User> call = service.registerUser(name, phoneNumber, pin, userType);
-        Response<User> response = call.execute();
+        Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType);
+        Response<UserModel> response = call.execute();
 
-        User user;
+        UserModel userModel;
+        User user = null;
 
         if (response.isSuccessful()) {
 
             switch (response.code()) {
                 case HttpResponses.CREATED:
 
-                    user = response.body();
+                    userModel = response.body();
+
+                    if (userModel.getUserType().equals(AccountService.DEPENDENT_TYPE)) {
+                        user = new DependentUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    } else {
+                        user = new CarerUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    }
+
                     break;
 
                 default:
@@ -78,7 +86,7 @@ public class AccountController {
             }
         } else {
             // TODO check whether to use erroBOdy()
-            throw new BadRequestException(response.errorBody().string());
+            throw new BadRequestException("Error: response.errorBody().string()");
         }
 
         return user;
@@ -88,16 +96,26 @@ public class AccountController {
 
         checkService();
 
-        Call<User> call = service.loginUser(phoneNumber, pin);
+        Call<UserModel> call = service.loginUser(phoneNumber, pin);
 
-        Response<User> response = call.execute();
+        Response<UserModel> response = call.execute();
 
-        User user;
+        UserModel userModel;
+        User user = null;
+
         if (response.isSuccessful()) {
 
             switch (response.code()) {
-                case 200:
-                    user = response.body();
+                case HttpResponses.SUCCESSFUL:
+
+                    userModel = response.body();
+
+                    if (userModel.getUserType().equals(AccountService.DEPENDENT_TYPE)) {
+                        user = new DependentUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    } else {
+                        user = new CarerUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    }
+
                     break;
                 default:
                     // Default: good response but user is not created
@@ -105,24 +123,10 @@ public class AccountController {
             }
 
         } else {
-            throw new BadRequestException("ERROR");
+            throw new BadRequestException(response.message());
         }
 
         return user;
-/*
-        User loginUser;
-        if (isDependent) {
-            loginUser = new DependentUser(null, phoneNumber, pin, null);
-        } else {
-            loginUser = new CarerUser(null, phoneNumber, pin, null);
-        }
-
-        if (loginUser.equals(user)) {
-            id = user.getId();
-            return user;
-        } else {
-            throw new Exception("User not created");
-        } */
     }
 
     public ArrayList<Location> getLocations(DependentUser dependent) throws IOException {
@@ -161,7 +165,7 @@ public class AccountController {
         // Bad request
         else {
             // TODO maybe change to another exception for bad request
-            throw new BadRequestException("ERROR! Bad request");
+            throw new BadRequestException("ERROR! Bad request: " + response.message());
         }
     }
 
@@ -177,7 +181,7 @@ public class AccountController {
         }
         // Bad request
         else {
-            throw new BadRequestException("ERROR! Bad request");
+            throw new BadRequestException("ERROR! Bad request: " + response.message());
         }
     }
 }

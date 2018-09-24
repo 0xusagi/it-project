@@ -27,4 +27,8 @@ public class DependentUser extends User implements Serializable {
         locations.add(location);
     }
 
+    public boolean isDependent() {
+        return true;
+    }
+
 }

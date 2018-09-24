@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,14 +13,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
-
-import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -122,15 +118,15 @@ public class LoginActivity extends AppCompatActivity {
                 final Boolean isDependent = dependentButton.isChecked();
 
                 //Asynchronous task for logging in
+                @SuppressLint("StaticFieldLeak")
                 AsyncTask task = new AsyncTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
                         try {
-                            User user = AccountController.getInstance().login(phoneNumber, pin);
-                            LoginHandler.getInstance().login(context, user.getName(), phoneNumber, pin, user.isDependent(), user.getId());
+                            LoginHandler.getInstance().login(context, phoneNumber, pin);
                             finish();
                         } catch (Exception e) {
-                            Toast.makeText(context, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                         return null;
                     }

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public abstract class User implements Serializable {
 
     @SerializedName("_id")
     private String id;
@@ -46,15 +46,9 @@ public class User implements Serializable {
         return password;
     }
 
-    public boolean isDependent() {
-        if (type == "Dependent") {
-            return true;
-        }
-
-        return false;
-    }
-
     public boolean equals(User other) {
         return mobile.equals(other.mobile) && password.equals(other.password);
     }
+
+    public abstract boolean isDependent();
 }

@@ -4,4 +4,6 @@ public class HttpResponses {
 
     public final static int CREATED = 201;
 
+    public final static int SUCCESSFUL = 200;
+
 }

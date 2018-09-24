@@ -1,23 +1,13 @@
 package com.comp30023.spain_itproject.ui;
 
-import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.User;
-import com.comp30023.spain_itproject.ui.AccountCreationActivity;
-import com.comp30023.spain_itproject.uicontroller.AccountController;
-
-import java.io.IOException;
 
 /**
  * Launching activity
@@ -51,22 +41,6 @@ public class StartActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         setLoginButtonListener(this);
     }
-
-    /*
-    private void login(final Context context) {
-        AsyncTask task = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                try {
-                    LoginHandler.login(context);
-                    finish();
-                } catch (Exception e) {
-                    LoginHandler.logout(context);
-                }
-                return null;
-            }
-        };
-    } */
 
     private void setCreateAccountButtonListener(final Context context) {
         createAccountButton.setOnClickListener(new View.OnClickListener() {

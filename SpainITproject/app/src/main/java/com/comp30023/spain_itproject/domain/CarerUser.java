@@ -17,4 +17,8 @@ public class CarerUser extends User implements Serializable {
     public ArrayList<DependentUser> getDependents() {
         return dependents;
     }
+
+    public boolean isDependent() {
+        return false;
+    }
 }
