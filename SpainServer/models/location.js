@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+mongoose.set('useCreateIndex', true);
+
 export const locationSchema = mongoose.Schema({
     _locationId: mongoose.Schema.Types.ObjectId,
     lat: {

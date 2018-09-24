@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { locationSchema } from "./location";
 
+mongoose.set('useCreateIndex', true);
+
 const options = { discriminatorKey: 'kind' };
 
 const userSchema = new mongoose.Schema({

@@ -88,10 +88,21 @@ describe('Users', () => {
             });
     });
 
-    it('should get a carer', (done) => {
+    it('should get a carer by id', (done) => {
         Carer.create(sampleCarer, (err, carer) => {
             chai.request(app)
                 .get(`/carers/${carer._id}`)
+                .end((err,res) => {
+                    res.body.name.should.equal(carer.name);
+                    done();
+                });
+        });
+    });
+
+    it('should get a carer\'s name by mobile', (done) => {
+        Carer.create(sampleCarer, (err, carer) => {
+            chai.request(app)
+                .get(`/carer/name/${carer.mobile}`)
                 .end((err,res) => {
                     res.body.name.should.equal(carer.name);
                     done();
@@ -126,10 +137,21 @@ describe('Users', () => {
     });
 
 
-    it('should get a dependent', (done) => {
+    it('should get a dependent by id', (done) => {
         Dependent.create(sampleDependent, (err, dependent) => {
             chai.request(app)
                 .get(`/dependents/${dependent._id}`)
+                .end((err,res) => {
+                    res.body.name.should.equal(dependent.name);
+                    done();
+                });
+        });
+    });
+
+    it('should get a dependent\'s name by mobile', (done) => {
+        Dependent.create(sampleDependent, (err, dependent) => {
+            chai.request(app)
+                .get(`/dependent/name/${dependent.mobile}`)
                 .end((err,res) => {
                     res.body.name.should.equal(dependent.name);
                     done();
