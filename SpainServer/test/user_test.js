@@ -16,6 +16,11 @@ let expect = chai.expect;
 
 chai.use(chaiHttp);
 
+/**
+* Need tests for:
+    two users with one mobile number
+**/
+
 describe('Users', () => {
     beforeEach((done) => {
         User.deleteMany({}, (err) => {
@@ -65,7 +70,7 @@ describe('Users', () => {
         chai.request(app)
             .post('/users/new')
             .type('form')
-            .send(sampleCarer)
+            .send(sampleDependent2_nohash)
             .end((err, res) => {
                 res.should.have.status(201);
                 done();
@@ -76,7 +81,7 @@ describe('Users', () => {
         chai.request(app)
             .post('/users/new')
             .type('form')
-            .send(sampleDependent)
+            .send(sampleDependent2_nohash)
             .end((err, res) => {
                 res.should.have.status(201);
                 done();

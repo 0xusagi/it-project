@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
     _userId: mongoose.Schema.Types.ObjectId,
     mobile: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     name: {
         type: String,
