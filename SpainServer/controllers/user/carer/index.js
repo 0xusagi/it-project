@@ -126,10 +126,31 @@ function handleCarerDependents(dependents) {
     return dependents_arr;
 }
 
+/**
+ * Specifically gets a carer's name given their mobile number
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Query}
+ */
+const getCarerByMobile = (req, res, next) => {
+    let userMobile = req.params.mobile;
+    const response = Carer.find({mobile: userMobile}, (err, carer) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        return res.status(200).send({name: carer[0].name});
+    });
+
+    return response;
+}
+
 export const carerIndex = {
     get: getCarer,
     put: updateCarer,
     delete: deleteCarer,
     addDependent: addDependentToCarer,
-    getDependents: getDependentsOfCarer
+    getDependents: getDependentsOfCarer,
+    getName: getCarerByMobile
 };
