@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.uicontroller;
 
+import com.comp30023.spain_itproject.domain.Address;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.network.AccountService;
@@ -178,5 +179,14 @@ public class AccountController {
         Call<DependentUser> call = service.getDependent(id);
 
         return call.execute().body();
+    }
+
+    public static ArrayList<Location> getLocations(String dependentId) {
+
+        ArrayList<Location> locations = new ArrayList<Location>();
+
+        locations.add(new Location(new Address("13 Foam Street", null, 3195, null, "Parkdale", "Vic"), "Home"));
+
+        return locations;
     }
 }

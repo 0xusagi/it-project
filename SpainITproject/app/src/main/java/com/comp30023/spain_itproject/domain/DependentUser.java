@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.domain;
 
+import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -19,7 +20,7 @@ public class DependentUser extends User implements Serializable {
     }
 
     public ArrayList<Location> getLocations() {
-        return locations;
+        return AccountController.getLocations(getId());
     }
 
     public void addLocation(Location location) {
