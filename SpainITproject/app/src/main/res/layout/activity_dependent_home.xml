@@ -12,7 +12,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.DependentHomeActivity">
+        tools:context=".ui.dependenthome.DependentHomeActivity">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -31,13 +31,13 @@
                     android:id="@+id/messagesButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:text="Messages" />
 
                 <Button
                     android:id="@+id/callButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:text="Calls" />
 
             </LinearLayout>
 

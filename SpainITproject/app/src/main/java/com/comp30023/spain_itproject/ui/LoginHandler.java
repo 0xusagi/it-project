@@ -3,8 +3,8 @@ package com.comp30023.spain_itproject.ui;
 import android.content.Context;
 import android.content.Intent;
 
-import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.ui.dependenthome.DependentHomeActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 /**

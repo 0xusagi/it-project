@@ -14,6 +14,7 @@ import com.comp30023.spain_itproject.domain.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -130,14 +131,6 @@ public class AccountController {
         return user;
     }
 
-    public ArrayList<Location> getLocations(DependentUser dependent) throws IOException {
-        checkService();
-
-        Call<ArrayList<Location>> call = service.getLocations(dependent);
-
-        return call.execute().body();
-    }
-
     public void addDependent(CarerUser carer, String dependentPhoneNumber) {
         checkService();
 
@@ -177,8 +170,10 @@ public class AccountController {
         Response<DependentUser> response = call.execute();
 
         if (response.isSuccessful()) {
-            // Could be null or there exists a dependent
-            return response.body();
+            DependentUser user = response.body();
+            user.addLocation(new Location(null, "Home"));
+            user.addCarer(new CarerUser("The Carer", null, null, null));
+            return user;
         }
         // Bad request
         else {
@@ -186,7 +181,7 @@ public class AccountController {
         }
     }
 
-    public static ArrayList<Location> getLocations(String dependentId) {
+    public ArrayList<Location> getLocations(String dependentId) {
 
         ArrayList<Location> locations = new ArrayList<Location>();
 

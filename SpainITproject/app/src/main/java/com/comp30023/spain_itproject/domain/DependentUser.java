@@ -17,11 +17,16 @@ public class DependentUser extends User implements Serializable {
 
     public DependentUser(String name, String phoneNumber, String pin, String id) {
         super(name, phoneNumber, pin, id);
-        locations = new ArrayList<>();
+        locations = new ArrayList<Location>();
+        carers = new ArrayList<CarerUser>();
     }
 
     public ArrayList<Location> getLocations() {
-        return AccountController.getLocations(getId());
+        return locations;
+    }
+
+    public ArrayList<CarerUser> getCarers() {
+        return carers;
     }
 
     public void addLocation(Location location) {
@@ -32,4 +37,7 @@ public class DependentUser extends User implements Serializable {
         return true;
     }
 
+    public void addCarer(CarerUser carer) {
+        carers.add(carer);
+    }
 }

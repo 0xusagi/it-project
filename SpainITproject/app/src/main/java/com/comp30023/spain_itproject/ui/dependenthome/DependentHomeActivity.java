@@ -1,7 +1,6 @@
-package com.comp30023.spain_itproject.ui;
+package com.comp30023.spain_itproject.ui.dependenthome;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.AsyncTask;
@@ -16,14 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.ui.LoginHandler;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 import java.io.IOException;
@@ -35,9 +35,10 @@ import java.util.ArrayList;
  */
 public class DependentHomeActivity extends AppCompatActivity {
 
-    private FragmentManager fragmentManager;
+    public static final String LOCATION_LIST_NAME = "Locations";
+    public static final String CARER_LIST_NAME = "Carers";
 
-    private DependentListFragment listFragment;
+    private FragmentManager fragmentManager;
 
     private Button messagesButton;
     private Button callButton;
@@ -73,6 +74,7 @@ public class DependentHomeActivity extends AppCompatActivity {
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
         callButton = (Button) findViewById(R.id.callButton);
+        setCallButtonListener(this);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         signOutButton = findViewById(R.id.signOutButton);
@@ -100,6 +102,22 @@ public class DependentHomeActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setCallButtonListener(final Context context) {
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ListFragment<CarerUser> carersFragment;
+                carersFragment = new ListFragment<CarerUser>(CARER_LIST_NAME, user, user.getCarers(), CarerFragment.class);
+
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container, carersFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 
 
@@ -154,15 +172,12 @@ public class DependentHomeActivity extends AppCompatActivity {
         protected void onPostExecute(DependentUser dependentUser) {
             super.onPostExecute(dependentUser);
 
-            Bundle arguments = new Bundle();
-            arguments.putSerializable(DependentListFragment.USER_ARGUMENT, user);
-
-            listFragment = new DependentListFragment();
-            listFragment.setArguments(arguments);
+            ListFragment<Location> locationsFragment;
+            locationsFragment = new ListFragment<Location>(LOCATION_LIST_NAME, user, user.getLocations(), MapFragment.class);
 
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-            transaction.add(R.id.fragment_container, listFragment);
+            transaction.add(R.id.fragment_container, locationsFragment);
             transaction.commit();
         }
     }

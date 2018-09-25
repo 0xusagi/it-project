@@ -29,7 +29,7 @@
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.DependentHomeActivity">
+        <activity android:name=".ui.dependenthome.DependentHomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>

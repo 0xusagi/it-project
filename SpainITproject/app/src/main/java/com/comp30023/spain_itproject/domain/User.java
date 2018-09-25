@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public abstract class User implements Serializable {
+public abstract class User implements Serializable, DisplayName {
 
     @SerializedName("_id")
     private String id;
@@ -51,4 +51,9 @@ public abstract class User implements Serializable {
     }
 
     public abstract boolean isDependent();
+
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
 }
