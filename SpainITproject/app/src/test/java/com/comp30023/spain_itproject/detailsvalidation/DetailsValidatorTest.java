@@ -1,10 +1,8 @@
-package com.comp30023.spain_itproject.validation;
+package com.comp30023.spain_itproject.detailsvalidation;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 

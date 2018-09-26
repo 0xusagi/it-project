@@ -16,6 +16,7 @@ import com.comp30023.spain_itproject.R;
  * If previously signed in, directs to appropriate HomeActivity (depending on whether signed in as a Dependent or Carer)
  */
 public class StartActivity extends AppCompatActivity {
+
     private Button createAccountButton;
     private Button loginButton;
 
@@ -23,7 +24,6 @@ public class StartActivity extends AppCompatActivity {
      * Initialises the activity and displays the layout
      * Initialises the LoginSharedPreference
      * Sets references and listeners to the buttons
-     *
      * @param savedInstanceState
      */
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class StartActivity extends AppCompatActivity {
 
         // Login the user if the user has already logged in without logging out
         if (LoginHandler.getInstance().isLoggedIn(this)) {
-            LoginHandler.getInstance().login(this);
+            LoginHandler.getInstance().continueLogin(this);
         }
 
         createAccountButton = findViewById(R.id.createAccountButton);
@@ -59,7 +59,6 @@ public class StartActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(context, LoginActivity.class);
                 startActivity(intent);
-
             }
         });
     }

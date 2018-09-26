@@ -11,6 +11,7 @@ import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.Location;
 
+//Fragment to be developed for when a carer is selected
 public class CarerFragment extends Fragment {
 
     private CarerUser carer;

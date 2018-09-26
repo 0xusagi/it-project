@@ -2,10 +2,12 @@ package com.comp30023.spain_itproject.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Pair;
 
 import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.ui.dependenthome.DependentHomeActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
+import com.comp30023.spain_itproject.detailsvalidation.DetailsValidator;
 
 /**
  * Logs in users and starts appropriate activity
@@ -33,45 +35,58 @@ public class LoginHandler {
     }
 
     /**
-     * Logs in a new user with details as specified by parameters
+     * Logs in user into the server with details as specified by parameter and receives their ID and account type
      * @param context The activity that called the method
      * @param phoneNumber The phone number of the user to be logged in
      * @param pin The pin of the user to be logged in
      */
     public void login(Context context, String phoneNumber, String pin) throws Exception {
 
-        User user = AccountController.getInstance().login(phoneNumber, pin);
+        Pair<String, Boolean> response = AccountController.getInstance().login(phoneNumber, pin);
 
-        Boolean isDependent = user.isDependent();
+        String userId = response.first;
+        Boolean isDependent = response.second;
 
-        LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent, user.getId());
-        displayHomeScreen(context, isDependent);
+        LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent, userId);
+        displayHomeScreen(context);
     }
 
+    /**
+     * Register a new account, set that account as logged in and then pass to the next activity
+     * @param context The activity calling the method
+     * @param name
+     * @param phoneNumber
+     * @param pin
+     * @param confirmPin
+     * @param isDependent
+     * @throws Exception Thrown with a message if there is an error in the registration process
+     */
     public void register(Context context, String name, String phoneNumber, String pin, String confirmPin, boolean isDependent) throws Exception {
 
-        User user = AccountController.getInstance().registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
+        DetailsValidator.getInstance().checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
+
+        User user = AccountController.getInstance().registerAccount(name, phoneNumber, pin, isDependent);
 
         LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent, user.getId());
-        displayHomeScreen(context, isDependent);
-
+        displayHomeScreen(context);
     }
 
     /**
      * Log in the existing user
-     * @param context
+     * @param context The activity calling the method
      */
-    public void login(Context context) {
-        displayHomeScreen(context, LoginSharedPreference.getIsDependent(context));
+    public void continueLogin(Context context) {
+        displayHomeScreen(context);
     }
 
     /**
      * Helper function to display the correct home screen for corresponding user
      * after logging in
      * @param context
-     * @param isDependent
      */
-    private void displayHomeScreen(Context context, boolean isDependent) {
+    private void displayHomeScreen(Context context) {
+
+        boolean isDependent = LoginSharedPreference.getIsDependent(context);
 
         Intent intent;
         if (isDependent) {

@@ -1,19 +1,11 @@
 package com.comp30023.spain_itproject.uicontroller;
 
-import android.telecom.Call;
-
 import com.comp30023.spain_itproject.network.AccountService;
-import com.comp30023.spain_itproject.network.RetrofitClientInstance;
-import com.comp30023.spain_itproject.validation.DetailsValidator;
-import com.comp30023.spain_itproject.validation.InvalidDetailsException;
+import com.comp30023.spain_itproject.detailsvalidation.DetailsValidator;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import javax.xml.validation.Validator;
-
-import static org.junit.Assert.*;
 
 public class AccountControllerTest {
     private static AccountService service;

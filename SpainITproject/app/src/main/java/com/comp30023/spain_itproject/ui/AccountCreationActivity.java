@@ -15,8 +15,6 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.User;
-import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 /**
  * Activity for uses to create/register an account
@@ -91,7 +89,7 @@ public class AccountCreationActivity extends AppCompatActivity {
     }
 
     /**
-     * References in the pin fields and sets input restrictions
+     * Sets references to the pin fields and sets input restrictions
      */
     private void setPinFields() {
 
@@ -105,6 +103,10 @@ public class AccountCreationActivity extends AppCompatActivity {
         confirmPinText.setFilters(pinFilters);
     }
 
+    /**
+     * Registers a new account on a separate thread and loads the next activity if successful
+     * @param context Reference to the activity the LoginHandler was called from
+     */
     private void setRegisterButtonListener(final Context context) {
         registerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -137,7 +139,7 @@ public class AccountCreationActivity extends AppCompatActivity {
                             LoginHandler.getInstance().register(context, name, phoneNumber, pin, confirmPin, isDependent);
                         } catch (Exception e) {
                             String message = e.getMessage();
-                            setErrorText(message);
+                            displayErrorMessage(message);
                             return null;
                         }
                         return null;
@@ -172,7 +174,11 @@ public class AccountCreationActivity extends AppCompatActivity {
         cancelButton.performClick();
     }
 
-    public void setErrorText(final String message) {
+    /**
+     * Displays a message in the text on the screen
+     * @param message Message to be displayed in the text
+     */
+    public void displayErrorMessage(final String message) {
 
         runOnUiThread(new Runnable() {
             @Override
@@ -181,6 +187,5 @@ public class AccountCreationActivity extends AppCompatActivity {
                 messageText.setText(message);
             }
         });
-
     }
 }

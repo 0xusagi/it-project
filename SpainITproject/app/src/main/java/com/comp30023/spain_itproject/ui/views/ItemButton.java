@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.ui;
+package com.comp30023.spain_itproject.ui.views;
 
 import android.content.Context;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Extension of the Button View that stores a item
  */
-public abstract class ItemButton<T extends Serializable> extends android.support.v7.widget.AppCompatButton {
+public class ItemButton<T extends Serializable> extends android.support.v7.widget.AppCompatButton {
 
     private T item;
 

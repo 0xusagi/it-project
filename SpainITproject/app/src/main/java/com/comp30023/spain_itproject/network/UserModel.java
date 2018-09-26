@@ -3,7 +3,7 @@ package com.comp30023.spain_itproject.network;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * A class to correspond with the JSON model on the MongoDB
+ * A class to correspond with the JSON model (user.js) on the MongoDB
  */
 public class UserModel {
 

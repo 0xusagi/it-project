@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 import android.widget.Toast;
@@ -21,36 +20,34 @@ import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
-import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * Activity that opens when a DependentUser is logged in
- * Displays the stored locations of the DependentUser
+ * Manages the fragments of the
  */
 public class DependentHomeActivity extends AppCompatActivity {
 
-    public static final String LOCATION_LIST_NAME = "Locations";
-    public static final String CARER_LIST_NAME = "Carers";
-
-    private FragmentManager fragmentManager;
-
-    private Button messagesButton;
-    private Button callButton;
-
-    private Button helpButton;
-
-    private Button signOutButton;
+    public static final String LIST_NAME_LOCATION = "Locations";
+    public static final String LIST_NAME_CARERS = "Carers";
 
     private DrawerLayout drawerLayout;
 
-    // Store the dependent user
-    DependentUser user;
+    private FragmentManager fragmentManager;
+    private ListFragment<CarerUser> carersFragment;
+    ListFragment<Location> locationsFragment;
+
+    private Button messagesButton;
+    private Button callsButton;
+    private Button helpButton;
+    private Button signOutButton;
+
+    //The logged in DependentUser
+    private DependentUser user;
 
     //Reference to signed in user's list of locations
     private ArrayList<Location> locations;
@@ -66,15 +63,14 @@ public class DependentHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dependent_home);
 
-        // Make a call to the server
+        fragmentManager = getSupportFragmentManager();
+
+        //Retrieve the logged in account from the server
         new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
 
-        fragmentManager = getSupportFragmentManager();
-        ViewGroup fragmentContainer = (ViewGroup) findViewById(R.id.fragment_container);
-
         messagesButton = (Button) findViewById(R.id.messagesButton);
-        callButton = (Button) findViewById(R.id.callButton);
-        setCallButtonListener(this);
+        callsButton = (Button) findViewById(R.id.callButton);
+        setCallsButtonListener(this);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         signOutButton = findViewById(R.id.signOutButton);
@@ -104,15 +100,14 @@ public class DependentHomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setCallButtonListener(final Context context) {
-        callButton.setOnClickListener(new View.OnClickListener() {
+    //Sets the listener for when the callsButton is pressed
+    private void setCallsButtonListener(final Context context) {
+        callsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                ListFragment<CarerUser> carersFragment;
-                carersFragment = new ListFragment<CarerUser>(CARER_LIST_NAME, user, user.getCarers(), CarerFragment.class);
-
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
+
                 transaction.replace(R.id.fragment_container, carersFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
@@ -120,7 +115,7 @@ public class DependentHomeActivity extends AppCompatActivity {
         });
     }
 
-
+    //Signs out the user and loads the StartActivity
     private void setSignOutButtonListener(final Context context) {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             /**
@@ -129,16 +124,14 @@ public class DependentHomeActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
+
                 LoginHandler.logout(context);
                 finish();
             }
         });
     }
 
-    private void storeDependentUser(DependentUser dependentUser) {
-        this.user = dependentUser;
-    }
-
+    //Downloads the logged in DependentUser from the database
     private class DownloadDependentTask extends AsyncTask<String, Void, DependentUser> {
 
         @Override
@@ -146,19 +139,14 @@ public class DependentHomeActivity extends AppCompatActivity {
 
             try {
 
-                DependentUser dependent = AccountController.getInstance().getDependent(strings[0]);
-                storeDependentUser(dependent);
-
+                user = AccountController.getInstance().getDependent(strings[0]);
                 return null;
             }
+
             // Exception when can't connect to the server
-            catch (IOException e) {
+            catch (Exception e) {
                 // When cannot get prompt whether to try again
-                Toast.makeText(getApplicationContext(), "Cannot get dependents. Please try again", Toast.LENGTH_SHORT).show();
-            }
-            // Exception when using invalid request
-            catch (BadRequestException e) {
-                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             return null;
@@ -172,8 +160,8 @@ public class DependentHomeActivity extends AppCompatActivity {
         protected void onPostExecute(DependentUser dependentUser) {
             super.onPostExecute(dependentUser);
 
-            ListFragment<Location> locationsFragment;
-            locationsFragment = new ListFragment<Location>(LOCATION_LIST_NAME, user, user.getLocations(), MapFragment.class);
+            carersFragment = new ListFragment<CarerUser>(LIST_NAME_CARERS, user, user.getCarers(), CarerFragment.class);
+            locationsFragment = new ListFragment<Location>(LIST_NAME_LOCATION, user, user.getLocations(), MapFragment.class);
 
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 

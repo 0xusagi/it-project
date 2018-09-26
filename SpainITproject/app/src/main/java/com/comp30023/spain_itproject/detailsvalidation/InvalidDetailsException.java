@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.validation;
+package com.comp30023.spain_itproject.detailsvalidation;
 
 public class InvalidDetailsException extends Exception {
 

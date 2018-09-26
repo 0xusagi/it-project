@@ -1,10 +1,12 @@
-package com.comp30023.spain_itproject.validation;
-
-import android.telecom.Call;
+package com.comp30023.spain_itproject.detailsvalidation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Checks details for a new user against constraints and throws an error if these aren't upheld
+ * Implements the singleton and composition GoF patterns
+ */
 public class DetailsValidator implements Serializable {
 
     private static DetailsValidator singleton;
@@ -15,27 +17,35 @@ public class DetailsValidator implements Serializable {
         validators = new ArrayList<DetailsValidator>();
     }
 
+    /**
+     * Checks details against multiple constraints
+     * @param name
+     * @param phoneNumber
+     * @param pin
+     * @param confirmPin
+     * @param isDependent
+     * @throws InvalidDetailsException
+     */
     public void checkDetails(String name, String phoneNumber, String pin, String confirmPin, boolean isDependent) throws InvalidDetailsException {
 
         for (DetailsValidator validator : validators) {
             validator.checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
         }
-
     }
 
     public static DetailsValidator getInstance() {
 
         if (singleton == null) {
             singleton = new DetailsValidator();
-            addValidator(new EqualPinsValidator());
-            addValidator(new PinLengthValidator());
-            addValidator(new PhoneNumberLengthValidator());
+            singleton.addValidator(new EqualPinsValidator());
+            singleton.addValidator(new PinLengthValidator());
+            singleton.addValidator(new PhoneNumberLengthValidator());
         }
         return singleton;
     }
 
-    public static void addValidator(DetailsValidator validator) {
-        singleton.validators.add(validator);
+    public void addValidator(DetailsValidator validator) {
+        validators.add(validator);
     }
 
     public ArrayList<DetailsValidator> getValidators() {

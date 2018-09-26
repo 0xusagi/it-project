@@ -3,7 +3,6 @@ package com.comp30023.spain_itproject.ui;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-// TODO determine whether pin needs to be stored
 /**
  * Contains the current login status and information as saved in a SharedPreferences
  */
@@ -16,7 +15,6 @@ public class LoginSharedPreference {
     private enum Pref {
         IS_LOGGED_IN,
         ID,
-        NAME,
         PHONE_NUMBER,
         PIN,
         IS_DEPENDENT
@@ -76,16 +74,6 @@ public class LoginSharedPreference {
     public static boolean checkLogIn(Context context) {
         checkInstance(context);
         return instance.getBoolean(Pref.IS_LOGGED_IN.name(), false);
-    }
-
-    /**
-     * Get name of user
-     * @param context
-     * @return name if exists, null otherwise
-     */
-    public static String getName(Context context) {
-        checkInstance(context);
-        return instance.getString(Pref.NAME.name(), null);
     }
 
     /**

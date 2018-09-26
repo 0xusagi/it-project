@@ -16,20 +16,18 @@ import android.widget.TextView;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DisplayName;
 import com.comp30023.spain_itproject.domain.User;
-import com.comp30023.spain_itproject.ui.ItemButton;
+import com.comp30023.spain_itproject.ui.views.ItemButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Display fragment of the dependent's list of list
+ * Fragment that displays a list of items that have a display name
  */
+@SuppressLint("ValidFragment")
 public class ListFragment<T extends DisplayName> extends Fragment {
 
     public static final String ITEM_ARGUMENT = "ITEM";
-
-    public ListFragment() {
-    }
 
     /**
      * The maximum number of list buttons that are viewed within the frame
@@ -41,24 +39,24 @@ public class ListFragment<T extends DisplayName> extends Fragment {
      */
     public static final float BUTTON_SPACING_WEIGHT = 0.2f;
 
-    //Reference to signed in user's list of list
-    private ArrayList<T> list;
-    private LinearLayout frame;
-
-    private Button previousPageButton;
-    private Button nextPageButton;
-
-    private ItemButton<T>[] buttons;
-
-    //Index in the list of the location that is at the top of the frame
-    private int topIndex;
+    private String name;
+    private Class nextClass;
 
     private User user;
 
+    //Reference to signed in user's list
+    private ArrayList<T> list;
+
+    //The parent view/layout
     private View view;
 
-    private Class nextClass;
-    private String name;
+    private LinearLayout frame;
+    private Button previousPageButton;
+    private Button nextPageButton;
+    private ItemButton<T>[] buttons;
+
+    //Index in the list of the item that is at the top of the frame
+    private int topIndex;
 
     @SuppressLint("ValidFragment")
     public ListFragment(String name, User user, ArrayList<T> list, Class nextClass) {
@@ -112,47 +110,51 @@ public class ListFragment<T extends DisplayName> extends Fragment {
 
         for (int i = 0; i < BUTTONS_PER_PAGE; i++) {
 
+            //Include space before next button (if not the first button)
             if (!first) {
                 Space space = new Space(view.getContext());
                 space.setLayoutParams(new LinearLayout.LayoutParams(0,1, BUTTON_SPACING_WEIGHT));
                 frame.addView(space);
             }
 
-            buttons[i] = new ItemButton<T>(view.getContext()) {
-                @Override
-                public void setItem(T item) {
-                    super.setItem(item);
-                    setText(item.getDisplayName());
-                }
-            };
+            buttons[i] = createItemButton();
 
-            buttons[i].setOnClickListener(itemButtonListener);
-
-            frame.addView(buttons[i]);
-            buttons[i].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f));
             first = false;
         }
     }
 
+    //Initialises the buttons within the frame
+    private ItemButton<T> createItemButton() {
+        //Create the button
+        ItemButton<T> button = new ItemButton<T>(view.getContext()) {
+            @Override
+            public void setItem(T item) {
+                super.setItem(item);
+                setText(item.getDisplayName());
+            }
+        };
+
+        //Set the on-click listener
+        button.setOnClickListener(itemButtonListener);
+
+        //Add the button to the frame and set the layout parameters
+        frame.addView(button);
+        button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f));
+
+        return button;
+    }
+
     //Changes the buttons viewed on the screen
+    //If direction == 0, goes to start of list
     //If direction > 0, gives next page
     //If direction < 0, gives previous page
     private void setButtons(int direction) {
 
-        //Set what the topIndex is to be after execution of this method
-        if (topIndex == 0) {
-            topIndex = 1;
-
-        } else if (direction > 0 && topIndex + BUTTONS_PER_PAGE <= list.size()) {
-            topIndex += BUTTONS_PER_PAGE;
-
-        } else if (direction < 0 && topIndex - BUTTONS_PER_PAGE >= 0) {
-            topIndex -= BUTTONS_PER_PAGE;
-        }
+        setNextTopIndex(direction);
 
         for (int i = topIndex; i < topIndex + BUTTONS_PER_PAGE; i++) {
 
-            //Attach a location to the button
+            //Attach an item to the button
             if (i - 1 < list.size()) {
                 T item = list.get(i - 1);
                 buttons[i - topIndex].setItem(item);
@@ -166,6 +168,22 @@ public class ListFragment<T extends DisplayName> extends Fragment {
         }
 
         setNavigationButtons();
+    }
+
+    //Sets the next top index depending on the direction
+    //If direction > 0, goes forward in list
+    //If direction < 0, goes back in list
+    //If direction == 0, goes to start of list
+    private void setNextTopIndex(int direction) {
+        if (topIndex == 0) {
+            topIndex = 1;
+
+        } else if (direction > 0 && topIndex + BUTTONS_PER_PAGE <= list.size()) {
+            topIndex += BUTTONS_PER_PAGE;
+
+        } else if (direction < 0 && topIndex - BUTTONS_PER_PAGE >= 0) {
+            topIndex -= BUTTONS_PER_PAGE;
+        }
     }
 
     //Displays the navigation buttons if required
@@ -189,22 +207,25 @@ public class ListFragment<T extends DisplayName> extends Fragment {
     //When an item button is pressed, starts the next activity as determined by the class
     //passed in the constructor
     private View.OnClickListener itemButtonListener = new View.OnClickListener() {
+
         @Override
-        /**
-         * When clicked, starts the next fragment and passes the location stored within the button
-         */
+        //When clicked, starts the next fragment and passes the location stored within the button
         public void onClick(View v) {
 
+            //The item button that is pressed
             ItemButton itemButton = (ItemButton) v;
             Serializable item = itemButton.getItem();
 
             FragmentManager fragmentManager = getFragmentManager();
+            assert fragmentManager != null;
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
             Bundle arguments = new Bundle();
             arguments.putSerializable(ITEM_ARGUMENT, item);
 
             try {
+
+                //Create new instance of the following class and pass the item
                 Fragment nextFragment = (Fragment) nextClass.newInstance();
 
                 nextFragment.setArguments(arguments);
@@ -213,9 +234,7 @@ public class ListFragment<T extends DisplayName> extends Fragment {
                 transaction.addToBackStack(null);
                 transaction.commit();
 
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (java.lang.InstantiationException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

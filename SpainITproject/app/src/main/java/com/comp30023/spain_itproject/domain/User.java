@@ -4,13 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public abstract class User implements Serializable, DisplayName {
+public abstract class User implements DisplayName {
 
     @SerializedName("_id")
     private String id;
-
-    @SerializedName("__t")
-    private String type;
 
     @SerializedName("name")
     private String name;
@@ -42,15 +39,9 @@ public abstract class User implements Serializable, DisplayName {
         return mobile;
     }
 
-    public String getPin() {
-        return password;
-    }
-
     public boolean equals(User other) {
         return mobile.equals(other.mobile) && password.equals(other.password);
     }
-
-    public abstract boolean isDependent();
 
     @Override
     public String getDisplayName() {

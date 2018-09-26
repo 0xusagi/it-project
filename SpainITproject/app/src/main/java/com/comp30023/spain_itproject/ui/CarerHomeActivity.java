@@ -126,13 +126,9 @@ public class CarerHomeActivity extends AppCompatActivity {
                 return carer.getDependents();
             }
             // Exception when can't connect to the server
-            catch (IOException e) {
+            catch (Exception e) {
                 // When cannot get prompt whether to try again
                 Toast.makeText(getApplicationContext(), "Cannot get dependents. Please try again", Toast.LENGTH_SHORT).show();
-            }
-            // Exception when using invalid request
-            catch (BadRequestException e) {
-                e.printStackTrace();
             }
 
             return null;

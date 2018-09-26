@@ -3,6 +3,7 @@ package com.comp30023.spain_itproject.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -21,11 +23,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final int PIN_LENGTH = 4;
 
+    private TextView messageText;
+
     private Button loginButton;
     private Button cancelButton;
-
-    private ToggleButton dependentButton;
-    private ToggleButton carerButton;
 
     private EditText phoneNumberText;
     private EditText pinText;
@@ -35,45 +36,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        messageText = (TextView) findViewById(R.id.login_message_text);
+
         loginButton = (Button) findViewById(R.id.loginButton);
         setLoginButtonListener(this);
 
         cancelButton = (Button) findViewById(R.id.cancelButton);
         setCancelButtonListener(this);
 
-        dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
-        dependentButton.setChecked(true);
-        dependentButton.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Toggles dependentButton to checked, carerButton to unchecked
-             * @param v
-             */
-            @Override
-            public void onClick(View v) {
-                dependentButton.setChecked(true);
-                carerButton.setChecked(false);
-            }
-        });
-
-        carerButton = (ToggleButton) findViewById(R.id.carerButton);
-        carerButton.setChecked(false);
-        carerButton.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Toggles carerButton to checked, dependentButton to unchecked
-             * @param v
-             */
-            @Override
-            public void onClick(View v) {
-                dependentButton.setChecked(false);
-                carerButton.setChecked(true);
-            }
-        });
-
         phoneNumberText = (EditText) findViewById(R.id.phoneNumberLoginField);
 
         setPinFields();
     }
 
+    //Set restrictions for the pin field
     private void setPinFields() {
 
         pinText = (EditText) findViewById(R.id.pinLoginField);
@@ -114,9 +90,6 @@ public class LoginActivity extends AppCompatActivity {
                 final String phoneNumber = phoneNumberText.getText().toString();
                 final String pin = pinText.getText().toString();
 
-                ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
-                final Boolean isDependent = dependentButton.isChecked();
-
                 //Asynchronous task for logging in
                 @SuppressLint("StaticFieldLeak")
                 AsyncTask task = new AsyncTask() {
@@ -124,9 +97,9 @@ public class LoginActivity extends AppCompatActivity {
                     protected Object doInBackground(Object[] objects) {
                         try {
                             LoginHandler.getInstance().login(context, phoneNumber, pin);
-                            finish();
+
                         } catch (Exception e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            displayErrorMessage(e.getMessage());
                         }
                         return null;
                     }
@@ -143,5 +116,20 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void onBackPressed() {
         cancelButton.performClick();
+    }
+
+    /**
+     * Displays a message in the text on the screen
+     * @param message Message to be displayed in the text
+     */
+    public void displayErrorMessage(final String message) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messageText.setTextColor(Color.RED);
+                messageText.setText(message);
+            }
+        });
     }
 }
