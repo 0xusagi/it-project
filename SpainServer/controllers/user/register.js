@@ -32,13 +32,6 @@ const newUserFromType = (data) => {
     }
 };
 
-const checkDuplicateMobile = (mobile) => {
-    return User.find({mobile: mobile}, (err, user) => {
-        // Found a duplicate user
-        return !!(err || user);
-    });
-};
-
 /**
  * Create a new user in the mongo database from client-supplied parameters and
  * return a response if successful.
@@ -48,11 +41,6 @@ const checkDuplicateMobile = (mobile) => {
  */
 const newUser = (req, res, next) => {
     const newUser = newUserFromType(req.body);
-
-    // console.log(newUser);
-    if (newUser === false || checkDuplicateMobile(newUser.mobile)) {
-        return res.status(400).json({message: "User Error (Duplicate or client error)"});
-    }
 
     const response = newUser.save((error, user) => {
         if (error) {
