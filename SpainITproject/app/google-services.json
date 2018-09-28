@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1022686727693",
+    "firebase_url": "https://spain-a0ca5.firebaseio.com",
+    "project_id": "spain-a0ca5",
+    "storage_bucket": "spain-a0ca5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022686727693:android:d125a13adb1a39cc",
+        "android_client_info": {
+          "package_name": "com.comp30023.spain_itproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1022686727693-mn990d941s5ch3cil76s0og790qolmdj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQFXiX7OkPPfBRcvY2Z-6SK3fKQNtwX8k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
