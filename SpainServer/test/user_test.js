@@ -16,6 +16,11 @@ let expect = chai.expect;
 
 chai.use(chaiHttp);
 
+/**
+* Need tests for:
+    two users with one mobile number
+**/
+
 describe('Users', () => {
     beforeEach((done) => {
         User.deleteMany({}, (err) => {
@@ -65,7 +70,7 @@ describe('Users', () => {
         chai.request(app)
             .post('/users/new')
             .type('form')
-            .send(sampleCarer)
+            .send(sampleDependent2_nohash)
             .end((err, res) => {
                 res.should.have.status(201);
                 done();
@@ -76,17 +81,28 @@ describe('Users', () => {
         chai.request(app)
             .post('/users/new')
             .type('form')
-            .send(sampleDependent)
+            .send(sampleDependent2_nohash)
             .end((err, res) => {
                 res.should.have.status(201);
                 done();
             });
     });
 
-    it('should get a carer', (done) => {
+    it('should get a carer by id', (done) => {
         Carer.create(sampleCarer, (err, carer) => {
             chai.request(app)
                 .get(`/carers/${carer._id}`)
+                .end((err,res) => {
+                    res.body.name.should.equal(carer.name);
+                    done();
+                });
+        });
+    });
+
+    it('should get a carer\'s name by mobile', (done) => {
+        Carer.create(sampleCarer, (err, carer) => {
+            chai.request(app)
+                .get(`/carer/name/${carer.mobile}`)
                 .end((err,res) => {
                     res.body.name.should.equal(carer.name);
                     done();
@@ -121,10 +137,21 @@ describe('Users', () => {
     });
 
 
-    it('should get a dependent', (done) => {
+    it('should get a dependent by id', (done) => {
         Dependent.create(sampleDependent, (err, dependent) => {
             chai.request(app)
                 .get(`/dependents/${dependent._id}`)
+                .end((err,res) => {
+                    res.body.name.should.equal(dependent.name);
+                    done();
+                });
+        });
+    });
+
+    it('should get a dependent\'s name by mobile', (done) => {
+        Dependent.create(sampleDependent, (err, dependent) => {
+            chai.request(app)
+                .get(`/dependent/name/${dependent.mobile}`)
                 .end((err,res) => {
                     res.body.name.should.equal(dependent.name);
                     done();

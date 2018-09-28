@@ -1,13 +1,16 @@
 import mongoose from 'mongoose';
 import { locationSchema } from "./location";
 
+mongoose.set('useCreateIndex', true);
+
 const options = { discriminatorKey: 'kind' };
 
 const userSchema = new mongoose.Schema({
     _userId: mongoose.Schema.Types.ObjectId,
     mobile: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     name: {
         type: String,

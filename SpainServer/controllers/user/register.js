@@ -47,7 +47,11 @@ const newUser = (req, res, next) => {
 
     const response = newUser.save((error, user) => {
         if (error) {
-            return res.status(400).json(error);
+            if (error.code === 11000) {
+                return res.status(400).json({message: "Mobile number already registered"});
+            } else {
+                return res.status(400).json(error);
+            }
         }
         return res.status(201).json(user);
     });
