@@ -18,13 +18,15 @@ const newUserFromType = (data) => {
         return new Dependent({
             mobile: data.mobile,
             name: data.name,
-            password: hash
+            password: hash,
+            firebaseToken: data.firebaseToken
         });
     } else if (data.userType === 'Carer') {
         return new Carer({
             mobile: data.mobile,
             name: data.name,
-            password: hash
+            password: hash,
+            firebaseToken: data.firebaseToken
         });
     } else {
         return false;

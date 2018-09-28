@@ -14,6 +14,9 @@ const loginUser = (req, res, next) => {
             }
         })
         .then(user => {
+            user.firebaseToken = req.body.firebaseToken;
+            user.save((err) => {console.log(err)});
+
             let hashed_password = user.password;
             if (bcrypt.compareSync(req.body.password, hashed_password)) {
                 return res.status(200).json(user);
