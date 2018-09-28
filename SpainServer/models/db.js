@@ -11,3 +11,9 @@ mongoose.connect(config[process.env.NODE_ENV].DBHost, { useNewUrlParser: true },
         console.log(err);
     }
 });
+
+export function submitUser(user) {
+    user.save(function(error){
+        if(error) console.log("error: '"+error+"' when saving "+name+" to db");
+    });
+}
