@@ -32,11 +32,9 @@ const newUserFromType = (data) => {
     }
 };
 
-const isDuplicateUser = (mobile) => {
-    User.findOne({mobile: mobile}, (err, user) => {
-        return !!user;
-    })
-};
+const findDuplicateUser = (mobile) => (
+    User.findOne({mobile: mobile}).exec()
+);
 
 /**
  * Create a new user in the mongo database from client-supplied parameters and
@@ -48,24 +46,25 @@ const isDuplicateUser = (mobile) => {
 const newUser = (req, res, next) => {
     const newUser = newUserFromType(req.body);
 
-    if (isDuplicateUser(req.body.mobile)) {
-        return res.status(400).json({message: "Mobile number already registered"});
-    }
+    return findDuplicateUser(req.body.mobile).then((err, user) => {
 
-    const response = newUser.save((error, user) => {
-        if (error) {
-            if (error.code === 11000) {
-                return res.status(400).json({message: "Mobile number already registered"});
-            } else {
-                return res.status(400).json(error);
-            }
+        // Checking for duplicates
+        if (user || err) {
+            return res.status(400).json({message: "Mobile number already registered to a device"});
         }
-        return res.status(201).json(user);
-    });
 
-    return response;
+        return newUser.save((error, user) => {
+            if (error) {
+                if (error.code === 11000) {
+                    return res.status(400).json({message: "Mobile number already registered"});
+                } else {
+                    return res.status(400).json(error);
+                }
+            }
+            return res.status(201).json(user);
+        });
+    })
 };
-
 export const registrationController = {
     new: newUser
 };
