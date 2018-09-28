@@ -1,5 +1,8 @@
-package com.comp30023.spain_itproject.domain;
+package com.comp30023.spain_itproject.detailsvalidation;
 
+/**
+ * Throws an error if the two pins used for account are unlike
+ */
 public class EqualPinsValidator extends DetailsValidator {
 
     public static final String DIFFERENT_PINS_MESSAGE = "PINs don\'t match, please try again";

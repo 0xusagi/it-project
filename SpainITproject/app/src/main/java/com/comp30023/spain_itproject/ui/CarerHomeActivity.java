@@ -1,21 +1,27 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -26,49 +32,74 @@ import java.util.ArrayList;
  */
 public class CarerHomeActivity extends AppCompatActivity {
 
+    // Dependents list
     private ListView dependentsList;
+    private ArrayAdapter<String> arrayAdapter;
 
-    private AccountController carerController;
-
-    private CarerUser carerUser;
-
-    private ArrayList<DependentUser> dependents;
-
+    // Settings button
     private ImageButton settingsButton;
+
+    // Add Dependent button
+    private Button addDependentsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carer_home);
 
-        carerUser = (CarerUser) getIntent().getSerializableExtra(LoginHandler.PASSED_USER);
-
-        dependents = carerUser.getDependents();
-
-        carerController = new AccountController();
-
         dependentsList = findViewById(R.id.carerHome_dependentsList);
-
-
-        // Initialise the listView
         displayDependentsList();
 
-        // Set the on click listener
-        dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                DependentsOnClickDialog dialog = new DependentsOnClickDialog(CarerHomeActivity.this);
-                dialog.show();
-            }
-        });
+        setupAddDependentButton();
 
-        settingsButton = (ImageButton) findViewById(R.id.carerHome_settingsButton);
+        setupSettingsButton(this);
 
-        setSettingsButtonListener(this);
 
     }
 
-    private void setSettingsButtonListener(final Context context) {
+    /**
+     * Setup displaying the dependents list
+     * Dynamically gets the list of dependents from the server
+     */
+    private void displayDependentsList() {
+
+
+        // Get the dependents list from the server
+        new DownloadDependentsListTask().execute(LoginSharedPreference.getId(this));
+
+
+    }
+
+    private void setArrayAdapter(ArrayList<String> dependentNames) {
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dependentNames);
+    }
+
+    /**
+     * Setup the add dependents button so that it displays the next activity on click
+     */
+    private void setupAddDependentButton() {
+        addDependentsButton = findViewById(R.id.carerHome_addDependentButton);
+
+        // When pressed the add dependents button the next activity to be shown is the
+        // add dependent activity
+        addDependentsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Display the next activity
+                Intent intent = new Intent(getApplicationContext(), AddDependentActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    /**
+     * Setup the settings button
+     * @param context
+     */
+    private void setupSettingsButton(final Context context) {
+        settingsButton = findViewById(R.id.carerHome_settingsButton);
+
+        // When pressed, the user is logged out
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,47 +107,73 @@ public class CarerHomeActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
 
-    /**
-     * Display the list of dependents that the carer currently has
-     */
-    private void displayDependentsList() {
+    private class DownloadDependentsListTask extends AsyncTask<String, Void, ArrayList<DependentUser>> {
 
-        // TODO Get the string of the current user
-        String phoneNumber = carerUser.getPhoneNumber();
+        @Override
+        protected ArrayList<DependentUser> doInBackground(String... strings) {
+            try {
+                CarerUser carer= AccountController.getInstance().getCarer(strings[0]);
 
-        ArrayList<String> dependentsName = new ArrayList<>();
+                System.out.println(carer.getName());
 
-        for (DependentUser dependent : dependents) {
-            dependentsName.add(dependent.getName());
+                // The null body so the carer doesn't exist
+                if (carer == null) {
+                    return null;
+                }
+
+                return carer.getDependents();
+            }
+            // Exception when can't connect to the server
+            catch (Exception e) {
+                // When cannot get prompt whether to try again
+                Toast.makeText(getApplicationContext(), "Cannot get dependents. Please try again", Toast.LENGTH_SHORT).show();
+            }
+
+            return null;
         }
 
-        // TODO Change the string to dependents
-        //ArrayList<DependentUser> dependents = carerController.getDependentsOfCarer(phoneNumber);
-        //ArrayList<String> dependentsName = new ArrayList<>();
+        @Override
+        protected void onPostExecute(ArrayList<DependentUser> dependentUsers) {
+            // TODO Handle null request
+            // If there are no dependentUsers, then print an error messaeg
+            if (dependentUsers == null) {
+                return;
+            }
 
-        //// TODO Populate the arraylist
-        //dependentsName.add("asdf");
-        //dependentsName.add("basdf");
+            ArrayList<String> dependentNames = new ArrayList<>();
+            // Extract the names of the dependent users
+            for (DependentUser dependent: dependentUsers) {
+                dependentNames.add(dependent.getName());
+            }
 
-        //// Set array adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, dependentsName);
+            // Carer has no dependent users
+            if (dependentUsers.size() == 0) {
+                dependentNames.add("No dependents on display :(");
+            }
 
-        dependentsList.setAdapter(adapter);
-    }
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(CarerHomeActivity.this, android.R.layout.simple_list_item_1, dependentNames);
 
-    /**
-     * Takes the carer to the next screen where the carer can input a mobile number to search
-     * for a dependent to be added
-     * @param view
-     */
-    public void displayAddDependentActivity(View view) {
-        Intent intent = new Intent(this, AddDependentActivity.class);
+            dependentsList.setAdapter(arrayAdapter);
 
-        startActivity(intent);
+            // Set an on click listener
+            dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String[] options = {"Call", "Message", "Add Dependent"};
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
+                    builder.setTitle("Choose");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // the user clicked on options[which]
+                        }
+                    });
+                    builder.show();
+                }
+            });
+        }
     }
 }

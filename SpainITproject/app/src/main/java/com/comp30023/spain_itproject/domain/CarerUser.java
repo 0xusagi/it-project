@@ -1,24 +1,43 @@
 package com.comp30023.spain_itproject.domain;
 
+import com.comp30023.spain_itproject.uicontroller.AccountController;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Extends user by storing lists of objects related to being a Carer user
+ */
 public class CarerUser extends User implements Serializable {
 
+    @SerializedName("dependents")
     private ArrayList<DependentUser> dependents;
 
-    public CarerUser(String name, String phoneNumber, String pin) {
-        super(name, phoneNumber, pin);
-
-        dependents = new ArrayList<>();
+    public CarerUser(String name, String phoneNumber, String pin, String id) {
+        super(name, phoneNumber, pin, id);
     }
 
-    public void addDependent(DependentUser dependent) {
-        dependents.add(dependent);
-    }
-
+    /**
+     * @return The list of stored dependents
+     */
     public ArrayList<DependentUser> getDependents() {
         return dependents;
     }
 
+    /**
+     * Adds a DependentUser by their stored phone number
+     * Adds the dependent first to the database and then locally
+     * @param dependentPhoneNumber The phone number of the dependent to be added
+     * @throws Exception Thrown if there is an error while communicating with the database
+     */
+    public void addDependent(String dependentPhoneNumber) throws Exception {
+
+        //Adds the dependent to the carers account externally
+        //Will throw an Exception if there is a method while communicating with the database
+        DependentUser dependent = AccountController.getInstance().addDependent(this, dependentPhoneNumber);
+
+        dependents.add(dependent);
+
+    }
 }

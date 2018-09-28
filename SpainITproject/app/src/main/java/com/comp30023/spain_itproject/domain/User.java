@@ -1,29 +1,50 @@
 package com.comp30023.spain_itproject.domain;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
-public class User implements Serializable {
+public abstract class User implements DisplayName {
 
+    @SerializedName("_id")
+    private String id;
+
+    @SerializedName("name")
     private String name;
-    private String phoneNumber;
-    private String pin;
 
-    public User(String name, String phoneNumber, String pin) {
+    @SerializedName("mobile")
+    private String mobile;
 
+    @SerializedName("password")
+    private String password;
+
+    public User(String name, String phoneNumber, String pin, String id) {
+
+        this.id = id;
         this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.pin = pin;
+        this.mobile = phoneNumber;
+        this.password = pin;
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getId() {
+        return id;
     }
 
-    public String getPin() {
-        return pin;
+    public String getPhoneNumber() {
+        return mobile;
+    }
+
+    public boolean equals(User other) {
+        return mobile.equals(other.mobile) && password.equals(other.password);
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
     }
 }
