@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
 
 public class MessagingService extends FirebaseMessagingService {
@@ -15,7 +16,6 @@ public class MessagingService extends FirebaseMessagingService {
 
         final String token = s;
 
-        System.out.println("MessagingService - Token: " + token);
         /*@SuppressLint("StaticFieldLeak") AsyncTask task = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -25,4 +25,5 @@ public class MessagingService extends FirebaseMessagingService {
             }
         };*/
     }
+
 }

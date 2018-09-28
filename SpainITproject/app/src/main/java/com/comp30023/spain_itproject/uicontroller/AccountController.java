@@ -59,9 +59,7 @@ public class AccountController {
             throws Exception {
         checkService();
 
-        String firebaseToken = FirebaseInstanceId.getInstance().getId();
-
-        System.out.println("Account Registration: Token: " + firebaseToken);
+        String firebaseToken = FirebaseInstanceId.getInstance().getToken();
 
         String userType = isDependent ? AccountService.DEPENDENT_TYPE : AccountService.CARER_TYPE;
 
@@ -108,6 +106,7 @@ public class AccountController {
      * @throws Exception Error for either connection failure or bad response. Includes message.
      */
     public Pair<String, Boolean> login(String phoneNumber, String pin) throws Exception {
+
         checkService();
 
         String firebaseToken = FirebaseInstanceId.getInstance().getId();
@@ -248,15 +247,8 @@ public class AccountController {
         // Contact the server to request the list of dependents for a carer
         Call<DependentUser> call = service.getDependent(id);
 
-        Task<InstanceIdResult> firebaseToken = FirebaseInstanceId.getInstance().getInstanceId();
-        firebaseToken.addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                System.out.println("Token: " + instanceIdResult.getToken());
-            }
-        });
-
-        System.out.println("GetDependent: Token: " + firebaseToken);
+        String firebaseToken = FirebaseInstanceId.getInstance().getToken();
+        System.out.println("Token: " + firebaseToken);
 
         try {
             Response<DependentUser> response = call.execute();
