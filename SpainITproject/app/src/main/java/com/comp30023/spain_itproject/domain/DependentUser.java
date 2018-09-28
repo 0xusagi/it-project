@@ -18,6 +18,8 @@ public class DependentUser extends User {
 
     private ArrayList<CarerUser> carers;
 
+    private ArrayList<CarerUser> pendingCarers;
+
     public DependentUser(String name, String phoneNumber, String pin, String id) {
         super(name, phoneNumber, pin, id);
 
@@ -53,5 +55,22 @@ public class DependentUser extends User {
 
         //Add location to dependent locally so consistent
         locations.add(location);
+    }
+
+    /**
+     * Responds to the request of a CarerUser to be one of their dependents
+     * @param carer The CarerUser that has made the request
+     * @param accept The response to the request
+     * @throws Exception Thrown if there is an issue when contacting the server
+     */
+    public void respondToRequest(CarerUser carer, boolean accept) throws Exception {
+
+        //Shift the carer from pending to accepted on the server
+        AccountController.getInstance().acceptCarer(this, carer, accept);
+
+        //Shift the carer from pending to accepted locally
+        pendingCarers.remove(carer);
+        carers.add(carer);
+
     }
 }

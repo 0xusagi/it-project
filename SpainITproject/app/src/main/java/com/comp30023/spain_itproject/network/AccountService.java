@@ -51,18 +51,18 @@ public interface AccountService {
 
     //CONFIRM
     @FormUrlEncoded
-    @POST("/carers/{id}/addDependent")
-    Call<DependentUser> addDependent(
-                            @Path("id") String carerId,
-                            @Field("mobile") String dependentPhoneNumber);
-
-
-    //CONFIRM
-    @FormUrlEncoded
     @POST("/dependents/{id}/locations/new")
     Call<ResponseBody> addLocationToDependent(
                             @Path("id") String dependentId,
                             @Field("Location") Location location);
+
+    //CONFIRM
+    @FormUrlEncoded
+    @POST("/carers/{id}/addDependent")
+    Call<DependentUser> addDependent(
+            @Path("id") String carerId,
+            @Field("mobile") String dependentPhoneNumber);
+
 
     @FormUrlEncoded
     @POST("/dependents/{dependentId}/carers/{carerId}/respond")

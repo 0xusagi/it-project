@@ -127,39 +127,6 @@ public class AccountController {
 
     //CONFIRM
     /**
-     * Add a dependent to the carer by their phone number
-     * @param carer The carer who is adding the dependent
-     * @param dependentPhoneNumber The dependent who is being added's phone number
-     * @throws Exception Thrown with a message if there is no contact made with the server or if unsuccessful response
-     */
-    public DependentUser addDependent(CarerUser carer, String dependentPhoneNumber) throws Exception {
-        checkService();
-
-        //Create the call to the server
-        Call<DependentUser> call = service.addDependent(carer.getId(), dependentPhoneNumber);
-
-        try{
-            //Execut the call to the server
-            Response<DependentUser> response = call.execute();
-
-            //If response is successful, return the dependent
-            if (response.isSuccessful()) {
-
-                DependentUser dependent = response.body();
-                return dependent;
-
-            //If the response is unsuccessful, throw an Exception with a message for the reason
-            } else {
-                throw new Exception(response.message());
-            }
-
-        } catch (IOException e) {
-            throw new Exception(MESSAGE_SERVER_FAILURE);
-        }
-    }
-
-    //CONFIRM
-    /**
      * Add a location to a dependent's account
      * @param dependent The dependent receiving the location
      * @param location The location to be added
@@ -253,7 +220,14 @@ public class AccountController {
         }
     }
 
-    public void acceptAddRequest(DependentUser dependent, CarerUser carer, boolean accept) throws Exception {
+    /**
+     * Sends the response of a friend request to the server
+     * @param dependent The dependent who received the request
+     * @param carer The carer that sent the request
+     * @param accept The boolean response to the request
+     * @throws Exception Thrown if there is an error while contacting the server
+     */
+    public void acceptCarer(DependentUser dependent, CarerUser carer, boolean accept) throws Exception {
 
         checkService();
 
@@ -266,6 +240,38 @@ public class AccountController {
             Response<ResponseBody> response = call.execute();
 
             if (!response.isSuccessful()) {
+                throw new Exception(response.message());
+            }
+
+        } catch (IOException e) {
+            throw new Exception(MESSAGE_SERVER_FAILURE);
+        }
+    }
+
+    /**
+     * Add a dependent to the carer by their phone number
+     * @param carer The carer who is adding the dependent
+     * @param dependentPhoneNumber The dependent who is being added's phone number
+     * @throws Exception Thrown with a message if there is no contact made with the server or if unsuccessful response
+     */
+    public DependentUser requestDependent(CarerUser carer, String dependentPhoneNumber) throws Exception {
+        checkService();
+
+        //Create the call to the server
+        Call<DependentUser> call = service.addDependent(carer.getId(), dependentPhoneNumber);
+
+        try{
+            //Execut the call to the server
+            Response<DependentUser> response = call.execute();
+
+            //If response is successful, return the dependent
+            if (response.isSuccessful()) {
+
+                DependentUser dependent = response.body();
+                return dependent;
+
+                //If the response is unsuccessful, throw an Exception with a message for the reason
+            } else {
                 throw new Exception(response.message());
             }
 
