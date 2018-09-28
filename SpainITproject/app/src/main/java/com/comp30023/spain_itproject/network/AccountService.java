@@ -17,8 +17,10 @@ import com.comp30023.spain_itproject.domain.Location;
  */
 public interface AccountService {
 
-    public static final String CARER_TYPE = "Carer";
-    public static final String DEPENDENT_TYPE = "Dependent";
+    public static final String USERTYPE_CARER = "Carer";
+    public static final String USERTYPE_DEPENDENT = "Dependent";
+    public static final String BOOLEAN_TRUE = "True";
+    public static final String BOOLEAN_FALSE = "False";
 
 
     @FormUrlEncoded
@@ -31,7 +33,7 @@ public interface AccountService {
 
 
     @FormUrlEncoded
-    @POST("user/login")
+    @POST("/user/login")
     Call<UserModel> loginUser(
                             @Field("mobile") String phoneNumber,
                             @Field("password") String pin);
@@ -57,9 +59,17 @@ public interface AccountService {
 
     //CONFIRM
     @FormUrlEncoded
-    @POST("dependents/{id}/locations/new")
+    @POST("/dependents/{id}/locations/new")
     Call<ResponseBody> addLocationToDependent(
                             @Path("id") String dependentId,
                             @Field("Location") Location location);
+
+    @FormUrlEncoded
+    @POST("/dependents/{dependentId}/carers/{carerId}/respond")
+    Call<ResponseBody> acceptRequest(
+            @Path("dependentId") String dependentId,
+            @Path("carerId") String carerId,
+            @Field("accept") String accept
+    );
 
 }

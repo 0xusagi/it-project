@@ -51,7 +51,7 @@ public class AccountController {
             throws Exception {
         checkService();
 
-        String userType = isDependent ? AccountService.DEPENDENT_TYPE : AccountService.CARER_TYPE;
+        String userType = isDependent ? AccountService.USERTYPE_DEPENDENT : AccountService.USERTYPE_CARER;
 
         //Create the call to the server
         Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType);
@@ -107,7 +107,7 @@ public class AccountController {
             if (response.isSuccessful()) {
 
                 String userType = response.body().getUserType();
-                boolean isDependent = userType.equals(AccountService.DEPENDENT_TYPE);
+                boolean isDependent = userType.equals(AccountService.USERTYPE_DEPENDENT);
 
                 String userId = response.body().getId();
 
@@ -246,6 +246,27 @@ public class AccountController {
             else {
                 // TODO maybe change to another exception for bad request
                 throw new BadRequestException("ERROR! Bad request: " + response.message());
+            }
+
+        } catch (IOException e) {
+            throw new Exception(MESSAGE_SERVER_FAILURE);
+        }
+    }
+
+    public void acceptAddRequest(DependentUser dependent, CarerUser carer, boolean accept) throws Exception {
+
+        checkService();
+
+        String stringAccept = accept ? AccountService.BOOLEAN_TRUE : AccountService.BOOLEAN_FALSE;
+
+        Call<ResponseBody> call = service.acceptRequest(dependent.getId(), carer.getId(), stringAccept);
+
+        try {
+
+            Response<ResponseBody> response = call.execute();
+
+            if (!response.isSuccessful()) {
+                throw new Exception(response.message());
             }
 
         } catch (IOException e) {
