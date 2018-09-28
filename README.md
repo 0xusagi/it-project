@@ -29,6 +29,7 @@ To install the server:
 'use spain-server'
 - Then run db.placeholder.insert({placeholder: 'hello-world'})
 - Check if the database was created by running 'show dbs' in mongo
+- If using Windows, run npm install -g win-node-env
 
 To run the server:
 - Run 'yarn nodemon-babel'
