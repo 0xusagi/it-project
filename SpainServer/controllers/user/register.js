@@ -32,6 +32,12 @@ const newUserFromType = (data) => {
     }
 };
 
+const isDuplicateUser = (mobile) => {
+    User.findOne({mobile: mobile}, (err, user) => {
+        return !!user;
+    })
+};
+
 /**
  * Create a new user in the mongo database from client-supplied parameters and
  * return a response if successful.
@@ -41,6 +47,10 @@ const newUserFromType = (data) => {
  */
 const newUser = (req, res, next) => {
     const newUser = newUserFromType(req.body);
+
+    if (isDuplicateUser(req.body.mobile)) {
+        return res.status(400).json({message: "Mobile number already registered"});
+    }
 
     const response = newUser.save((error, user) => {
         if (error) {

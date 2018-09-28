@@ -64,6 +64,23 @@ const deleteCarer = (req, res, next) => {
 };
 
 /**
+ *
+ * @param mobile
+ * @param carerId
+ * @returns {*}
+ */
+const isAlreadyAdded = (mobile, carerId) => {
+    return Carer.find({ $or:
+            [
+                {dependents: {mobile: mobile}},
+                {pendingDependents:  {mobile: mobile}}
+            ]
+    }, (err, carers) => {
+        return !!(err || carers.length > 0);
+    })
+};
+
+/**
  * Specifically adds a dependent to a carer's list of dependents
  * based on supplied dependent id from the client.
  *
@@ -81,9 +98,14 @@ const addDependentToCarer = (req, res, next) => {
         if (err || dependents.length === 0) {
             return res.status(400).send({message: 'Dependent not found in database.'})
         }
+        // Checks if a mobile has already been added by this carer before.
+        if (isAlreadyAdded(mobile, carerId)) {
+            return res.status(400).send({message: 'Dependent already friend or request already sent.'})
+        }
+
         // Mobile number found, finding the carer and adding it to their list first
         return Carer.findOneAndUpdate(carerId,
-            { $push: { dependents: dependents[0]._id } }, options,
+            { $push: { pendingDependents: dependents[0] } }, options,
             (err, carer) => {
                 if (err) {
                     return res.status(400).send(err);
