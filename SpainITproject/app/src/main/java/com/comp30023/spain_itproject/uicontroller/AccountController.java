@@ -10,6 +10,12 @@ import com.comp30023.spain_itproject.network.RetrofitClientInstance;
 import com.comp30023.spain_itproject.network.UserModel;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.ui.LoginHandler;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.IOException;
 
@@ -25,6 +31,8 @@ import retrofit2.Response;
 public class AccountController {
 
     public static final String MESSAGE_SERVER_FAILURE = "Please try again";
+
+    private String userId = null;
 
     private static AccountController instance;
     public static AccountController getInstance() {
@@ -51,10 +59,14 @@ public class AccountController {
             throws Exception {
         checkService();
 
+        String firebaseToken = FirebaseInstanceId.getInstance().getId();
+
+        System.out.println("Account Registration: Token: " + firebaseToken);
+
         String userType = isDependent ? AccountService.DEPENDENT_TYPE : AccountService.CARER_TYPE;
 
         //Create the call to the server
-        Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType);
+        Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType/*, firebaseToken*/);
 
         try {
 
@@ -67,11 +79,13 @@ public class AccountController {
                 UserModel userModel = response.body();
                 User user;
 
+                userId = userModel.getId();
+
                 //Create the type of user based on input (corresponds to user returned from server
                 if (isDependent) {
-                    user = new DependentUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    user = new DependentUser(userModel.getName(), phoneNumber, pin, userId);
                 } else {
-                    user = new CarerUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    user = new CarerUser(userModel.getName(), phoneNumber, pin, userId);
                 }
 
                 return user;
@@ -96,8 +110,12 @@ public class AccountController {
     public Pair<String, Boolean> login(String phoneNumber, String pin) throws Exception {
         checkService();
 
+        String firebaseToken = FirebaseInstanceId.getInstance().getId();
+
         //Create the call to the server
-        Call<UserModel> call = service.loginUser(phoneNumber, pin);
+        Call<UserModel> call = service.loginUser(phoneNumber, pin/*, firebaseToken*/);
+
+        System.out.println("Login: Token: " + firebaseToken);
 
         try {
             //Execute the call to the server
@@ -109,7 +127,7 @@ public class AccountController {
                 String userType = response.body().getUserType();
                 boolean isDependent = userType.equals(AccountService.DEPENDENT_TYPE);
 
-                String userId = response.body().getId();
+                userId = response.body().getId();
 
                 Pair<String, Boolean> pair = new Pair<String, Boolean>(userId, isDependent);
 
@@ -230,6 +248,16 @@ public class AccountController {
         // Contact the server to request the list of dependents for a carer
         Call<DependentUser> call = service.getDependent(id);
 
+        Task<InstanceIdResult> firebaseToken = FirebaseInstanceId.getInstance().getInstanceId();
+        firebaseToken.addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                System.out.println("Token: " + instanceIdResult.getToken());
+            }
+        });
+
+        System.out.println("GetDependent: Token: " + firebaseToken);
+
         try {
             Response<DependentUser> response = call.execute();
 
@@ -251,5 +279,21 @@ public class AccountController {
         } catch (IOException e) {
             throw new Exception(MESSAGE_SERVER_FAILURE);
         }
+    }
+
+    public void updateToken(String token) {
+
+        checkService();
+
+        assert userId != null;
+        Call<ResponseBody> call = service.updateToken(userId, token);
+
+        try {
+            Response<ResponseBody> response = call.execute();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
