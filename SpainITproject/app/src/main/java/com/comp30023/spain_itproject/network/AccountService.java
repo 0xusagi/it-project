@@ -1,8 +1,9 @@
 package com.comp30023.spain_itproject.network;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -10,10 +11,6 @@ import retrofit2.http.Path;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
-import com.comp30023.spain_itproject.domain.User;
-
-import java.util.ArrayList;
-
 
 /**
  * Retrofit-compatible interface that co-ordinates all our different HTTP requests.
@@ -23,30 +20,46 @@ public interface AccountService {
     public static final String CARER_TYPE = "Carer";
     public static final String DEPENDENT_TYPE = "Dependent";
 
-    //CONFIRM
+
+    @FormUrlEncoded
+    @POST("/users/new")
+    Call<UserModel> registerUser(
+                            @Field("name") String name,
+                            @Field("mobile") String phoneNumber,
+                            @Field("password") String pin,
+                            @Field("userType") String userType);
+
+
+    @FormUrlEncoded
     @POST("user/login")
-    Call<User> loginUser(@Field("phone_number") String phoneNumber, @Field("pin") String pin);
+    Call<UserModel> loginUser(
+                            @Field("mobile") String phoneNumber,
+                            @Field("password") String pin);
 
-    @POST("user/new")
-    Call<User> registerUser(@Field("name") String name, @Field("phone_number") String phoneNumber,
-                            @Field("pin") String pin, String userType);
 
-    //CONFIRM
-    @GET("user/new")
-    Call<ArrayList<Location>> getLocations(DependentUser dependent);
+    @GET("/carers/{id}")
+    Call<CarerUser> getCarer(
+            @Path("id") String id);
 
-    //CONFIRM
-    //@POST("")
-    //Call<> addDependent(@Field("id") int carerId, String dependentPhoneNumber);
 
-    //CONFIRM
-    // Subject to change whether using phone number as id or not
-    @GET("user/{id}")
-    Call<ArrayList<DependentUser>> getDependentsOfCarer(@Path("id") String phoneNumber);
+    @GET("/dependents/{id}")
+    Call<DependentUser> getDependent(
+            @Path("id") String id);
+
 
     //CONFIRM
-    @GET("user/{id}")
-    Call<DependentUser> getDependent(@Path("id") String phoneNumber);
+    @FormUrlEncoded
+    @POST("/carers/{id}/addDependent")
+    Call<DependentUser> addDependent(
+                            @Path("id") String carerId,
+                            @Field("mobile") String dependentPhoneNumber);
 
+
+    //CONFIRM
+    @FormUrlEncoded
+    @POST("dependents/{id}/locations/new")
+    Call<ResponseBody> addLocationToDependent(
+                            @Path("id") String dependentId,
+                            @Field("Location") Location location);
 
 }

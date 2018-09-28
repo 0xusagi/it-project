@@ -1,6 +1,6 @@
 // Switch to the test database for testing
-process.env.NODE_ENV = 'test';
 require('babel-polyfill');
+import bcrypt from 'bcryptjs';
 
 let mongoose = require('mongoose');
 let chai = require('chai');
@@ -16,51 +16,79 @@ let expect = chai.expect;
 
 chai.use(chaiHttp);
 
+/**
+* Need tests for:
+    two users with one mobile number
+**/
+
 describe('Users', () => {
     beforeEach((done) => {
-        User.remove({}, (err) => {
+        User.deleteMany({}, (err) => {
             done();
         });
     });
 
+    let salt = bcrypt.genSaltSync(10);
+
     /**
-     * Test POST /users/new
-     */node
+     * Some mock test objects
+     */
     const sampleCarer = {
         mobile: '12345678',
-        password: '1234',
+        password: bcrypt.hashSync('1234', salt),
         name: 'John Smith',
         userType: 'Carer'
     };
 
     const sampleDependent = {
         mobile: '12345678',
-        password: '1234',
+        password: bcrypt.hashSync('1234', salt),
         name: 'Joel Smith',
         userType: 'Dependent'
     };
 
+
+    const sampleDependent2_hashed = {
+        mobile: '12345678',
+        password: bcrypt.hashSync('my-password', salt),
+        name: 'Joel Smith',
+        userType: 'Dependent'
+    };
+
+    const sampleDependent2_nohash = {
+        mobile: '12345678',
+        password: 'my-password',
+        name: 'Joel Smith',
+        userType: 'Dependent'
+    };
+
+    /*
+    * Actual tests
+    */
+
     it('should create a new carer', (done) => {
         chai.request(app)
             .post('/users/new')
-            .send(sampleCarer)
+            .type('form')
+            .send(sampleDependent2_nohash)
             .end((err, res) => {
                 res.should.have.status(201);
                 done();
-            })
+            });
     });
 
     it('should create a new dependent', (done) => {
         chai.request(app)
             .post('/users/new')
-            .send(sampleDependent)
+            .type('form')
+            .send(sampleDependent2_nohash)
             .end((err, res) => {
                 res.should.have.status(201);
                 done();
-            })
+            });
     });
 
-    it('should get a carer', (done) => {
+    it('should get a carer by id', (done) => {
         Carer.create(sampleCarer, (err, carer) => {
             chai.request(app)
                 .get(`/carers/${carer._id}`)
@@ -68,7 +96,18 @@ describe('Users', () => {
                     res.body.name.should.equal(carer.name);
                     done();
                 });
-        })
+        });
+    });
+
+    it('should get a carer\'s name by mobile', (done) => {
+        Carer.create(sampleCarer, (err, carer) => {
+            chai.request(app)
+                .get(`/carer/name/${carer.mobile}`)
+                .end((err,res) => {
+                    res.body.name.should.equal(carer.name);
+                    done();
+                });
+        });
     });
 
     it('should update a carer', (done) => {
@@ -77,28 +116,28 @@ describe('Users', () => {
 
             chai.request(app)
                 .put(`/carers/${carer._id}`)
+                .type('form')
                 .send(newName)
                 .end((err, res) => {
                     res.body.name.should.equal(newName.name);
                     done();
-                })
-        })
+                });
+        });
     });
 
     it('should delete a carer', (done) => {
         Carer.create(sampleCarer, (err, carer) => {
-
             chai.request(app)
                 .delete(`/carers/${carer._id}`)
                 .end((err, res) => {
                     res.body.name.should.equal(carer.name);
                     done();
-                })
-        })
-    })
+                });
+        });
+    });
 
 
-    it('should get a dependent', (done) => {
+    it('should get a dependent by id', (done) => {
         Dependent.create(sampleDependent, (err, dependent) => {
             chai.request(app)
                 .get(`/dependents/${dependent._id}`)
@@ -106,7 +145,18 @@ describe('Users', () => {
                     res.body.name.should.equal(dependent.name);
                     done();
                 });
-        })
+        });
+    });
+
+    it('should get a dependent\'s name by mobile', (done) => {
+        Dependent.create(sampleDependent, (err, dependent) => {
+            chai.request(app)
+                .get(`/dependent/name/${dependent.mobile}`)
+                .end((err,res) => {
+                    res.body.name.should.equal(dependent.name);
+                    done();
+                });
+        });
     });
 
     it('should update a dependent', (done) => {
@@ -115,23 +165,52 @@ describe('Users', () => {
 
             chai.request(app)
                 .put(`/dependents/${dependent._id}`)
+                .type('form')
                 .send(newName)
                 .end((err, res) => {
                     res.body.name.should.equal(newName.name);
                     done();
-                })
-        })
+                });
+        });
     });
 
     it('should delete a dependent', (done) => {
         Dependent.create(sampleDependent, (err, dependent) => {
-
             chai.request(app)
                 .delete(`/dependents/${dependent._id}`)
                 .end((err, res) => {
                     res.body.name.should.equal(dependent.name);
                     done();
-                })
-        })
-    })
+                });
+        });
+    });
+
+    it('should login a dependent with correct credentials', (done) => {
+        // console.log("sampleDependent", sampleDependent_v3);
+        Dependent.create(sampleDependent2_hashed, (err, dependent) => {
+            chai.request(app)
+                .post('/user/login')
+                .type('form')
+                .send(sampleDependent2_nohash)
+                .end((err, res) => {
+                    // console.log(res.message);
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+
+    it('should deny login for a dependent with incorrect credentials', (done) => {
+        Dependent.create(sampleDependent, (err, dependent) => {
+            chai.request(app)
+                .post('/user/login')
+                .type('form')
+                .send(sampleDependent2_nohash)
+                .end((err, res) => {
+                    // console.log(res.message);
+                    res.should.have.status(401);
+                    done();
+                });
+        });
+    });
 });

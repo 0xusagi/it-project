@@ -1,8 +1,10 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -12,12 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.comp30023.spain_itproject.LoginHandler;
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.validation.InvalidDetailsException;
-import com.comp30023.spain_itproject.uicontroller.AccountController;
-
-import java.io.IOException;
 
 /**
  * Activity for uses to create/register an account
@@ -92,7 +89,7 @@ public class AccountCreationActivity extends AppCompatActivity {
     }
 
     /**
-     * References in the pin fields and sets input restrictions
+     * Sets references to the pin fields and sets input restrictions
      */
     private void setPinFields() {
 
@@ -106,6 +103,10 @@ public class AccountCreationActivity extends AppCompatActivity {
         confirmPinText.setFilters(pinFilters);
     }
 
+    /**
+     * Registers a new account on a separate thread and loads the next activity if successful
+     * @param context Reference to the activity the LoginHandler was called from
+     */
     private void setRegisterButtonListener(final Context context) {
         registerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -119,32 +120,34 @@ public class AccountCreationActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Retrieve inputs from fields
-                String name = nameText.getText().toString();
-                String phoneNumber = phoneNumberText.getText().toString();
-                String pin = pinText.getText().toString();
-                String confirmPin = confirmPinText.getText().toString();
+                final String name = nameText.getText().toString();
+                final String phoneNumber = phoneNumberText.getText().toString();
+                final String pin = pinText.getText().toString();
+                final String confirmPin = confirmPinText.getText().toString();
 
                 ToggleButton dependentButton = (ToggleButton) findViewById(R.id.dependentButton);
-                Boolean isDependent = dependentButton.isChecked();
+                final Boolean isDependent = dependentButton.isChecked();
 
                 //Register the account, handle input errors
-                try {
-                    AccountController.registerAccount(name, phoneNumber, pin, confirmPin, isDependent);
-                } catch (InvalidDetailsException e) {
-                    messageText.setText(e.getMessage());
-                    messageText.setTextColor(Color.RED);
-                    return;
-                } catch (Exception e) {
-                    return;
-                }
 
-                //Login the user
-                try {
-                    LoginHandler.newLogin(context, phoneNumber, pin, isDependent);
-                } catch (IOException e) {
-                    return;
-                }
-                finish();
+                //Logs in on new thread asynchronously
+                @SuppressLint("StaticFieldLeak")
+                AsyncTask task = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        try {
+                            LoginHandler.getInstance().register(context, name, phoneNumber, pin, confirmPin, isDependent);
+                        } catch (Exception e) {
+                            String message = e.getMessage();
+                            displayErrorMessage(message);
+                            return null;
+                        }
+                        return null;
+                    }
+                };
+
+                task.execute();
+
             }
         });
     }
@@ -171,4 +174,18 @@ public class AccountCreationActivity extends AppCompatActivity {
         cancelButton.performClick();
     }
 
+    /**
+     * Displays a message in the text on the screen
+     * @param message Message to be displayed in the text
+     */
+    public void displayErrorMessage(final String message) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messageText.setTextColor(Color.RED);
+                messageText.setText(message);
+            }
+        });
+    }
 }
