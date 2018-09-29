@@ -9,10 +9,11 @@ import android.widget.TextView;
 
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
-import com.comp30023.spain_itproject.domain.Location;
 
 //Fragment to be developed for when a carer is selected
 public class CarerFragment extends Fragment {
+
+    public static final String ARGUMENT_CARER = "CARER";
 
     private CarerUser carer;
 
@@ -21,7 +22,7 @@ public class CarerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        carer = (CarerUser) getArguments().getSerializable(ListFragment.ITEM_ARGUMENT);
+        carer = (CarerUser) getArguments().getSerializable(ARGUMENT_CARER);
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         text = (TextView) view.findViewById(R.id.location_display_name);

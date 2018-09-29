@@ -14,6 +14,8 @@ import com.comp30023.spain_itproject.domain.Location;
 //Currently just displays the tag of the location
 public class MapFragment extends Fragment {
 
+    public static final String ARGUMENT_LOCATION = "LOCATION";
+
     private Location location;
 
     private TextView text;
@@ -21,7 +23,7 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        location = (Location) getArguments().getSerializable(ListFragment.ITEM_ARGUMENT);
+        location = (Location) getArguments().getSerializable(ARGUMENT_LOCATION);
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         text = (TextView) view.findViewById(R.id.location_display_name);

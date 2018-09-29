@@ -1,6 +1,7 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.AsyncTask;
@@ -38,12 +39,12 @@ public class DependentHomeActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
 
     private FragmentManager fragmentManager;
-    private ListFragment<CarerUser> carersFragment;
-    ListFragment<Location> locationsFragment;
+    private Fragment locationsFragment;
 
     private Button messagesButton;
     private Button callsButton;
     private Button helpButton;
+    private Button refreshButton;
     private Button signOutButton;
 
     //The logged in DependentUser
@@ -69,8 +70,17 @@ public class DependentHomeActivity extends AppCompatActivity {
         new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
+
         callsButton = (Button) findViewById(R.id.callButton);
         setCallsButtonListener(this);
+
+        refreshButton = (Button) findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DownloadDependentTask().execute(LoginSharedPreference.getId(getApplicationContext()));
+            }
+        });
 
         drawerLayout = findViewById(R.id.drawer_layout);
         signOutButton = findViewById(R.id.signOutButton);
@@ -106,11 +116,11 @@ public class DependentHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                /*FragmentTransaction transaction = fragmentManager.beginTransaction();
 
                 transaction.replace(R.id.fragment_container, carersFragment);
                 transaction.addToBackStack(null);
-                transaction.commit();
+                transaction.commit();*/
             }
         });
     }
@@ -137,6 +147,7 @@ public class DependentHomeActivity extends AppCompatActivity {
         @Override
         protected DependentUser doInBackground(String... strings) {
 
+            displayRefreshButton(false);
             try {
 
                 user = AccountController.getInstance().getDependent(strings[0]);
@@ -160,13 +171,34 @@ public class DependentHomeActivity extends AppCompatActivity {
         protected void onPostExecute(DependentUser dependentUser) {
             super.onPostExecute(dependentUser);
 
-            carersFragment = new ListFragment<CarerUser>(LIST_NAME_CARERS, user, user.getCarers(), CarerFragment.class);
-            locationsFragment = new ListFragment<Location>(LIST_NAME_LOCATION, user, user.getLocations(), MapFragment.class);
+            locationsFragment = new LocationsListFragment();
+
+
+            Bundle arguments = new Bundle();
+            arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
+            locationsFragment.setArguments(arguments);
 
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
             transaction.add(R.id.fragment_container, locationsFragment);
             transaction.commit();
+
+            displayRefreshButton(true);
         }
+    }
+
+    /**
+     * Sets wehether the refresh button should be displayed
+     * @param display
+     */
+    private void displayRefreshButton(final boolean display) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                int visibility = display ? View.VISIBLE : View.INVISIBLE;
+                refreshButton.setVisibility(visibility);
+            }
+        });
     }
 }
