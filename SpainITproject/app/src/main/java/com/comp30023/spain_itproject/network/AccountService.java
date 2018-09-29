@@ -28,16 +28,16 @@ public interface AccountService {
                             @Field("name") String name,
                             @Field("mobile") String phoneNumber,
                             @Field("password") String pin,
-                            @Field("userType") String userType//,
-                            //@Field("firebaseToken") String firebaseToken
+                            @Field("userType") String userType,
+                            @Field("firebaseToken") String firebaseToken
     );
 
     @FormUrlEncoded
     @POST("user/login")
     Call<UserModel> loginUser(
                             @Field("mobile") String phoneNumber,
-                            @Field("password") String pin//,
-                            //@Field("firebaseToken") String firebaseToken
+                            @Field("password") String pin,
+                            @Field("firebaseToken") String firebaseToken
     );
 
 
@@ -61,17 +61,24 @@ public interface AccountService {
 
     //CONFIRM
     @FormUrlEncoded
-    @POST("dependents/{id}/locations/new")
+    @POST("/dependents/{id}/locations/new")
     Call<ResponseBody> addLocationToDependent(
                             @Path("id") String dependentId,
                             @Field("Location") Location location);
 
     //CONFIRM
     @FormUrlEncoded
-    @PUT("users/{id}/")
-    Call<ResponseBody> updateToken(
+    @PUT("/dependents/{id}/")
+    Call<ResponseBody> updateDependentToken(
             @Path("id") String id,
-            @Field("token") String token
+            @Field("firebaseToken") String token
+    );
+
+    @FormUrlEncoded
+    @PUT("/carers/{id}/")
+    Call<ResponseBody> updateCarerToken(
+            @Path("id") String id,
+            @Field("firebaseToken") String token
     );
 
 }

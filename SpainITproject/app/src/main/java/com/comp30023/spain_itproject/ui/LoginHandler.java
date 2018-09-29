@@ -8,6 +8,7 @@ import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.ui.dependenthome.DependentHomeActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.comp30023.spain_itproject.detailsvalidation.DetailsValidator;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 /**
  * Logs in users and starts appropriate activity
@@ -42,12 +43,14 @@ public class LoginHandler {
      */
     public void login(Context context, String phoneNumber, String pin) throws Exception {
 
-        Pair<String, Boolean> response = AccountController.getInstance().login(phoneNumber, pin);
+        String token = FirebaseInstanceId.getInstance().getId();
+
+        Pair<String, Boolean> response = AccountController.getInstance().login(phoneNumber, pin, token);
 
         String userId = response.first;
         Boolean isDependent = response.second;
 
-        LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent, userId);
+        LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent, userId, token);
         displayHomeScreen(context);
     }
 
@@ -65,9 +68,11 @@ public class LoginHandler {
 
         DetailsValidator.getInstance().checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
 
-        User user = AccountController.getInstance().registerAccount(name, phoneNumber, pin, isDependent);
+        String token = FirebaseInstanceId.getInstance().getId();
 
-        LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent, user.getId());
+        User user = AccountController.getInstance().registerAccount(name, phoneNumber, pin, isDependent, token);
+
+        LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent, user.getId(), token);
         displayHomeScreen(context);
     }
 
@@ -109,6 +114,28 @@ public class LoginHandler {
         Intent intent = new Intent(context, StartActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    /**
+     * Updates the token used for FirebaseCloudMessaging for the logged in user on the server and then locally
+     * @param context
+     * @param token The new token
+     */
+    public void updateToken(Context context, String token) {
+
+        if (isLoggedIn(context)) {
+
+            String id = LoginSharedPreference.getId(context);
+            boolean isDependent = LoginSharedPreference.getIsDependent(context);
+
+            //Update token on server
+            // TODO if this fails should we logout?
+            AccountController.getInstance().updateToken(id, isDependent, token);
+
+            //Update token in SharedPreferences
+            LoginSharedPreference.updateToken(context, token);
+
+        }
     }
 
 }
