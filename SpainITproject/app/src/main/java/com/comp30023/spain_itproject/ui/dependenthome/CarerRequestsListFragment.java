@@ -9,31 +9,34 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.ui.views.ItemButton;
 
 import java.util.ArrayList;
 
-/**
- * A fragment that displays the list of the DependentUser's locations
- */
-public class LocationsListFragment extends ListFragment<Location> {
+public class CarerRequestsListFragment extends ListFragment<CarerUser> {
 
     public static final String ARGUMENT_USER = "USER";
 
-    public static final String TITLE = "Locations";
+    public static final String TITLE = "Requesting Carers";
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater,container,savedInstanceState);
+    private DependentUser user;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         Bundle arguments = getArguments();
-        DependentUser user = (DependentUser) arguments.getSerializable(ARGUMENT_USER);
+        user = (DependentUser) arguments.getSerializable(ARGUMENT_USER);
 
-        ArrayList<Location> locations = user.getLocations();
+        ArrayList<CarerUser> pendingCarers = user.getPendingCarers();
+        if (pendingCarers.isEmpty()) {
+            getActivity().onBackPressed();
+        }
 
-        setList(locations);
+        setList(user.getPendingCarers());
         setButtonListeners();
 
         setTitle(TITLE);
@@ -41,26 +44,25 @@ public class LocationsListFragment extends ListFragment<Location> {
         return view;
     }
 
-
     private void setButtonListeners() {
-
         super.setButtonListeners(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //The item button that is pressed
                 ItemButton itemButton = (ItemButton) v;
-                Location location = (Location) itemButton.getItem();
+                CarerUser requester = (CarerUser) itemButton.getItem();
 
                 FragmentManager fragmentManager = getFragmentManager();
                 assert fragmentManager != null;
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
                 Bundle arguments = new Bundle();
-                arguments.putSerializable(MapFragment.ARGUMENT_LOCATION, location);
+                arguments.putSerializable(ResponseFragment.ARGUMENT_USER, user);
+                arguments.putSerializable(ResponseFragment.ARGUMENT_REQUESTING_USER, requester);
 
                 //Create new instance of the following class and pass the item
-                Fragment nextFragment = new MapFragment();
+                Fragment nextFragment = new ResponseFragment();
 
                 nextFragment.setArguments(arguments);
 

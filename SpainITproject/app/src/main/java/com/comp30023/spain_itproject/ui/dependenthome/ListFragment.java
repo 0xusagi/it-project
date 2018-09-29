@@ -47,6 +47,7 @@ public abstract class ListFragment<T extends DisplayName> extends Fragment {
     private Button previousPageButton;
     private Button nextPageButton;
     private ItemButton<T>[] buttons;
+    private TextView title;
 
     //Index in the list of the item that is at the top of the frame
     private int topIndex;
@@ -58,6 +59,9 @@ public abstract class ListFragment<T extends DisplayName> extends Fragment {
         view = inflater.inflate(R.layout.fragment_list, container, false);
 
         frame = (LinearLayout) view.findViewById(R.id.frame);
+
+        title = (TextView) view.findViewById(R.id.list_title);
+        title.setVisibility(View.INVISIBLE);
 
         buttons = new ItemButton[BUTTONS_PER_PAGE];
         addButtonsToFrame();
@@ -124,6 +128,10 @@ public abstract class ListFragment<T extends DisplayName> extends Fragment {
         return button;
     }
 
+    /**
+     * Set the behaviour for when the buttons are clicked
+     * @param listener
+     */
     public void setButtonListeners(View.OnClickListener listener) {
         for (ItemButton<T> button : buttons) {
             button.setOnClickListener(listener);
@@ -190,9 +198,22 @@ public abstract class ListFragment<T extends DisplayName> extends Fragment {
         }
     }
 
+    /**
+     * Sets the list and sets the buttons to correspond with this list
+     * @param list
+     */
     public void setList(ArrayList<T> list) {
         this.list = list;
 
         setButtons(0);
+    }
+
+    /**
+     * Sets and displays the text above the list
+     * @param title
+     */
+    public void setTitle(String title) {
+        this.title.setText(title);
+        this.title.setVisibility(View.VISIBLE);
     }
 }

@@ -15,10 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.ui.LoginHandler;
@@ -44,7 +44,6 @@ public class DependentHomeActivity extends AppCompatActivity {
     private Button messagesButton;
     private Button callsButton;
     private Button helpButton;
-    private Button refreshButton;
     private Button signOutButton;
 
     //The logged in DependentUser
@@ -52,6 +51,10 @@ public class DependentHomeActivity extends AppCompatActivity {
 
     //Reference to signed in user's list of locations
     private ArrayList<Location> locations;
+
+    private boolean responding;
+
+    private ProgressBar spinner;
 
     /**
      * References the objects to the corresponding views
@@ -66,6 +69,11 @@ public class DependentHomeActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
+        responding = false;
+
+        spinner = (ProgressBar) findViewById(R.id.progressBar) ;
+        spinner.setVisibility(View.GONE);
+
         //Retrieve the logged in account from the server
         new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
 
@@ -73,14 +81,6 @@ public class DependentHomeActivity extends AppCompatActivity {
 
         callsButton = (Button) findViewById(R.id.callButton);
         setCallsButtonListener(this);
-
-        refreshButton = (Button) findViewById(R.id.refreshButton);
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DownloadDependentTask().execute(LoginSharedPreference.getId(getApplicationContext()));
-            }
-        });
 
         drawerLayout = findViewById(R.id.drawer_layout);
         signOutButton = findViewById(R.id.signOutButton);
@@ -116,11 +116,20 @@ public class DependentHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                /*FragmentTransaction transaction = fragmentManager.beginTransaction();
+                if (!responding) {
+                    Fragment carersFragment = new CarersListFragment();
 
-                transaction.replace(R.id.fragment_container, carersFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();*/
+                    Bundle arguments = new Bundle();
+                    arguments.putSerializable(CarersListFragment.ARGUMENT_USER, user);
+
+                    carersFragment.setArguments(arguments);
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                    transaction.replace(R.id.fragment_container, carersFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
             }
         });
     }
@@ -147,7 +156,9 @@ public class DependentHomeActivity extends AppCompatActivity {
         @Override
         protected DependentUser doInBackground(String... strings) {
 
-            displayRefreshButton(false);
+            responding = true;
+
+            displaySpinnder(true);
             try {
 
                 user = AccountController.getInstance().getDependent(strings[0]);
@@ -157,33 +168,44 @@ public class DependentHomeActivity extends AppCompatActivity {
             // Exception when can't connect to the server
             catch (Exception e) {
                 // When cannot get prompt whether to try again
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
             return null;
         }
 
         /**
-         * Load the list fragment of the dependent's locations
+         * Load the fragment to display
          * @param dependentUser
          */
         @Override
         protected void onPostExecute(DependentUser dependentUser) {
             super.onPostExecute(dependentUser);
 
-            locationsFragment = new LocationsListFragment();
+            Fragment fragment;
 
+            //If there are pending requests, display them
+            if (user.getPendingCarers().isEmpty()) {
+                fragment = new LocationsListFragment();
+
+            //Otherwise display the locations
+            } else {
+                fragment = new CarerRequestsListFragment();
+
+            }
 
             Bundle arguments = new Bundle();
             arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
-            locationsFragment.setArguments(arguments);
+            fragment.setArguments(arguments);
 
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-            transaction.add(R.id.fragment_container, locationsFragment);
+            transaction.replace(R.id.fragment_container, fragment);
             transaction.commit();
 
-            displayRefreshButton(true);
+            responding = false;
+
+            displaySpinnder(false);
         }
     }
 
@@ -191,13 +213,13 @@ public class DependentHomeActivity extends AppCompatActivity {
      * Sets wehether the refresh button should be displayed
      * @param display
      */
-    private void displayRefreshButton(final boolean display) {
+    private void displaySpinnder(final boolean display) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                int visibility = display ? View.VISIBLE : View.INVISIBLE;
-                refreshButton.setVisibility(visibility);
+                int spinnerVisibility = display ? View.VISIBLE : View.GONE;
+                spinner.setVisibility(spinnerVisibility);
             }
         });
     }

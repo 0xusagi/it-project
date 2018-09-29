@@ -35,10 +35,17 @@ public class DependentUser extends User {
     }
 
     /**
-     * @return The listof carers associated with the dependent account
+     * @return The list of carers associated with the dependent account
      */
     public ArrayList<CarerUser> getCarers() {
         return carers;
+    }
+
+    /**
+     * @return The list of carers that have requested to aid this dependent
+     */
+    public ArrayList<CarerUser> getPendingCarers() {
+        return pendingCarers;
     }
 
     /**
