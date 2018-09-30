@@ -28,15 +28,15 @@ const userSchema = new mongoose.Schema({
 export const User = mongoose.model('user', userSchema);
 
 const dependentSchema = new mongoose.Schema({
-    pendingCarers: [Array],
-    carers: [Array],
+    pendingCarers: [String],
+    carers: [String],
     homeLocation: locationSchema,
     destinations: [locationSchema]
 }, options);
 
 const carerSchema = new mongoose.Schema({
-    pendingDependents: [Array],
-    dependents: [Array]
+    pendingDependents: [String],
+    dependents: [String]
 });
 
 export const Carer = User.discriminator('Carer', carerSchema);
