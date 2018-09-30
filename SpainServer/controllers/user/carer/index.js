@@ -1,5 +1,9 @@
-import { Carer } from "../../../models/user";
-import { Dependent } from "../../../models/user";
+import {
+    Carer
+} from "../../../models/user";
+import {
+    Dependent
+} from "../../../models/user";
 
 /**
  * Gets a carer from the database from a supplied id parameter.
@@ -30,15 +34,17 @@ const getCarer = (req, res, next) => {
  * @returns {Query}
  */
 const updateCarer = (req, res, next) => {
-    let options = {new: true};
+    let options = {
+        new: true
+    };
     const response = Carer.findOneAndUpdate(req.params.id,
         req.body, options,
         (err, carer) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        return res.status(200).json(carer);
-    });
+            if (err) {
+                return res.status(400).send(err);
+            }
+            return res.status(200).json(carer);
+        });
 
     return response;
 };
@@ -70,22 +76,28 @@ const deleteCarer = (req, res, next) => {
  * @returns {*}
  */
 const isAlreadyAdded = (mobile, carerId) => {
-    let result;
-    Dependent.find({ $or:
-            [
-                {carers: carerId},
-                {pendingCarers: carerId}
+    return new Promise((resolve, reject) => {
+        Dependent.find({
+            $or: [{
+                    carers: carerId
+                },
+                {
+                    pendingCarers: carerId
+                }
             ]
-    }, (err, dependents) => {
-        console.log("carerId",carerId);
-        console.log("found dependents:",dependents);
-        if(dependents.length > 0) {
-            result = true;
-        } else {
-            result = false;
-        }
+        }).then((dependents) => {
+            console.log("[isAlreadyAdded] dependents: ", dependents);
+            console.log("[isAlreadyAdded] dependents.length: ", dependents.length);
+            if (dependents.length > 0) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        }).catch((err) => {
+            console.log("error checking whether dependent/carer already added; ", err);
+            resolve(true);
+        })
     });
-    return result;
 };
 
 /**
@@ -98,42 +110,69 @@ const isAlreadyAdded = (mobile, carerId) => {
  * @returns {Query}
  */
 const addDependentToCarer = (req, res, next) => {
-    const options = {new: true};
+    const options = {
+        new: true
+    };
     const carerId = req.params.id;
     const mobile = req.body.mobile;
-    const response = Dependent.find({mobile: mobile}, (err, dependents) => {
-        // Could not find dependent's mobile number in the database.
-        if (err || dependents.length === 0) {
-            return res.status(400).send({message: 'Dependent not found in database.'})
+    var query = Dependent.find({
+        mobile: mobile
+    });
+
+    // `.exec()` gives you a fully-fledged promise
+    var promise = query.exec();
+    // assert.ok(promise instanceof Promise);
+
+    const response = promise.then(function(dependents) {
+        // use doc
+        // console.log("dependents[0]", dependents[0]);
+        if (dependents.length === 0) {
+            return res.status(400).send({
+                message: 'Dependent not found in database.'
+            });
         }
         // Checks if a mobile has already been added by this carer before.
-        let added_check = isAlreadyAdded(mobile, carerId);
-        if (added_check == true) {
-            return res.status(400).send({message: 'Dependent already friend or request already sent.'})
-        }
-        console.log("added_check",added_check);
-        console.log("dependents[0]: ",dependents[0]);
-        // Mobile number found, finding the carer and adding it to their list first
-        return Carer.findOneAndUpdate(carerId,
-            { $push: { pendingDependents: dependents[0]._id } }, options,
-            (err, carer) => {
-                if (err) {
-                    return res.status(400).send(err);
-                }
-                console.log("pushing carer: ", carer);
-                // Add carer to list of pending carers for dependent
-                dependents[0].pendingCarers.push(carer._id);
+        isAlreadyAdded(mobile, carerId).then((check) => {
+                // if so, return 400 already sent request
+                if (check === true) {
+                    return res.status(400).send({
+                        message: 'Dependent already friend or request already sent.'
+                    });
+                } else {
+                    return Carer.findOneAndUpdate(carerId, {
+                            $push: {
+                                pendingDependents: dependents[0]._id
+                            }
+                        }, options)
+                        .then((carer) => {
+                            // Add carer to list of pending carers for dependent
+                            dependents[0].pendingCarers.push(carer._id);
 
-                return dependents[0].save((err, dependent) => {
-                    if (err) {
-                        return res.status(400).send(err);
-                    }
-                    console.log("saved dependent: ", dependent);
-                    return res.status(200).send({message:"Friend request sent", name: dependents[0].name});
-                });
+                            return dependents[0].save().then((dependent) => {
+                                    // console.log("saving dependent: ", dependent);
+                                    return res.status(200).send({
+                                        message: "Friend request sent",
+                                        name: dependent.name
+                                    });
+                                })
+                                .catch((err) => {
+                                    return res.status(400).send(err);
+                                });
+                        })
+                        .catch((err) => {
+                            return res.status(400).send(err);
+                        });
+                }
             })
+            .catch((err) => {
+                console.log(err);
+            });
+    }).catch((err) => {
+        console.log("err", err);
+        return res.status(500).send({
+            message: 'Internal server error.'
+        })
     });
-    // return name of the requested dependent.
     return response;
 };
 
@@ -186,11 +225,15 @@ function handleCarerDependents(dependents) {
  */
 const getCarerByMobile = (req, res, next) => {
     let userMobile = req.params.mobile;
-    const response = Carer.find({mobile: userMobile}, (err, carer) => {
+    const response = Carer.find({
+        mobile: userMobile
+    }, (err, carer) => {
         if (err) {
             return res.status(400).send(err);
         }
-        return res.status(200).send({name: carer[0].name});
+        return res.status(200).send({
+            name: carer[0].name
+        });
     });
 
     return response;
