@@ -1,6 +1,7 @@
 package com.comp30023.spain_itproject.ui;
 
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ public class AddDependentActivity extends AppCompatActivity {
 
     private EditText mobileNumberField;
     private Button searchButton;
+
+    String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +44,12 @@ public class AddDependentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO send the query to the server
                 // Get the mobile number to query
-                String phoneNumber = mobileNumberField.getText().toString();
+                phoneNumber = mobileNumberField.getText().toString();
 
                 // Send to server
                 try {
-                    DependentUser dependentUser = AccountController.getInstance().getDependent(phoneNumber);
-                    displayInfoDialog(dependentUser.getName());
+                    String dependentName = new GetDependentNameFromNumberTask().execute(phoneNumber, AddDependentActivity.this).get();
+                    displayInfoDialog(dependentName);
                 } catch (Exception e) {
                     // Display error message as a toast
                     Toast errorMsg = Toast.makeText(getApplicationContext(), "Dependent does not exist", Toast.LENGTH_SHORT);
@@ -77,6 +80,7 @@ public class AddDependentActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // TODO send a request to the server
+                new AddDependentTask().execute(phoneNumber);
             }
         });
 
@@ -94,5 +98,28 @@ public class AddDependentActivity extends AppCompatActivity {
 
         // Clear the edit text field for entering mobile number
         mobileNumberField.setText("");
+     }
+
+    /**
+     * Async task to add a dependent on the background thread which interacts with the server
+     * Calling execute(phoneNumber) always returns null
+     */
+    private class AddDependentTask extends AsyncTask<String, Void, Void> {
+
+         @Override
+         protected Void doInBackground(String... strings) {
+             // Dependent phone number is the first argument
+             String dependentPhoneNumber = strings[0];
+
+             try {
+                 AccountController.getInstance().requestDependent(LoginSharedPreference.getId(AddDependentActivity.this),
+                         dependentPhoneNumber);
+             } catch (Exception e) {
+                 // Print the error message
+                 Toast.makeText(AddDependentActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+             }
+
+             return null;
+         }
      }
 }

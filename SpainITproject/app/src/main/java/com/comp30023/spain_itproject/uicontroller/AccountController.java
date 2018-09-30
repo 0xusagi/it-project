@@ -221,6 +221,38 @@ public class AccountController {
     }
 
     /**
+     * Get a dependent name from the server by passing in a phone number
+     * @param phoneNumber
+     * @return
+     * @throws Exception
+     */
+    public String getDependentNameByPhoneNumber(String phoneNumber) throws Exception {
+        checkService();
+
+        // Contact the server to request the name of the dependent who has the corresponding
+        // phone number
+        Call<UserModel> call = service.getDependentNameFromPhoneNumber(phoneNumber);
+
+        try {
+            Response<UserModel> response = call.execute();
+
+            // Response is successful
+            if (response.isSuccessful()) {
+                UserModel userModel = response.body();
+
+                return userModel.getName();
+            }
+            // Bad request
+            else {
+                throw new BadRequestException("ERROR! Bad request: " + response.message());
+            }
+        }
+        catch (IOException e) {
+            throw new Exception(MESSAGE_SERVER_FAILURE);
+        }
+    }
+
+    /**
      * Sends the response of a friend request to the server
      * @param dependent The dependent who received the request
      * @param carer The carer that sent the request
@@ -250,15 +282,15 @@ public class AccountController {
 
     /**
      * Add a dependent to the carer by their phone number
-     * @param carer The carer who is adding the dependent
+     * @param carerId The carer who is adding the dependent
      * @param dependentPhoneNumber The dependent who is being added's phone number
      * @throws Exception Thrown with a message if there is no contact made with the server or if unsuccessful response
      */
-    public DependentUser requestDependent(CarerUser carer, String dependentPhoneNumber) throws Exception {
+    public DependentUser requestDependent(String carerId, String dependentPhoneNumber) throws Exception {
         checkService();
 
         //Create the call to the server
-        Call<DependentUser> call = service.addDependent(carer.getId(), dependentPhoneNumber);
+        Call<DependentUser> call = service.addDependent(carerId, dependentPhoneNumber);
 
         try{
             //Execut the call to the server

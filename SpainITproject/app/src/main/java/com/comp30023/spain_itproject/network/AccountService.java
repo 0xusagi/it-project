@@ -48,6 +48,12 @@ public interface AccountService {
     Call<DependentUser> getDependent(
             @Path("id") String id);
 
+    // CONFIRM
+    // Get a UserModel which will be a name corresponding to the phone number of a dependent user
+    @GET("/dependent/name/{mobile}")
+    Call<UserModel> getDependentNameFromPhoneNumber(
+            @Path("mobile") String phoneNumber);
+
 
     //CONFIRM
     @FormUrlEncoded

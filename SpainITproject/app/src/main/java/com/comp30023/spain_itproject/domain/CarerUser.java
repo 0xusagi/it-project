@@ -34,6 +34,7 @@ public class CarerUser extends User implements Serializable {
      * @param dependentPhoneNumber The phone number of the dependent to be added
      * @throws Exception Thrown if there is an error while communicating with the database
      */
+    /*
     public void addDependent(String dependentPhoneNumber) throws Exception {
 
         //Check if this carer has already sent a request to the dependent
@@ -47,5 +48,5 @@ public class CarerUser extends User implements Serializable {
         DependentUser dependent = AccountController.getInstance().requestDependent(this, dependentPhoneNumber);
 
         pendingDependents.add(dependent);
-    }
+    }*/
 }
