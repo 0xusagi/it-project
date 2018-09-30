@@ -125,7 +125,7 @@ public class DependentHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                LoginHandler.logout(context);
+                LoginHandler.getInstance().logout(context);
                 finish();
             }
         });

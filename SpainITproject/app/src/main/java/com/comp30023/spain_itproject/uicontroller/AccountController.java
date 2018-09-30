@@ -10,7 +10,6 @@ import com.comp30023.spain_itproject.network.RetrofitClientInstance;
 import com.comp30023.spain_itproject.network.UserModel;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
-import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
@@ -27,9 +26,6 @@ import retrofit2.Response;
 public class AccountController {
 
     public static final String MESSAGE_SERVER_FAILURE = "Could not connect to the server. Check that you're connected to the internet and please try again";
-
-    private String loggedInUserId = null;
-    private boolean loggedInIsDependent;
 
     private static AccountController instance;
     public static AccountController getInstance() {
@@ -72,14 +68,13 @@ public class AccountController {
                 UserModel userModel = response.body();
                 User user;
 
-                loggedInUserId = userModel.getId();
-                loggedInIsDependent = isDependent;
+                String userId = userModel.getId();
 
                 //Create the type of user based on input (corresponds to user returned from server
                 if (isDependent) {
-                    user = new DependentUser(userModel.getName(), phoneNumber, pin, loggedInUserId);
+                    user = new DependentUser(userModel.getName(), phoneNumber, pin, userId);
                 } else {
-                    user = new CarerUser(userModel.getName(), phoneNumber, pin, loggedInUserId);
+                    user = new CarerUser(userModel.getName(), phoneNumber, pin, userId);
                 }
 
                 return user;
@@ -115,13 +110,14 @@ public class AccountController {
             //If the response is successful, return the id and whether the account is dependent
             if (response.isSuccessful()) {
 
-                String userType = response.body().getUserType();
+                UserModel userModel = response.body();
+
+                String userType = userModel.getUserType();
                 boolean isDependent = userType.equals(AccountService.DEPENDENT_TYPE);
 
-                loggedInUserId = response.body().getId();
-                loggedInIsDependent = isDependent;
+                String userId = userModel.getId();
 
-                Pair<String, Boolean> pair = new Pair<String, Boolean>(loggedInUserId, isDependent);
+                Pair<String, Boolean> pair = new Pair<String, Boolean>(userId, isDependent);
 
                 return pair;
 
@@ -277,9 +273,9 @@ public class AccountController {
         Call<ResponseBody> call;
 
         if (isDependent) {
-            call = service.updateDependentToken(loggedInUserId, token);
+            call = service.updateDependentToken(userId, token);
         } else {
-            call = service.updateCarerToken(loggedInUserId, token);
+            call = service.updateCarerToken(userId, token);
         }
 
         try {

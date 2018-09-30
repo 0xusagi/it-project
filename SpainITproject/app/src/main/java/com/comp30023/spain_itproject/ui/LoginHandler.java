@@ -108,7 +108,7 @@ public class LoginHandler {
      * Logs out the current user and begins the StartActivity
      * @param context
      */
-    public static void logout(Context context) {
+    public void logout(Context context) {
 
         LoginSharedPreference.setLogOut(context);
         Intent intent = new Intent(context, StartActivity.class);
