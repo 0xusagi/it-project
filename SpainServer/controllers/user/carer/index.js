@@ -70,14 +70,22 @@ const deleteCarer = (req, res, next) => {
  * @returns {*}
  */
 const isAlreadyAdded = (mobile, carerId) => {
-    return Carer.find({ $or:
+    let result;
+    Dependent.find({ $or:
             [
-                {dependents: {mobile: mobile}},
-                {pendingDependents:  {mobile: mobile}}
+                {carers: carerId},
+                {pendingCarers: carerId}
             ]
-    }, (err, carers) => {
-        return !!(err || carers.length > 0);
-    })
+    }, (err, dependents) => {
+        console.log("carerId",carerId);
+        console.log("found dependents:",dependents);
+        if(dependents.length > 0) {
+            result = true;
+        } else {
+            result = false;
+        }
+    });
+    return result;
 };
 
 /**
@@ -99,26 +107,29 @@ const addDependentToCarer = (req, res, next) => {
             return res.status(400).send({message: 'Dependent not found in database.'})
         }
         // Checks if a mobile has already been added by this carer before.
-        if (isAlreadyAdded(mobile, carerId)) {
+        let added_check = isAlreadyAdded(mobile, carerId);
+        if (added_check == true) {
             return res.status(400).send({message: 'Dependent already friend or request already sent.'})
         }
-
+        console.log("added_check",added_check);
+        console.log("dependents[0]: ",dependents[0]);
         // Mobile number found, finding the carer and adding it to their list first
         return Carer.findOneAndUpdate(carerId,
-            { $push: { pendingDependents: dependents[0] } }, options,
+            { $push: { pendingDependents: dependents[0]._id } }, options,
             (err, carer) => {
                 if (err) {
                     return res.status(400).send(err);
                 }
+                console.log("pushing carer: ", carer);
                 // Add carer to list of pending carers for dependent
-                dependents[0].pendingCarers.push(carer);
+                dependents[0].pendingCarers.push(carer._id);
 
                 return dependents[0].save((err, dependent) => {
                     if (err) {
                         return res.status(400).send(err);
                     }
-
-                    return res.status(200).send({name: dependents[0].name});
+                    console.log("saved dependent: ", dependent);
+                    return res.status(200).send({message:"Friend request sent", name: dependents[0].name});
                 });
             })
     });
