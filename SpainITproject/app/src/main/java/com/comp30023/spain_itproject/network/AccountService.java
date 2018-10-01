@@ -72,7 +72,7 @@ public interface AccountService {
 
 
     @FormUrlEncoded
-    @POST("/dependents/{dependentId}/carers/{carerId}/acceptCarer")
+    @PUT("/dependents/{dependentId}/acceptCarer/{carerId}")
     Call<ResponseBody> acceptRequest(
             @Path("dependentId") String dependentId,
             @Path("carerId") String carerId,
