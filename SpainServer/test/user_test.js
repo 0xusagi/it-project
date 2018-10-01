@@ -213,4 +213,20 @@ describe('Users', () => {
                 });
         });
     });
+
+    it('should allow carers to add dependents (create a friend request)', (done) => {
+        Carer.create(sampleCarer, (err, carer) => {
+            Dependent.create(sampleDependent, (err, dependent) => {
+                chai.request(app)
+                    .put('/carers/'+carer._id+'/addDependent')
+                    .type('form')
+                    .send({mobile: dependent.mobile})
+                    .end((err, res) => {
+                        // console.log(res.message);
+                        res.should.have.status(200);
+                        done();
+                    });
+            });
+        });
+    });
 });

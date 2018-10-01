@@ -86,7 +86,7 @@ const isAlreadyAddedOrPending = (mobile, carerId) => {
                 }
             ]
         }).then((dependents) => {
-            console.log("dependents", dependents);
+            // console.log("dependents", dependents);
             if (dependents.length > 0) {
                 resolve(true);
             } else {
@@ -176,7 +176,7 @@ const sendFriendRequest = (req, res, next) => {
                 message: 'Dependent not found in database.'
             });
         }
-        console.log("carerId", carerId);
+        // console.log("carerId", carerId);
 
         // Firstly check whether the carer exists
         Carer.findById(carerId).then((carer) => {
@@ -193,7 +193,7 @@ const sendFriendRequest = (req, res, next) => {
         isAlreadyAddedOrPending(mobile, carerId).then((check) => {
                 // if so, return 400 already sent request
 
-                console.log("check", check);
+                // console.log("check", check);
                 if (check === true) {
                     return res.status(400).send({
                         message: 'Dependent already friend or request already sent.'
@@ -256,7 +256,7 @@ const acceptFriendRequest = (req, res, next) => {
         }).exec()
         .then(function(dependents) {
             // use doc
-            console.log("dependents[0]", dependents[0]);
+            // console.log("dependents[0]", dependents[0]);
             if (dependents.length === 0) {
                 return res.status(400).send({
                     message: 'Dependent not found in database.'
