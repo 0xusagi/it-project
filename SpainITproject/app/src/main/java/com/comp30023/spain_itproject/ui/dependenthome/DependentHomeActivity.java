@@ -158,7 +158,7 @@ public class DependentHomeActivity extends AppCompatActivity {
 
             responding = true;
 
-            displaySpinnder(true);
+            displaySpinner(true);
             try {
 
                 user = AccountController.getInstance().getDependent(strings[0]);
@@ -167,8 +167,7 @@ public class DependentHomeActivity extends AppCompatActivity {
 
             // Exception when can't connect to the server
             catch (Exception e) {
-                // When cannot get prompt whether to try again
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
 
             return null;
@@ -182,30 +181,40 @@ public class DependentHomeActivity extends AppCompatActivity {
         protected void onPostExecute(DependentUser dependentUser) {
             super.onPostExecute(dependentUser);
 
-            Fragment fragment;
+            displaySpinner(false);
 
-            //If there are pending requests, display them
-            if (user.getPendingCarers().isEmpty()) {
-                fragment = new LocationsListFragment();
+            if (user != null) {
 
-            //Otherwise display the locations
-            } else {
-                fragment = new CarerRequestsListFragment();
+                try {
 
+                    Fragment fragment;
+
+                    //If there are pending requests, display them
+                    if (!user.hasPendingCarers()) {
+                        fragment = new LocationsListFragment();
+
+                        //Otherwise display the locations
+                    } else {
+                        fragment = new CarerRequestsListFragment();
+                    }
+
+                    Bundle arguments = new Bundle();
+                    arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
+                    fragment.setArguments(arguments);
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                    transaction.replace(R.id.fragment_container, fragment);
+                    transaction.commit();
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                responding = false;
             }
-
-            Bundle arguments = new Bundle();
-            arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
-            fragment.setArguments(arguments);
-
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-            transaction.replace(R.id.fragment_container, fragment);
-            transaction.commit();
-
-            responding = false;
-
-            displaySpinnder(false);
         }
     }
 
@@ -213,13 +222,22 @@ public class DependentHomeActivity extends AppCompatActivity {
      * Sets wehether the refresh button should be displayed
      * @param display
      */
-    private void displaySpinnder(final boolean display) {
+    private void displaySpinner(final boolean display) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
                 int spinnerVisibility = display ? View.VISIBLE : View.GONE;
                 spinner.setVisibility(spinnerVisibility);
+            }
+        });
+    }
+
+    private void displayErrorToast(final Exception e) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -1,5 +1,7 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +15,7 @@ import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.ui.views.ItemButton;
+import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,8 @@ public class CarerRequestsListFragment extends ListFragment<CarerUser> {
 
     private DependentUser user;
 
+    private ArrayList<CarerUser> pendingCarers = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
@@ -31,15 +36,36 @@ public class CarerRequestsListFragment extends ListFragment<CarerUser> {
         Bundle arguments = getArguments();
         user = (DependentUser) arguments.getSerializable(ARGUMENT_USER);
 
-        ArrayList<CarerUser> pendingCarers = user.getPendingCarers();
-        if (pendingCarers.isEmpty()) {
-            getActivity().onBackPressed();
-        }
+        @SuppressLint("StaticFieldLeak")
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
 
-        setList(user.getPendingCarers());
-        setButtonListeners();
+                try {
+                    pendingCarers = user.getPendingCarers();
 
-        setTitle(TITLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                if (pendingCarers == null || pendingCarers.isEmpty()) {
+                    startNextFragment();
+
+                } else {
+                    setList(pendingCarers);
+                    setButtonListeners();
+                    setTitle(TITLE);
+                }
+            }
+        };
+        task.execute();
 
         return view;
     }
@@ -71,5 +97,20 @@ public class CarerRequestsListFragment extends ListFragment<CarerUser> {
                 transaction.commit();
             }
         });
+    }
+
+    private void startNextFragment() {
+
+        FragmentManager fragmentManager = getFragmentManager();
+
+        Fragment fragment = new LocationsListFragment();
+
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
+        fragment.setArguments(arguments);
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 }

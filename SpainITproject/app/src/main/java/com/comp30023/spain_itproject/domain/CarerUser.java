@@ -15,7 +15,9 @@ public class CarerUser extends User implements Serializable {
     private ArrayList<DependentUser> dependents;
 
     @SerializedName("pendingDependents")
-    private ArrayList<DependentUser> pendingDependents;
+    private ArrayList<String> pendingDependents;
+
+    private ArrayList<DependentUser> pDependents;
 
     public CarerUser(String name, String phoneNumber, String pin, String id) {
         super(name, phoneNumber, pin, id);

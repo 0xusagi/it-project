@@ -123,7 +123,7 @@ public abstract class ListFragment<T extends DisplayName> extends Fragment {
         //Add the button to the frame and set the layout parameters
         frame.addView(button);
         button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f));
-        //button.setVisibility(View.INVISIBLE);
+        button.setVisibility(View.INVISIBLE);
 
         return button;
     }
