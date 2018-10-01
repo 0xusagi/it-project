@@ -22,6 +22,27 @@ const getDependent = (req, res, next) => {
 };
 
 /**
+ * Gets all carers (objects) of a carer from the database
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Query}
+ */
+const getCarers = (req, res, next) => {
+    const response = Dependent.findById(req.params.id).exec()
+        .then((dependent) => {
+            return Carer.find({'_id': { $in: dependent.carers }}, (err, carers) => {
+                return res.status(200).json(carers);
+            });
+        }).catch((err) => {
+            console.log('error: ', err);
+            return res.status(400).send(err);
+        });
+    return response;
+};
+
+/**
  * Updates a dependent based on supplied params from the client.
  *
  * @param req
@@ -216,5 +237,6 @@ export const dependentIndex = {
     put: updateDependent,
     delete: deleteDependent,
     acceptCarer: acceptFriendRequest,
-    getName: getDependentByMobile
+    getName: getDependentByMobile,
+    getCarers: getCarers
 };

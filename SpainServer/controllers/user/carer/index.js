@@ -14,14 +14,34 @@ import {
  * @returns {Query}
  */
 const getCarer = (req, res, next) => {
-    const response = Carer.findById(req.params.id, (err, carer) => {
-        if (err) {
+    const response = Carer.findById(req.params.id).exec()
+        .then((carer) => {
+            return res.status(200).json(carer);
+        }).catch((err) => {
+            console.log('error: ', err);
             return res.status(400).send(err);
-        }
+        });
+    return response;
+};
 
-        return res.status(200).json(carer);
-    });
-
+/**
+ * Gets all dependents (objects) of a carer from the database
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Query}
+ */
+const getDependents = (req, res, next) => {
+    const response = Carer.findById(req.params.id).exec()
+        .then((carer) => {
+            return Dependent.find({'_id': { $in: carer.dependents }}, (err, dependents) => {
+                return res.status(200).json(dependents);
+            });
+        }).catch((err) => {
+            console.log('error: ', err);
+            return res.status(400).send(err);
+        });
     return response;
 };
 
@@ -237,45 +257,6 @@ const sendFriendRequest = (req, res, next) => {
 };
 
 /**
- * Gets all dependents of a carer from the database
- *
- * @param req
- * @param res
- * @param next
- * @returns {Query}
- */
-const getDependentsOfCarer = (req, res, next) => {
-    const response = Carer.findById(req.params.id, (err, carer) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        // console.log("carer", carer);
-        let dependents_array = handleCarerDependents(carer.dependents);
-        return res.status(200).json(dependents_array);
-    });
-
-    return response;
-};
-
-function handleCarerDependents(dependents) {
-    var response2, dependents_arr = [];
-    dependents.forEach((dependent_id) => {
-        // console.log("dependent_id", dependent_id);
-        response2 = Dependent.findById(dependent_id, (err, dep) => {
-            if (err) {
-                return res.status(400).send(err);
-            }
-            // console.log("dep",dep);
-            dependents_arr.push(dep);
-            // console.log("dependents_arr (1)",dependents_arr);
-        });
-        // console.log("dependents_arr (2)",dependents_arr);
-    });
-    // console.log("returning dependents_arr", dependents_arr);
-    return dependents_arr;
-}
-
-/**
  * Specifically gets a carer's name given their mobile number
  *
  * @param req
@@ -304,6 +285,6 @@ export const carerIndex = {
     put: updateCarer,
     delete: deleteCarer,
     sendFriendRequest: sendFriendRequest,
-    getDependents: getDependentsOfCarer,
+    getDependents: getDependents,
     getName: getCarerByMobile
 };
