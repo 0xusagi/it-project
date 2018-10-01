@@ -214,7 +214,7 @@ describe('Users', () => {
         });
     });
 
-    it('should allow carers to add dependents (create a friend request)', (done) => {
+    it('should allow a carer to add a dependent as a friend', (done) => {
         Carer.create(sampleCarer, (err, carer) => {
             Dependent.create(sampleDependent, (err, dependent) => {
                 chai.request(app)
@@ -225,6 +225,58 @@ describe('Users', () => {
                         // console.log(res.message);
                         res.should.have.status(200);
                         done();
+                    });
+            });
+        });
+    });
+
+    it('should allow a dependent to accept a friend request from a carer', (done) => {
+        Carer.create(sampleCarer, (err, carer) => {
+            Dependent.create(sampleDependent, (err, dependent) => {
+                chai.request(app)
+                    .put('/carers/'+carer._id+'/addDependent')
+                    .type('form')
+                    .send({mobile: dependent.mobile})
+                    .end((err, res) => {
+                        // console.log(res.message);
+                        res.should.have.status(200);
+                        chai.request(app)
+                            .put('/dependents/'+dependent._id+'/acceptCarer/'+carer._id)
+                            .type('form')
+                            .send({accept: 'accept'})
+                            .end((err, res) => {
+                                // console.log(res.message);
+                                res.body.message.should.equal("Friend request accepted");
+                                res.body.name.should.equal(carer.name);
+                                res.should.have.status(200);
+                                done();
+                            });
+                    });
+            });
+        });
+    });
+
+    it('should allow a dependent to decline a friend request from a carer', (done) => {
+        Carer.create(sampleCarer, (err, carer) => {
+            Dependent.create(sampleDependent, (err, dependent) => {
+                chai.request(app)
+                    .put('/carers/'+carer._id+'/addDependent')
+                    .type('form')
+                    .send({mobile: dependent.mobile})
+                    .end((err, res) => {
+                        // console.log(res.message);
+                        res.should.have.status(200);
+                        chai.request(app)
+                            .put('/dependents/'+dependent._id+'/acceptCarer/'+carer._id)
+                            .type('form')
+                            .send({accept: 'decline'})
+                            .end((err, res) => {
+                                // console.log(res.message);
+                                res.body.message.should.equal("Friend request declined");
+                                res.body.name.should.equal(carer.name);
+                                res.should.have.status(200);
+                                done();
+                            });
                     });
             });
         });

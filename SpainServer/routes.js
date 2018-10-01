@@ -25,7 +25,7 @@ router.delete('/carers/:id', carerIndex.delete);
 
 // adding and getting their dependents
 router.put('/carers/:id/addDependent', carerIndex.sendFriendRequest);
-router.put('/carers/:id/acceptDependent', carerIndex.acceptFriendRequest);
+// router.put('/carers/:id/acceptDependent', carerIndex.acceptFriendRequest);
 router.get('/carers/:id/getDependents', carerIndex.getDependents);
 
 // get a carer's name by mobile number
@@ -41,7 +41,7 @@ router.put('/dependents/:id', dependentIndex.put);
 router.delete('/dependents/:id', dependentIndex.delete);
 
 // adding and getting their carers
-router.put('/dependents/:id/addCarer', dependentIndex.addCarer);
+router.put('/dependents/:depId/acceptCarer/:carerId', dependentIndex.acceptCarer);
 
 // get a dependent's name by mobile number
 router.get('/dependent/name/:mobile', dependentIndex.getName);
