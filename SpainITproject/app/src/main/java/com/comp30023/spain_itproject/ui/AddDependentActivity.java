@@ -114,6 +114,7 @@ public class AddDependentActivity extends AppCompatActivity {
              try {
                  AccountController.getInstance().requestDependent(LoginSharedPreference.getId(AddDependentActivity.this),
                          dependentPhoneNumber);
+                 Toast.makeText(AddDependentActivity.this, "Dependent added", Toast.LENGTH_SHORT).show();
              } catch (Exception e) {
                  // Print the error message
                  Toast.makeText(AddDependentActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();

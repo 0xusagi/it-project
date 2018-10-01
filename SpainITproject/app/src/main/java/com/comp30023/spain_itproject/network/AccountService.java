@@ -6,6 +6,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 import com.comp30023.spain_itproject.domain.CarerUser;
@@ -64,7 +65,7 @@ public interface AccountService {
 
     //CONFIRM
     @FormUrlEncoded
-    @POST("/carers/{id}/addDependent")
+    @PUT("/carers/{id}/addDependent")
     Call<DependentUser> addDependent(
             @Path("id") String carerId,
             @Field("mobile") String dependentPhoneNumber);
