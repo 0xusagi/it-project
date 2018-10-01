@@ -75,7 +75,7 @@ const deleteCarer = (req, res, next) => {
  * @param carerId
  * @returns {*}
  */
-const isAlreadyAdded = (mobile, carerId) => {
+const isAlreadyAddedOrPending = (mobile, carerId) => {
     return new Promise((resolve, reject) => {
         Dependent.find({
             $or: [{
@@ -86,30 +86,74 @@ const isAlreadyAdded = (mobile, carerId) => {
                 }
             ]
         }).then((dependents) => {
-            console.log("[isAlreadyAdded] dependents: ", dependents);
-            console.log("[isAlreadyAdded] dependents.length: ", dependents.length);
             if (dependents.length > 0) {
                 resolve(true);
             } else {
                 resolve(false);
             }
         }).catch((err) => {
-            console.log("error checking whether dependent/carer already added; ", err);
+            // console.log("error checking whether dependent/carer already added; ", err);
             resolve(true);
         })
     });
 };
 
 /**
- * Specifically adds a dependent to a carer's list of dependents
- * based on supplied dependent id from the client.
+ *
+ * @param mobile
+ * @param carerId
+ * @returns {*}
+ */
+const isAlreadyPending = (mobile, carerId) => {
+    return new Promise((resolve, reject) => {
+        Dependent.find({
+                pendingCarers: carerId
+            }).then((dependents) => {
+            if (dependents.length > 0) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        }).catch((err) => {
+            // console.log("error checking whether dependent/carer already added; ", err);
+            resolve(true);
+        })
+    });
+};
+
+/**
+ *
+ * @param mobile
+ * @param carerId
+ * @returns {*}
+ */
+const isAlreadyAdded = (mobile, carerId) => {
+    return new Promise((resolve, reject) => {
+        Dependent.find({
+                carers: carerId
+            }).then((dependents) => {
+            if (dependents.length > 0) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        }).catch((err) => {
+            // console.log("error checking whether dependent/carer already added; ", err);
+            resolve(true);
+        })
+    });
+};
+
+
+/**
+ * Deals with pending carers and dependents based on a carer id and a dependent mobile
  *
  * @param req
  * @param res
  * @param next
  * @returns {Query}
  */
-const addDependentToCarer = (req, res, next) => {
+const sendFriendRequest = (req, res, next) => {
     const options = {
         new: true
     };
@@ -132,7 +176,7 @@ const addDependentToCarer = (req, res, next) => {
             });
         }
         // Checks if a mobile has already been added by this carer before.
-        isAlreadyAdded(mobile, carerId).then((check) => {
+        isAlreadyAddedOrPending(mobile, carerId).then((check) => {
                 // if so, return 400 already sent request
                 if (check === true) {
                     return res.status(400).send({
@@ -173,6 +217,96 @@ const addDependentToCarer = (req, res, next) => {
             message: 'Internal server error.'
         })
     });
+    return response;
+};
+
+/**
+ * Deals with pending carers and dependents based on a carer id and a dependent mobile
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Query}
+ */
+const acceptFriendRequest = (req, res, next) => {
+    const options = {
+        new: true
+    };
+    const carerId = req.params.id;
+    const mobile = req.body.mobile;
+
+    const response = Dependent.find({
+            mobile: mobile
+        }).exec()
+        .then(function(dependents) {
+            // use doc
+            console.log("dependents[0]", dependents[0]);
+            if (dependents.length === 0) {
+                return res.status(400).send({
+                    message: 'Dependent not found in database.'
+                });
+            }
+            // Checks if a mobile has already been added by this carer before.
+            isAlreadyPending(mobile, carerId).then((check) => {
+                    // console.log("check", check);
+                    if (check === false) {
+                        return res.status(400).send({
+                            message: 'A friend request between these users does not exist'
+                        });
+                    } else {
+                        return isAlreadyAdded(mobile, carerId).then((check2) => {
+                            if (check2 === true) {
+                                return res.status(400).send({
+                                    message: 'These users are already friends'
+                                });
+                            } else {
+                                return Carer.findById(carerId)
+                                    .then((carer) => {
+                                        // Add dependent to list of dependents for carer AND remove from pending
+                                        carer.pendingDependents = carer.pendingDependents.filter(id => id != dependents[0]._id);
+                                        carer.dependents.push(dependents[0]._id);
+                                        // Add carer to list of carers for dependent AND remove from pending
+                                        dependents[0].pendingCarers = dependents[0].pendingCarers.filter(id => id != carer._id);
+                                        dependents[0].carers.push(carer._id);
+
+                                        return dependents[0].save().then((dependent) => {
+                                            console.log("saving carer: ", carer);
+                                                return carer.save().then((carer) => {
+                                                    return res.status(200).send({
+                                                        message: "Friend accepted"
+                                                    });
+                                                }).catch((err) => {
+                                                    return res.status(400).send(err);
+                                                });
+                                            })
+                                            .catch((err) => {
+                                                return res.status(400).send(err);
+                                            });
+                                    })
+                                    .catch((err) => {
+                                        return res.status(400).send(err);
+                                    });
+                            }
+                        }).catch((err) => {
+                            return res.status(500).send({
+                                message: 'Internal server error'
+                            });
+                            console.log(err);
+                        })
+                    }
+                })
+                .catch((err) => {
+                    return res.status(500).send({
+                        message: 'Internal server error'
+                    });
+                    console.log(err);
+                });
+        }).catch((err) => {
+            return res.status(500).send({
+                message: 'Internal server error'
+            });
+            console.log("err", err);
+        });
     return response;
 };
 
@@ -243,7 +377,8 @@ export const carerIndex = {
     get: getCarer,
     put: updateCarer,
     delete: deleteCarer,
-    addDependent: addDependentToCarer,
+    acceptFriendRequest: acceptFriendRequest,
+    sendFriendRequest: sendFriendRequest,
     getDependents: getDependentsOfCarer,
     getName: getCarerByMobile
 };
