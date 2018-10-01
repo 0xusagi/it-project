@@ -83,7 +83,7 @@ public class DependentHomeActivity extends AppCompatActivity {
         setCallsButtonListener(this);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        signOutButton = findViewById(R.id.signOutButton);
+        signOutButton = findViewById(R.id.tempSignOutButton);
         setSignOutButtonListener(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
