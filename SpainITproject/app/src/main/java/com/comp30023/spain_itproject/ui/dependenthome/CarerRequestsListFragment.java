@@ -3,6 +3,7 @@ package com.comp30023.spain_itproject.ui.dependenthome;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -30,42 +31,20 @@ public class CarerRequestsListFragment extends ListFragment<CarerUser> {
     private ArrayList<CarerUser> pendingCarers = null;
 
     @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        setList();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         Bundle arguments = getArguments();
         user = (DependentUser) arguments.getSerializable(ARGUMENT_USER);
 
-        @SuppressLint("StaticFieldLeak")
-        AsyncTask task = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] objects) {
-
-                try {
-                    pendingCarers = user.getPendingCarers();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-
-                if (pendingCarers == null || pendingCarers.isEmpty()) {
-                    startNextFragment();
-
-                } else {
-                    setList(pendingCarers);
-                    setButtonListeners();
-                    setTitle(TITLE);
-                }
-            }
-        };
-        task.execute();
+        setList();
 
         return view;
     }
@@ -112,5 +91,38 @@ public class CarerRequestsListFragment extends ListFragment<CarerUser> {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
+    }
+
+    private void setList() {
+        @SuppressLint("StaticFieldLeak")
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+
+                try {
+                    pendingCarers = user.getPendingCarers();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                if (pendingCarers == null || pendingCarers.isEmpty()) {
+                    startNextFragment();
+
+                } else {
+                    setList(pendingCarers);
+                    setButtonListeners();
+                    setTitle(TITLE);
+                }
+            }
+        };
+        task.execute();
     }
 }

@@ -255,21 +255,17 @@ public class AccountController {
      * @param accept The boolean response to the request
      * @throws Exception Thrown if there is an error while contacting the server
      */
-    public void acceptCarer(DependentUser dependent, CarerUser carer, boolean accept) throws Exception {
+    public void respondToCarerRequest(DependentUser dependent, CarerUser carer, boolean accept) throws Exception {
 
         checkService();
 
-        String stringAccept = accept ? AccountService.BOOLEAN_TRUE : AccountService.BOOLEAN_FALSE;
+        String stringAccept = accept ? AccountService.CARER_REQUEST_ACCEPT : AccountService.CARER_REQUEST_REJECT;
 
         Call<ResponseBody> call = service.acceptRequest(dependent.getId(), carer.getId(), stringAccept);
 
         try {
 
             Response<ResponseBody> response = call.execute();
-
-            if (!response.isSuccessful()) {
-                throw new Exception(response.message());
-            }
 
         } catch (IOException e) {
             throw new Exception(MESSAGE_SERVER_FAILURE);

@@ -20,8 +20,8 @@ public interface AccountService {
 
     public static final String USERTYPE_CARER = "Carer";
     public static final String USERTYPE_DEPENDENT = "Dependent";
-    public static final String BOOLEAN_TRUE = "True";
-    public static final String BOOLEAN_FALSE = "False";
+    public static final String CARER_REQUEST_ACCEPT = "accept";
+    public static final String CARER_REQUEST_REJECT = "reject";
 
 
     @FormUrlEncoded
@@ -72,7 +72,7 @@ public interface AccountService {
 
 
     @FormUrlEncoded
-    @POST("/dependents/{dependentId}/carers/{carerId}/respond")
+    @POST("/dependents/{dependentId}/carers/{carerId}/acceptCarer")
     Call<ResponseBody> acceptRequest(
             @Path("dependentId") String dependentId,
             @Path("carerId") String carerId,

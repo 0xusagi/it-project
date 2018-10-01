@@ -12,7 +12,9 @@ import java.util.ArrayList;
 public class CarerUser extends User implements Serializable {
 
     @SerializedName("dependents")
-    private ArrayList<DependentUser> dependents;
+    private ArrayList<String> dependentIds;
+
+    private ArrayList<DependentUser> confirmedDependents;
 
     @SerializedName("pendingDependents")
     private ArrayList<String> pendingDependents;
@@ -26,8 +28,31 @@ public class CarerUser extends User implements Serializable {
     /**
      * @return The list of stored dependents
      */
-    public ArrayList<DependentUser> getDependents() {
-        return dependents;
+    public ArrayList<DependentUser> getDependents() throws Exception {
+
+        if (confirmedDependents == null) {
+            confirmedDependents = new ArrayList<DependentUser>();
+        }
+
+        if (!dependentIds.isEmpty()) {
+            for (String id : dependentIds) {
+
+                boolean contains = false;
+
+                for (DependentUser dependent : confirmedDependents) {
+                    if (id.equals(dependent.getId())) {
+                        contains = true;
+                        break;
+                    }
+                }
+
+                if (!contains) {
+                    confirmedDependents.add(AccountController.getInstance().getDependent(id));
+                }
+            }
+        }
+
+        return confirmedDependents;
     }
 
     /**

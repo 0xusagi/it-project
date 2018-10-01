@@ -143,43 +143,51 @@ public class CarerHomeActivity extends AppCompatActivity {
         boolean isSetOnClick;
         ArrayList<String> dependentNames = new ArrayList<>();
 
-        // Handle where carer has no dependents
-        if (carerUser.getDependents().size() == 0) {
-            dependentNames.add("You currently have no dependents :(");
-            isSetOnClick = false;
-        }
-        // Carer has dependents
-        else {
-            // Get the carer names
-            for (DependentUser dependent: carerUser.getDependents()) {
-                dependentNames.add(dependent.getName());
+        // Get the dependents
+        try {
+            ArrayList<DependentUser> dependents = carerUser.getDependents();
+
+            // Handle where carer has no dependents
+            if (dependents.size() == 0) {
+                dependentNames.add("You currently have no dependents :(");
+                isSetOnClick = false;
             }
-            isSetOnClick = true;
-        }
-
-        // Set array adapter
-        arrayAdapter = new ArrayAdapter<>(CarerHomeActivity.this, android.R.layout.simple_list_item_1, dependentNames);
-
-        dependentsList.setAdapter(arrayAdapter);
-
-        // Set on click listener only if the carer has dependents
-        if (isSetOnClick) {
-            dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String[] options = {"Call", "Message", "Add Location"};
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
-                    builder.setTitle("Choose");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // the user clicked on options[which]
-                        }
-                    });
-                    builder.show();
+            // Carer has dependents
+            else {
+                // Get the carer names
+                for (DependentUser dependent: dependents) {
+                    dependentNames.add(dependent.getName());
                 }
-            });
+                isSetOnClick = true;
+            }
+
+            // Set array adapter
+            arrayAdapter = new ArrayAdapter<>(CarerHomeActivity.this, android.R.layout.simple_list_item_1, dependentNames);
+
+            dependentsList.setAdapter(arrayAdapter);
+
+            // Set on click listener only if the carer has dependents
+            if (isSetOnClick) {
+                dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        String[] options = {"Call", "Message", "Add Location"};
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
+                        builder.setTitle("Choose");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // the user clicked on options[which]
+                            }
+                        });
+                        builder.show();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
     }
 }

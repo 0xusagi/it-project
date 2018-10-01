@@ -138,15 +138,18 @@ public class DependentUser extends User {
     public void respondToRequest(CarerUser carer, boolean accept) throws Exception {
 
         //Shift the carer from pending to accepted on the server
-        //AccountController.getInstance().acceptCarer(this, carer, accept);
+        AccountController.getInstance().respondToCarerRequest(this, carer, accept);
 
         //Shift the carer from pending to accepted locally
         pCarers.remove(carer);
+        if (accept) {
 
-        if (confirmedCarers == null) {
-            confirmedCarers = new ArrayList<CarerUser>();
+            if (confirmedCarers == null) {
+                confirmedCarers = new ArrayList<CarerUser>();
+            }
+            confirmedCarers.add(carer);
         }
-        confirmedCarers.add(carer);
+
 
     }
 
