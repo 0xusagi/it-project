@@ -190,7 +190,7 @@ public class DependentHomeActivity extends AppCompatActivity {
                     Fragment fragment;
 
                     //If there are pending requests, display them
-                    if (user.hasPendingCarers()) {
+                    if (!user.hasPendingCarers()) {
                         fragment = new LocationsListFragment();
 
                         //Otherwise display the locations
@@ -206,6 +206,8 @@ public class DependentHomeActivity extends AppCompatActivity {
 
                     transaction.replace(R.id.fragment_container, fragment);
                     transaction.commit();
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -43,13 +43,11 @@ public class CarersListFragment extends ListFragment<CarerUser> {
             protected Object doInBackground(Object[] objects) {
 
                 try {
-
                     carers = user.getCarers();
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 return null;
             }
 
@@ -63,6 +61,7 @@ public class CarersListFragment extends ListFragment<CarerUser> {
 
             }
         };
+        task.execute();
 
         return view;
     }

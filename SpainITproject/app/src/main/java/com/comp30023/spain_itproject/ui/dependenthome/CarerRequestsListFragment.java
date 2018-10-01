@@ -56,7 +56,7 @@ public class CarerRequestsListFragment extends ListFragment<CarerUser> {
                 super.onPostExecute(o);
 
                 if (pendingCarers == null || pendingCarers.isEmpty()) {
-                    getActivity().onBackPressed();
+                    startNextFragment();
 
                 } else {
                     setList(pendingCarers);
@@ -97,5 +97,20 @@ public class CarerRequestsListFragment extends ListFragment<CarerUser> {
                 transaction.commit();
             }
         });
+    }
+
+    private void startNextFragment() {
+
+        FragmentManager fragmentManager = getFragmentManager();
+
+        Fragment fragment = new LocationsListFragment();
+
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
+        fragment.setArguments(arguments);
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 }

@@ -92,10 +92,9 @@ public class ResponseFragment extends Fragment {
 
             try {
                 user.respondToRequest(requester, response);
-                getActivity().onBackPressed();
 
             } catch (Exception e) {
-                Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
 
             return null;
@@ -106,6 +105,7 @@ public class ResponseFragment extends Fragment {
             super.onPostExecute(aVoid);
 
             responding = false;
+            getActivity().onBackPressed();
         }
     }
 }
