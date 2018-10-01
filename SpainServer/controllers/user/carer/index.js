@@ -179,7 +179,7 @@ const sendFriendRequest = (req, res, next) => {
         new: true
     };
     let carerId = req.params.id;
-    console.log("carerId", carerId);
+    // console.log("carerId", carerId);
     let mobile = req.body.mobile;
     let response = Dependent.find({
             mobile: mobile
@@ -216,7 +216,7 @@ const sendFriendRequest = (req, res, next) => {
                         message: 'Dependent already friend or request already sent.'
                     });
                 } else {
-                    console.log("searching for carer: ", carerId);
+                    // console.log("searching for carer: ", carerId);
                     return Carer.findOneAndUpdate({
                             _id: carerId
                         }, {
@@ -225,7 +225,7 @@ const sendFriendRequest = (req, res, next) => {
                             }
                         }, options)
                         .then((carer) => {
-                            console.log("carer", carer);
+                            // console.log("carer", carer);
                             // Add carer to list of pending carers for dependent
                             dependents[0].pendingCarers.push(carer._id);
 
