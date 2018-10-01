@@ -47,7 +47,6 @@ describe('Users', () => {
         userType: 'Dependent'
     };
 
-
     const sampleDependent2_hashed = {
         mobile: '12345678',
         password: bcrypt.hashSync('my-password', salt),
@@ -110,6 +109,17 @@ describe('Users', () => {
         });
     });
 
+    it('should get a carer\'s list of dependents', (done) => {
+        Dependent.create(sampleCarer, (err, carer) => {
+            chai.request(app)
+                .get('/carers/' + carer._id + '/dependents')
+                .end((err,res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+
     it('should update a carer', (done) => {
         Carer.create(sampleCarer, (err, carer) => {
             const newName = {name: 'Gary Lyon'};
@@ -136,7 +146,6 @@ describe('Users', () => {
         });
     });
 
-
     it('should get a dependent by id', (done) => {
         Dependent.create(sampleDependent, (err, dependent) => {
             chai.request(app)
@@ -154,6 +163,17 @@ describe('Users', () => {
                 .get(`/dependent/name/${dependent.mobile}`)
                 .end((err,res) => {
                     res.body.name.should.equal(dependent.name);
+                    done();
+                });
+        });
+    });
+
+    it('should get a dependent\'s list of carers', (done) => {
+        Dependent.create(sampleDependent, (err, dependent) => {
+            chai.request(app)
+                .get('/dependents/' + dependent._id + '/carers')
+                .end((err,res) => {
+                    res.should.have.status(200);
                     done();
                 });
         });
@@ -218,11 +238,10 @@ describe('Users', () => {
         Carer.create(sampleCarer, (err, carer) => {
             Dependent.create(sampleDependent, (err, dependent) => {
                 chai.request(app)
-                    .put('/carers/'+carer._id+'/addDependent')
+                    .put('/carers/' + carer._id + '/addDependent')
                     .type('form')
                     .send({mobile: dependent.mobile})
                     .end((err, res) => {
-                        // console.log(res.message);
                         res.should.have.status(200);
                         done();
                     });

@@ -38,7 +38,8 @@ const getDependents = (req, res, next) => {
             return Dependent.find({'_id': { $in: carer.dependents }}, (err, dependents) => {
                 return res.status(200).json(dependents);
             });
-        }).catch((err) => {
+        })
+        .catch((err) => {
             console.log('error: ', err);
             return res.status(400).send(err);
         });
