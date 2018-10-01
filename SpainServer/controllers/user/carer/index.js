@@ -175,20 +175,16 @@ const isAlreadyAdded = (mobile, carerId) => {
  * @returns {Query}
  */
 const sendFriendRequest = (req, res, next) => {
-    const options = {
+    let options = {
         new: true
     };
-    const carerId = req.params.id;
-    const mobile = req.body.mobile;
-    var query = Dependent.find({
-        mobile: mobile
-    });
-
-    // `.exec()` gives you a fully-fledged promise
-    var promise = query.exec();
-    // assert.ok(promise instanceof Promise);
-
-    const response = promise.then(function(dependents) {
+    let carerId = req.params.id;
+    console.log("carerId", carerId);
+    let mobile = req.body.mobile;
+    let response = Dependent.find({
+            mobile: mobile
+        }).exec()
+        .then(function(dependents) {
         // use doc
         // console.log("dependents[0]", dependents[0]);
         if (dependents.length === 0) {
@@ -199,15 +195,16 @@ const sendFriendRequest = (req, res, next) => {
         // console.log("carerId", carerId);
 
         // Firstly check whether the carer exists
-        Carer.findById(carerId).then((carer) => {
+        Carer.findById(carerId).exec()
+            .then((carer) => {
             // do nothing
-        })
-        .catch((err) => {
-            return res.status(400).send({
-                message: 'Carer not found in database.'
+            })
+            .catch((err) => {
+                return res.status(400).send({
+                    message: 'Carer not found in database.'
+                });
+                console.log("error finding carer:", err);
             });
-            console.log("error finding carer:", err);
-        })
 
         // Then check if the mobile has already been added by this carer before.
         isAlreadyAddedOrPending(mobile, carerId).then((check) => {
@@ -219,12 +216,16 @@ const sendFriendRequest = (req, res, next) => {
                         message: 'Dependent already friend or request already sent.'
                     });
                 } else {
-                    return Carer.findOneAndUpdate(carerId, {
+                    console.log("searching for carer: ", carerId);
+                    return Carer.findOneAndUpdate({
+                            _id: carerId
+                        }, {
                             $push: {
                                 pendingDependents: dependents[0]._id
                             }
                         }, options)
                         .then((carer) => {
+                            console.log("carer", carer);
                             // Add carer to list of pending carers for dependent
                             dependents[0].pendingCarers.push(carer._id);
 
