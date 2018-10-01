@@ -93,8 +93,7 @@ public class AddDependentActivity extends AppCompatActivity {
             }
         });
 
-        AlertDialog alertDialog = dependentInfoDialogBuilder.create();
-        alertDialog.show();
+        dependentInfoDialogBuilder.show();
 
         // Clear the edit text field for entering mobile number
         mobileNumberField.setText("");
@@ -104,23 +103,31 @@ public class AddDependentActivity extends AppCompatActivity {
      * Async task to add a dependent on the background thread which interacts with the server
      * Calling execute(phoneNumber) always returns null
      */
-    private class AddDependentTask extends AsyncTask<String, Void, Void> {
+    private class AddDependentTask extends AsyncTask<String, Void, Boolean> {
 
          @Override
-         protected Void doInBackground(String... strings) {
+         protected Boolean doInBackground(String... strings) {
              // Dependent phone number is the first argument
              String dependentPhoneNumber = strings[0];
 
              try {
                  AccountController.getInstance().requestDependent(LoginSharedPreference.getId(AddDependentActivity.this),
                          dependentPhoneNumber);
-                 Toast.makeText(AddDependentActivity.this, "Dependent added", Toast.LENGTH_SHORT).show();
-             } catch (Exception e) {
-                 // Print the error message
-                 Toast.makeText(AddDependentActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-             }
+                 return true;
 
-             return null;
+             } catch (Exception e) {
+                 return false;
+             }
          }
-     }
+
+         @Override
+         protected void onPostExecute(Boolean success) {
+             if (success) {
+                 Toast.makeText(AddDependentActivity.this, "Dependent added", Toast.LENGTH_SHORT).show();
+             }
+             else {
+                 Toast.makeText(AddDependentActivity.this, "Failed to add dependent", Toast.LENGTH_LONG).show();
+             }
+         }
+    }
 }
