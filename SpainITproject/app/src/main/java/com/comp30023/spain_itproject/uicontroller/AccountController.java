@@ -236,9 +236,6 @@ public class AccountController {
         // Contact the server to request the list of dependents for a carer
         Call<DependentUser> call = service.getDependent(id);
 
-        String firebaseToken = FirebaseInstanceId.getInstance().getToken();
-        System.out.println("Token: " + firebaseToken);
-
         try {
             Response<DependentUser> response = call.execute();
 

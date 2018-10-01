@@ -50,7 +50,7 @@ public class LoginSharedPreference {
         editor.putString(Pref.PIN.name(), pin);
         editor.putBoolean(Pref.IS_DEPENDENT.name(), isDependent);
         editor.putString(Pref.ID.name(), id);
-        editor.putString(Pref.ID.name(), token);
+        editor.putString(Pref.TOKEN.name(), token);
 
         editor.commit();
     }
