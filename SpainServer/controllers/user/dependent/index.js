@@ -76,7 +76,7 @@ const addCarerToDependent = (req, res, next) => {
     let carerMobile = req.body.carerMobile;
     let carerId = getCarerIdFromMobile(carerMobile);
     // console.log("carerId", carerId);
-    // some sort of Asynchronous stuff going on here 
+    // some sort of Asynchronous stuff going on here
     let options = {new: true};
     const response = Dependent.findOneAndUpdate(req.params.id,
         { $addToSet: { carers: carerId } }, options,
@@ -121,11 +121,100 @@ const getDependentByMobile = (req, res, next) => {
     return response;
 }
 
+/**
+ * Deals with pending carers and dependents based on a carer id and a dependent mobile
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Query}
+ */
+const acceptFriendRequest = (req, res, next) => {
+    const options = {
+        new: true
+    };
+    const carerId = req.params.carerId;
+    const depId = req.params.depId;
+    const acceptOrDecline = req.body.accept;
+
+    const response = Dependent.find({_id: depId}).exec()
+        .then(function(dependents) {
+            if (dependents.length === 0) {
+                return res.status(400).send({
+                    message: 'Dependent not found in database.'
+                });
+            }
+            let current_dependent = dependents[0];
+            // if this dependent has a request from this carer
+            if (current_dependent.pendingCarers.includes(carerId)) {
+                    // if this dependent already has this carer in their list of carers
+                    if (current_dependent.carers.includes(carerId)) {
+                        // return 400
+                        return res.status(400).send({
+                            message: 'These users are already friends'
+                        });
+                    } else {
+                        return Carer.findById(carerId)
+                            .then((current_carer) => {
+                                // console.log("acceptOrDecline", acceptOrDecline);
+                                let res_message = "Friend request declined";
+                                // remove from pending lists
+                                current_carer.pendingDependents = current_carer.pendingDependents.filter(id => id != current_dependent._id);
+                                current_dependent.pendingCarers = current_dependent.pendingCarers.filter(id => id != current_carer._id);
+
+                                // add to actual lists (if they wish to accept)
+                                if (acceptOrDecline.toUpperCase() === 'ACCEPT') {
+                                    current_dependent.carers.push(current_carer._id);
+                                    current_carer.dependents.push(current_dependent._id);
+                                    res_message = "Friend request accepted";
+                                }
+
+                                return current_dependent.save().then((dependent) => {
+                                        return current_carer.save().then((carer) => {
+                                            return res.status(200).send({
+                                                message: res_message,
+                                                name: current_carer.name
+                                            });
+                                        }).catch((err) => {
+                                            console.log("error: ", err);
+                                            return res.status(500).send({
+                                                message: 'Internal server error'
+                                            });
+                                        });
+                                    })
+                                    .catch((err) => {
+                                        console.log("error: ", err);
+                                        return res.status(500).send({
+                                            message: 'Internal server error'
+                                        });
+                                    });
+                            })
+                            .catch((err) => {
+                                console.log("error: ", err);
+                                return res.status(500).send({
+                                    message: 'Internal server error'
+                                });
+                            });
+                    }
+                } else {
+                    // return 400
+                    return res.status(400).send({
+                        message: 'A friend request between these users does not exist'
+                    });
+                }
+        }).catch((err) => {
+            console.log("error: ", err);
+            return res.status(500).send({
+                message: 'Internal server error'
+            });
+        });
+    return response;
+};
 
 export const dependentIndex = {
     get: getDependent,
     put: updateDependent,
     delete: deleteDependent,
-    addCarer: addCarerToDependent,
+    acceptCarer: acceptFriendRequest,
     getName: getDependentByMobile
 };
