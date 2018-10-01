@@ -12,6 +12,7 @@ import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -205,16 +206,11 @@ public class AccountController {
 
                 // Could be null or there exists a carer
                 DependentUser user = response.body();
-
                 return user;
-            }
 
-            // Bad request
-            else {
-                // TODO maybe change to another exception for bad request
-                throw new BadRequestException("ERROR! Bad request: " + response.message());
+            } else {
+                throw new BadRequestException(response.message());
             }
-
         } catch (IOException e) {
             throw new Exception(MESSAGE_SERVER_FAILURE);
         }
