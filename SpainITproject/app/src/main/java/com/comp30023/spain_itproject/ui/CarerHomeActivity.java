@@ -23,6 +23,7 @@ import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The home activity for carer which displays on the carers screen after login and
@@ -97,7 +98,7 @@ public class CarerHomeActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginHandler.logout(context);
+                LoginHandler.getInstance().logout(context);
                 finish();
             }
         });
@@ -145,7 +146,7 @@ public class CarerHomeActivity extends AppCompatActivity {
 
         // Get the dependents
         try {
-            ArrayList<DependentUser> dependents = carerUser.getDependents();
+            List<DependentUser> dependents = carerUser.getDependents();
 
             // Handle where carer has no dependents
             if (dependents.size() == 0) {

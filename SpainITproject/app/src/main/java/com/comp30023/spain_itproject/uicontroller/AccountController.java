@@ -10,9 +10,11 @@ import com.comp30023.spain_itproject.network.RetrofitClientInstance;
 import com.comp30023.spain_itproject.network.UserModel;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.ui.dependenthome.ListFragment;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -291,12 +293,116 @@ public class AccountController {
             //If response is successful, return the dependent
             if (response.isSuccessful()) {
 
-                DependentUser dependent = response.body();
-                return dependent;
+                return response.body();
 
                 //If the response is unsuccessful, throw an Exception with a message for the reason
             } else {
                 throw new Exception(response.message());
+            }
+
+        } catch (IOException e) {
+            throw new Exception(MESSAGE_SERVER_FAILURE);
+        }
+    }
+
+    /**
+     * Retrieve from the server the carers corresponding to a dependent's account
+     * @param dependentUser
+     * @return
+     * @throws Exception
+     */
+    public List<CarerUser> getCarersOfDependent(DependentUser dependentUser) throws Exception {
+
+        checkService();
+
+        Call<List<CarerUser>> call = service.getCarersOfDependent(dependentUser.getId());
+
+        try {
+            Response<List<CarerUser>> response = call.execute();
+
+            if (response.isSuccessful()) {
+                return response.body();
+            } else {
+                throw new BadRequestException(response.message());
+            }
+
+        } catch (IOException e) {
+            throw new Exception(MESSAGE_SERVER_FAILURE);
+        }
+
+    }
+
+    /**
+     * Retrieve from the server the dependents corresponding to a carer's account
+     * @param carerUser
+     * @return
+     * @throws Exception
+     */
+    public List<DependentUser> getDependentsOfCarer(CarerUser carerUser) throws Exception {
+
+        checkService();
+
+        Call<List<DependentUser>> call = service.getDependentsOfCarer(carerUser.getId());
+
+        try {
+            Response<List<DependentUser>> response = call.execute();
+
+            if (response.isSuccessful()) {
+                return response.body();
+            } else {
+                throw new BadRequestException(response.message());
+            }
+
+        } catch (IOException e) {
+            throw new Exception(MESSAGE_SERVER_FAILURE);
+        }
+    }
+
+    /**
+     * Retrieve from the server the locations corresponding to a dependent's account
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public List<Location> getLocationsOfDependent(DependentUser user) throws Exception {
+
+        checkService();
+
+        Call<List<Location>> call = service.getLocationsOfDependent(user.getId());
+
+        try {
+            Response<List<Location>> response = call.execute();
+
+            if (response.isSuccessful()) {
+                return response.body();
+            } else {
+                throw new BadRequestException(response.message());
+            }
+
+        } catch (IOException e) {
+            throw new Exception(MESSAGE_SERVER_FAILURE);
+        }
+    }
+
+    /**
+     * Retrieves from the server the pending carers corresponding to the dependent's account
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public List<CarerUser> getPendingCarersOfDependent(DependentUser user) throws Exception {
+
+        checkService();
+
+        Call<List<CarerUser>> call = service.getPendingCarersOfDependent(user.getId());
+
+        try {
+            Response<List<CarerUser>> response = call.execute();
+
+            if (response.isSuccessful()) {
+                return response.body();
+            } else {
+                throw new BadRequestException(response.message());
             }
 
         } catch (IOException e) {

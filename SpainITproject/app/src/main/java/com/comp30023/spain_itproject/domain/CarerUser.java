@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Extends user by storing lists of objects related to being a Carer user
@@ -12,14 +13,14 @@ import java.util.ArrayList;
 public class CarerUser extends User implements Serializable {
 
     @SerializedName("dependents")
-    private ArrayList<String> dependentIds;
+    private List<String> dependentIds;
 
-    private ArrayList<DependentUser> confirmedDependents;
+    private List<DependentUser> confirmedDependents;
 
     @SerializedName("pendingDependents")
-    private ArrayList<String> pendingDependents;
+    private List<String> pendingDependents;
 
-    private ArrayList<DependentUser> pDependents;
+    private List<DependentUser> pDependents;
 
     public CarerUser(String name, String phoneNumber, String pin, String id) {
         super(name, phoneNumber, pin, id);
@@ -28,28 +29,15 @@ public class CarerUser extends User implements Serializable {
     /**
      * @return The list of stored dependents
      */
-    public ArrayList<DependentUser> getDependents() throws Exception {
+    public List<DependentUser> getDependents() throws Exception {
 
         if (confirmedDependents == null) {
             confirmedDependents = new ArrayList<DependentUser>();
         }
 
         if (!dependentIds.isEmpty()) {
-            for (String id : dependentIds) {
-
-                boolean contains = false;
-
-                for (DependentUser dependent : confirmedDependents) {
-                    if (id.equals(dependent.getId())) {
-                        contains = true;
-                        break;
-                    }
-                }
-
-                if (!contains) {
-                    confirmedDependents.add(AccountController.getInstance().getDependent(id));
-                }
-            }
+            confirmedDependents = AccountController.getInstance().getDependentsOfCarer(this);
+            dependentIds.clear();
         }
 
         return confirmedDependents;

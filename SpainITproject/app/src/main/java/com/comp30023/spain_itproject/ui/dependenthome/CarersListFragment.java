@@ -13,6 +13,7 @@ import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,7 +28,7 @@ public class CarersListFragment extends ListFragment<CarerUser> {
 
     private static boolean added = false;
 
-    ArrayList<CarerUser> carers;
+    List<CarerUser> carers;
 
     @Nullable
     @Override

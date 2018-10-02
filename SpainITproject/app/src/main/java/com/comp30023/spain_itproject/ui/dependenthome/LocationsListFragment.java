@@ -1,5 +1,7 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +16,7 @@ import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.ui.views.ItemButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment that displays the list of the DependentUser's locations
@@ -24,23 +27,21 @@ public class LocationsListFragment extends ListFragment<Location> {
 
     public static final String TITLE = "Locations";
 
+    private DependentUser user;
+
+    private List<Location> locations;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater,container,savedInstanceState);
 
         Bundle arguments = getArguments();
-        DependentUser user = (DependentUser) arguments.getSerializable(ARGUMENT_USER);
+        user = (DependentUser) arguments.getSerializable(ARGUMENT_USER);
 
-        ArrayList<Location> locations = user.getLocations();
-
-        setList(locations);
-        setButtonListeners();
-
-        setTitle(TITLE);
+        setList();
 
         return view;
     }
-
 
     private void setButtonListeners() {
 
@@ -69,5 +70,33 @@ public class LocationsListFragment extends ListFragment<Location> {
                 transaction.commit();
             }
         });
+    }
+
+    private void setList() {
+
+        @SuppressLint("StaticFieldLeak")
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+
+                try {
+                    locations = user.getLocations();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                setList(locations);
+                setButtonListeners();
+                setTitle(TITLE);
+            }
+        };
+        task.execute();
     }
 }

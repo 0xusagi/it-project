@@ -20,6 +20,7 @@ import com.comp30023.spain_itproject.ui.views.ItemButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment that displays a list of items that have a display name
@@ -36,9 +37,10 @@ public abstract class ListFragment<T extends DisplayName> extends Fragment {
      * The spacing between the location buttons
      */
     public static final float BUTTON_SPACING_WEIGHT = 0.2f;
+    public static final int FIRST_BUTTON_ID = 2000;
 
     //Reference to signed in user's list
-    private ArrayList<T> list;
+    private List<T> list;
 
     //The parent view/layout
     private View view;
@@ -104,13 +106,13 @@ public abstract class ListFragment<T extends DisplayName> extends Fragment {
                 frame.addView(space);
             }
 
-            buttons[i] = createItemButton();
+            buttons[i] = createItemButton(FIRST_BUTTON_ID + i);
             first = false;
         }
     }
 
     //Initialises the buttons within the frame
-    private ItemButton<T> createItemButton() {
+    private ItemButton<T> createItemButton(int id) {
         //Create the button
         ItemButton<T> button = new ItemButton<T>(view.getContext()) {
             @Override
@@ -124,6 +126,7 @@ public abstract class ListFragment<T extends DisplayName> extends Fragment {
         frame.addView(button);
         button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f));
         button.setVisibility(View.INVISIBLE);
+        button.setId(id);
 
         return button;
     }
@@ -202,7 +205,7 @@ public abstract class ListFragment<T extends DisplayName> extends Fragment {
      * Sets the list and sets the buttons to correspond with this list
      * @param list
      */
-    public void setList(ArrayList<T> list) {
+    public void setList(List<T> list) {
         this.list = list;
 
         setButtons(0);

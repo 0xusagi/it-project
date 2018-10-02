@@ -13,6 +13,8 @@ import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 
+import java.util.List;
+
 /**
  * Retrofit-compatible interface that co-ordinates all our different HTTP requests.
  */
@@ -49,7 +51,7 @@ public interface AccountService {
     Call<DependentUser> getDependent(
             @Path("id") String id);
 
-    // CONFIRM
+
     // Get a UserModel which will be a name corresponding to the phone number of a dependent user
     @GET("/dependent/name/{mobile}")
     Call<UserModel> getDependentNameFromPhoneNumber(
@@ -63,7 +65,6 @@ public interface AccountService {
                             @Path("id") String dependentId,
                             @Field("Location") Location location);
 
-    //CONFIRM
     @FormUrlEncoded
     @PUT("/carers/{id}/addDependent")
     Call<DependentUser> addDependent(
@@ -77,6 +78,26 @@ public interface AccountService {
             @Path("dependentId") String dependentId,
             @Path("carerId") String carerId,
             @Field("accept") String accept
+    );
+
+    @GET("/dependents/{id}/carers")
+    Call<List<CarerUser>> getCarersOfDependent(
+            @Path("id") String id
+    );
+
+    @GET("/carers/{id}/dependents")
+    Call<List<DependentUser>> getDependentsOfCarer(
+            @Path("id") String id
+    );
+
+    @GET("/dependents/{id}/locations")
+    Call<List<Location>> getLocationsOfDependent(
+            @Path("id") String id
+    );
+
+    @GET("/dependents/{id}/pendingCarers")
+    Call<List<CarerUser>> getPendingCarersOfDependent(
+            @Path("id") String id
     );
 
 }

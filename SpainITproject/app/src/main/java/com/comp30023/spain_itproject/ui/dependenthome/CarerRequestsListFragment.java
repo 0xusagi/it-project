@@ -19,6 +19,7 @@ import com.comp30023.spain_itproject.ui.views.ItemButton;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CarerRequestsListFragment extends ListFragment<CarerUser> {
 
@@ -28,7 +29,7 @@ public class CarerRequestsListFragment extends ListFragment<CarerUser> {
 
     private DependentUser user;
 
-    private ArrayList<CarerUser> pendingCarers = null;
+    private List<CarerUser> pendingCarers = null;
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
