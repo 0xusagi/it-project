@@ -10,6 +10,7 @@ import com.comp30023.spain_itproject.network.RetrofitClientInstance;
 import com.comp30023.spain_itproject.network.UserModel;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 
@@ -24,7 +25,7 @@ import retrofit2.Response;
  */
 public class AccountController {
 
-    public static final String MESSAGE_SERVER_FAILURE = "Please try again";
+    public static final String MESSAGE_SERVER_FAILURE = "Could not connect to the server. Check that you're connected to the internet and please try again";
 
     private static AccountController instance;
     public static AccountController getInstance() {
@@ -47,14 +48,14 @@ public class AccountController {
      * @return The registered account
      * @throws Exception Error for either connection failure or bad response. Includes message.
      */
-    public User registerAccount(String name, String phoneNumber, String pin, Boolean isDependent)
+    public User registerAccount(String name, String phoneNumber, String pin, Boolean isDependent, String token)
             throws Exception {
         checkService();
 
         String userType = isDependent ? AccountService.DEPENDENT_TYPE : AccountService.CARER_TYPE;
 
         //Create the call to the server
-        Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType);
+        Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType, token);
 
         try {
 
@@ -67,11 +68,13 @@ public class AccountController {
                 UserModel userModel = response.body();
                 User user;
 
+                String userId = userModel.getId();
+
                 //Create the type of user based on input (corresponds to user returned from server
                 if (isDependent) {
-                    user = new DependentUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    user = new DependentUser(userModel.getName(), phoneNumber, pin, userId);
                 } else {
-                    user = new CarerUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                    user = new CarerUser(userModel.getName(), phoneNumber, pin, userId);
                 }
 
                 return user;
@@ -93,11 +96,12 @@ public class AccountController {
      * @return A Pair, First value is user's ID, Second value is whether the account is a dependent
      * @throws Exception Error for either connection failure or bad response. Includes message.
      */
-    public Pair<String, Boolean> login(String phoneNumber, String pin) throws Exception {
+    public Pair<String, Boolean> login(String phoneNumber, String pin, String token) throws Exception {
+
         checkService();
 
         //Create the call to the server
-        Call<UserModel> call = service.loginUser(phoneNumber, pin);
+        Call<UserModel> call = service.loginUser(phoneNumber, pin, token);
 
         try {
             //Execute the call to the server
@@ -106,10 +110,12 @@ public class AccountController {
             //If the response is successful, return the id and whether the account is dependent
             if (response.isSuccessful()) {
 
-                String userType = response.body().getUserType();
+                UserModel userModel = response.body();
+
+                String userType = userModel.getUserType();
                 boolean isDependent = userType.equals(AccountService.DEPENDENT_TYPE);
 
-                String userId = response.body().getId();
+                String userId = userModel.getId();
 
                 Pair<String, Boolean> pair = new Pair<String, Boolean>(userId, isDependent);
 
@@ -250,6 +256,31 @@ public class AccountController {
 
         } catch (IOException e) {
             throw new Exception(MESSAGE_SERVER_FAILURE);
+        }
+    }
+
+    /**
+     * Update the users token on the server
+     * @param token The new token
+     */
+    public void updateToken(String userId, boolean isDependent, String token) {
+
+        checkService();
+
+        Call<ResponseBody> call;
+
+        if (isDependent) {
+            call = service.updateDependentToken(userId, token);
+        } else {
+            call = service.updateCarerToken(userId, token);
+        }
+
+        try {
+            Response<ResponseBody> response = call.execute();
+
+        } catch (IOException e) {
+            // TODO If this update fails, should the app close or log out?
+            e.printStackTrace();
         }
     }
 }

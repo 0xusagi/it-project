@@ -6,6 +6,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 import com.comp30023.spain_itproject.domain.CarerUser;
@@ -27,14 +28,17 @@ public interface AccountService {
                             @Field("name") String name,
                             @Field("mobile") String phoneNumber,
                             @Field("password") String pin,
-                            @Field("userType") String userType);
-
+                            @Field("userType") String userType,
+                            @Field("firebaseToken") String firebaseToken
+    );
 
     @FormUrlEncoded
     @POST("user/login")
     Call<UserModel> loginUser(
                             @Field("mobile") String phoneNumber,
-                            @Field("password") String pin);
+                            @Field("password") String pin,
+                            @Field("firebaseToken") String firebaseToken
+    );
 
 
     @GET("/carers/{id}")
@@ -57,9 +61,24 @@ public interface AccountService {
 
     //CONFIRM
     @FormUrlEncoded
-    @POST("dependents/{id}/locations/new")
+    @POST("/dependents/{id}/locations/new")
     Call<ResponseBody> addLocationToDependent(
                             @Path("id") String dependentId,
                             @Field("Location") Location location);
+
+    //CONFIRM
+    @FormUrlEncoded
+    @PUT("/dependents/{id}/")
+    Call<ResponseBody> updateDependentToken(
+            @Path("id") String id,
+            @Field("firebaseToken") String token
+    );
+
+    @FormUrlEncoded
+    @PUT("/carers/{id}/")
+    Call<ResponseBody> updateCarerToken(
+            @Path("id") String id,
+            @Field("firebaseToken") String token
+    );
 
 }
