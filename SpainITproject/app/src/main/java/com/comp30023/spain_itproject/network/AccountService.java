@@ -2,6 +2,7 @@ package com.comp30023.spain_itproject.network;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -49,11 +50,19 @@ public interface AccountService {
     Call<CarerUser> getCarer(
             @Path("id") String id);
 
+    @DELETE("/carers/{id}")
+    Call<CarerUser> deleteCarer(
+            @Path("id") String id
+    );
 
     @GET("/dependents/{id}")
     Call<DependentUser> getDependent(
             @Path("id") String id);
 
+    @DELETE("/dependents/{id}")
+    Call<DependentUser> deleteDependent(
+            @Path("id") String id
+    );
 
     // Get a UserModel which will be a name corresponding to the phone number of a dependent user
     @GET("/dependent/name/{mobile}")
