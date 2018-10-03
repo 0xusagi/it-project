@@ -13,6 +13,7 @@ import com.comp30023.spain_itproject.detailsvalidation.DetailsValidator;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
 /**
@@ -48,8 +49,7 @@ public class LoginHandler {
      */
     public void login(Context context, String phoneNumber, String pin) throws Exception {
 
-        String token = 
-        System.out.println("Token from loginhandler: " + token);
+        String token = FirebaseInstanceId.getInstance().getToken();
 
         Pair<String, Boolean> response = AccountController.getInstance().login(phoneNumber, pin, token);
 
