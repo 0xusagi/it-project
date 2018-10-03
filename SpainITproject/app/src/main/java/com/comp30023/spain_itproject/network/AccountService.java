@@ -67,7 +67,7 @@ public interface AccountService {
 
     @FormUrlEncoded
     @PUT("/carers/{id}/addDependent")
-    Call<DependentUser> addDependent(
+    Call<ResponseBody> addDependent(
             @Path("id") String carerId,
             @Field("mobile") String dependentPhoneNumber);
 
