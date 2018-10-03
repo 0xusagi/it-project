@@ -38,9 +38,12 @@ router.delete('/dependents/:id', dependentIndex.delete);
 // accepting and retrieving carers
 router.put('/dependents/:depId/acceptCarer/:carerId', dependentIndex.acceptCarer);
 router.get('/dependents/:id/carers', dependentIndex.getCarers);
+
+// get all pending carers for one dependent
+router.get('/dependent/:id/carers/pending', dependentIndex.getPending);
+
 // get a dependent's name by mobile number
 router.get('/dependent/name/:mobile', dependentIndex.getName);
-
 
 /**
  * Locations

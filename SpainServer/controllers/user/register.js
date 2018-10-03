@@ -49,7 +49,6 @@ const newUser = (req, res, next) => {
     const newUser = newUserFromType(req.body);
 
     return findDuplicateUser(req.body.mobile).then((err, user) => {
-
         // Checking for duplicates
         if (user || err) {
             return res.status(400).json({message: "Mobile number already registered to a device"});
