@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.ui;
+package com.comp30023.spain_itproject.ui.carerhome;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,10 +18,10 @@ import android.widget.Toast;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.ui.LoginHandler;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +32,10 @@ import java.util.List;
  * various different activities in order to observe or contact the dependent
  */
 public class CarerHomeActivity extends AppCompatActivity {
+
+    // The list of dependents of the carer which contains all information about the dependents
+    // to be used when the carer wants to edit the dependent
+    private List<DependentUser> dependents;
 
     // Dependents list
     private ListView dependentsList;
@@ -107,15 +111,15 @@ public class CarerHomeActivity extends AppCompatActivity {
     /**
      * Async task to run on background thread to get the carer user from the server
      */
-    private class DisplayDependentsListTask extends AsyncTask<String, Void, CarerUser> {
+    private class DisplayDependentsListTask extends AsyncTask<String, Void, List<DependentUser>> {
         private Exception exception;
 
         @Override
-        protected CarerUser doInBackground(String... strings) {
+        protected List<DependentUser> doInBackground(String... strings) {
             // Get the carer User from the server
             try {
                 CarerUser carer = AccountController.getInstance().getCarer(strings[0]);
-                return carer;
+                return carer.getDependents();
             } catch (Exception e) {
                 exception = e;
             }
@@ -123,15 +127,20 @@ public class CarerHomeActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(CarerUser carerUser) {
+        protected void onPostExecute(List<DependentUser> dependents) {
             // If the carer User is null, then there is an error
-            if (carerUser == null) {
+            if (dependents == null) {
                 // Make a toast for the error
                 Toast.makeText(CarerHomeActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
             } else {
-                setupList(carerUser);
+                storeDependents(dependents);
+                setupList(dependents);
             }
         }
+    }
+
+    private void storeDependents(List<DependentUser> dependents) {
+        this.dependents = dependents;
     }
 
     /**
@@ -140,55 +149,75 @@ public class CarerHomeActivity extends AppCompatActivity {
      * @param carerUser
      * @return
      */
-    private void setupList(CarerUser carerUser) {
+    private void setupList(List<DependentUser> dependents) {
         boolean isSetOnClick;
         ArrayList<String> dependentNames = new ArrayList<>();
 
         // Get the dependents
-        try {
-            List<DependentUser> dependents = carerUser.getDependents();
-
-            // Handle where carer has no dependents
-            if (dependents.size() == 0) {
-                dependentNames.add("You currently have no dependents :(");
-                isSetOnClick = false;
-            }
-            // Carer has dependents
-            else {
-                // Get the carer names
-                for (DependentUser dependent: dependents) {
-                    dependentNames.add(dependent.getName());
-                }
-                isSetOnClick = true;
-            }
-
-            // Set array adapter
-            arrayAdapter = new ArrayAdapter<>(CarerHomeActivity.this, android.R.layout.simple_list_item_1, dependentNames);
-
-            dependentsList.setAdapter(arrayAdapter);
-
-            // Set on click listener only if the carer has dependents
-            if (isSetOnClick) {
-                dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        String[] options = {"Call", "Message", "Add Location"};
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
-                        builder.setTitle("Choose");
-                        builder.setItems(options, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // the user clicked on options[which]
-                            }
-                        });
-                        builder.show();
-                    }
-                });
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        if (dependents == null) {
+            System.out.println("NULL");
+            finish();
         }
 
+        // Handle where carer has no dependents
+        if (dependents.size() == 0) {
+            dependentNames.add("You currently have no dependents :(");
+            isSetOnClick = false;
+        }
+        // Carer has dependents
+        else {
+            // Get the carer names
+            for (DependentUser dependent: dependents) {
+                dependentNames.add(dependent.getName());
+            }
+            isSetOnClick = true;
+        }
+
+        // Set array adapter
+        arrayAdapter = new ArrayAdapter<>(CarerHomeActivity.this, android.R.layout.simple_list_item_1, dependentNames);
+
+        dependentsList.setAdapter(arrayAdapter);
+
+        // Set on click listener only if the carer has dependents
+        if (isSetOnClick) {
+            dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                    String[] options = {"Call", "Message", "Edit"};
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
+                    builder.setTitle("Choose");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // the user clicked on options[which]
+                            switch (which) {
+                                // Edit button
+                                case 2:
+                                    Intent intent = new Intent(getApplicationContext(), EditDependentsActivity.class);
+                                    intent.putExtra("DependentID", getDependentAt(i).getId());
+                                    startActivity(intent);
+                                    break;
+
+                                // Default case
+                                default:
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+            });
+        }
+    }
+
+    /**
+     * Helper method to get the DependentUser at the index i from the outer class from inner class
+     * of the onClick method
+     * @param i
+     * @return
+     */
+    private DependentUser getDependentAt(int i) {
+        return dependents.get(i);
     }
 }

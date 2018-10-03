@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Pair;
 
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.ui.carerhome.CarerHomeActivity;
 import com.comp30023.spain_itproject.ui.dependenthome.DependentHomeActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.comp30023.spain_itproject.detailsvalidation.DetailsValidator;
