@@ -45,7 +45,7 @@ router.put('/dependents/:id/addCarer', dependentIndex.addCarer);
 // get a dependent's name by mobile number
 router.get('/dependent/name/:mobile', dependentIndex.getName);
 
-
+router.post('/dependent/:id/addLocation', locationIndex.addToDependent);
 /**
  * Locations
  */

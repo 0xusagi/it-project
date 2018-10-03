@@ -12,30 +12,13 @@ export const locationSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    addressLine1: {
-        type: String
-    },
-    addressLine2: {
-        type: String
-    },
-    postcode: {
-        type: Number
-    },
-    state: {
-        type: String
-    },
     displayName: {
         type: String,
         required: true
     },
-    description: {
-        type: String
-    },
-    imageUrl: {
-        type: String
-    },
-    popularity: {
-        type: Number
+    googleId: {
+        type: String,
+        required: true
     }
 },{
     timestamps: true

@@ -1,4 +1,5 @@
 import { Location } from "../../models/location";
+import {Dependent} from "../../models/user";
 
 /**
  * Create a new location in the mongo database from client-supplied parameters and
@@ -81,10 +82,26 @@ const deleteLocation = (req, res, next) => {
     return response;
 };
 
+const addLocationToDependent = (location, dependentId) => {
+    return Dependent.findByIdAndUpdate(dependentId, {$push: {locations: location}})
+};
+
+/**
+ * Add locations to a dependent
+ * @param req
+ * @param res
+ */
+const addToDependent = (req, res) => {
+    return Location.create(req.body)
+        .then(location => addLocationToDependent(location, req.params.id))
+        .catch(err => res.status(500).send({message: 'Server Error.'}));
+};
+
 export const locationIndex = {
     new: newLocation,
     get: getLocation,
     getAll: getAllLocations,
     put: updateLocation,
-    delete: deleteLocation
+    delete: deleteLocation,
+    addToDependent: addToDependent
 };
