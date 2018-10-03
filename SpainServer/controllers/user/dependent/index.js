@@ -233,16 +233,17 @@ const acceptFriendRequest = (req, res, next) => {
 };
 
 // Get all carers who are in the stage 'pending' for a certain dependent.
-const getPendingDependents = (req, res) => {
+const getPendingCarers = (req, res) => {
+    console.log(req.params.id);
     // Find by id, then get pending carers. find all who are in that range
     return Dependent.findById(req.params.id).exec()
-        .then(dependents => {
-            if (!dependents.length) {
+        .then(dependent => {
+            if (!dependent) {
                 return res.status(400).send({
                     message: 'Dependent does not exist.'
                 })
             }
-            return dependents[0].pendingCarers;
+            return dependent.pendingCarers;
         })
         .then(pendingCarerIds => Carer.find({_id: {$in: pendingCarerIds}}).exec())
         .then(carers => res.status(200).send(carers))
@@ -255,7 +256,7 @@ const getPendingDependents = (req, res) => {
 
 export const dependentIndex = {
     get: getDependent,
-    getPending: getPendingDependents,
+    getPending: getPendingCarers,
     put: updateDependent,
     delete: deleteDependent,
     acceptCarer: acceptFriendRequest,
