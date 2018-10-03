@@ -142,6 +142,7 @@ public class AddDependentActivity extends AppCompatActivity {
                  return true;
 
              } catch (Exception e) {
+                 e.printStackTrace();
                  exception = e;
                  return false;
              }

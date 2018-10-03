@@ -134,11 +134,16 @@ public class CarerHomeActivity extends AppCompatActivity {
                 Toast.makeText(CarerHomeActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
             } else {
                 storeDependents(dependents);
-                setupList(dependents);
+                setupList();
             }
         }
     }
 
+    /**
+     * Helper method to store the dependents list into the class since cannot be accessed in the
+     * inner field
+     * @param dependents
+     */
     private void storeDependents(List<DependentUser> dependents) {
         this.dependents = dependents;
     }
@@ -149,7 +154,7 @@ public class CarerHomeActivity extends AppCompatActivity {
      * @param carerUser
      * @return
      */
-    private void setupList(List<DependentUser> dependents) {
+    private void setupList() {
         boolean isSetOnClick;
         ArrayList<String> dependentNames = new ArrayList<>();
 
@@ -194,7 +199,9 @@ public class CarerHomeActivity extends AppCompatActivity {
                             switch (which) {
                                 // Edit button
                                 case 2:
+                                    // Make a new intent to display the edit dependents activity
                                     Intent intent = new Intent(getApplicationContext(), EditDependentsActivity.class);
+                                    // Pass through the dependent id so that can edit easily
                                     intent.putExtra("DependentID", getDependentAt(i).getId());
                                     startActivity(intent);
                                     break;

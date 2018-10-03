@@ -24,7 +24,13 @@ import java.util.List;
 public class EditDependentsActivity extends AppCompatActivity {
     public final String NO_LOCATIONS_MSG = "This dependent currently has no locations. Please add some for them";
 
+    // Dependent's locations which contains all the fields
+    private List<Location> locations;
+
+    // Current dependent id obtained from previosu activity
     private String dependentID;
+
+    // Locations list of dependent
     private ListView locationsList;
     private ArrayAdapter<String> arrayAdapter;
 
@@ -47,55 +53,60 @@ public class EditDependentsActivity extends AppCompatActivity {
         new SetupLocationsListTask().execute();
     }
 
-    private void setupList(DependentUser dependentUser) {
+    private void setupList() {
         boolean isSetOnClick;
         ArrayList<String> locationNames = new ArrayList<>();
 
-        // Get the dependents
-        try {
-            List<Location> locations = dependentUser.getLocations();
+        // Get the locations
 
-            // Handle where carer has no dependents
-            if (locations.size() == 0) {
-                locationNames.add(NO_LOCATIONS_MSG);
-                isSetOnClick = false;
+        // Handle where carer has no dependents
+        if (locations.size() == 0) {
+            locationNames.add(NO_LOCATIONS_MSG);
+            isSetOnClick = false;
+        }
+        // Carer has dependents
+        else {
+            // Get the carer names
+            for (Location location: locations) {
+                locationNames.add(location.getDisplayName());
             }
-            // Carer has dependents
-            else {
-                // Get the carer names
-                for (Location location: locations) {
-                    locationNames.add(location.getDisplayName());
-                }
-                isSetOnClick = true;
-            }
+            isSetOnClick = true;
+        }
 
-            // Set array adapter
-            arrayAdapter = new ArrayAdapter<>(EditDependentsActivity.this, android.R.layout.simple_list_item_1, locationNames);
+        // Set array adapter
+        arrayAdapter = new ArrayAdapter<>(EditDependentsActivity.this, android.R.layout.simple_list_item_1, locationNames);
 
-            locationsList.setAdapter(arrayAdapter);
+        locationsList.setAdapter(arrayAdapter);
 
-            // Set on click listener only if the carer has dependents
-            if (isSetOnClick) {
-                locationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        // TODO change the options
-                        String[] options = {"Call", "Message", "Edit"};
+        // Set on click listener only if the carer has dependents
+        if (isSetOnClick) {
+            locationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    // TODO change add the edit function
+                    String[] options = {"Delete", "Edit"};
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(EditDependentsActivity.this);
-                        builder.setTitle("Choose");
-                        builder.setItems(options, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // the user clicked on options[which]
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EditDependentsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // the user clicked on options[which]
+                            switch(which) {
+                                // Delete option
+                                case 0:
+
+                                    break;
+
+                                // Default (no click)
+                                default:
+                                    break;
                             }
-                        });
-                        builder.show();
-                    }
-                });
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.show();
+                }
+            });
         }
     }
 
@@ -103,13 +114,13 @@ public class EditDependentsActivity extends AppCompatActivity {
      * Asynchronous task to get the dependent that is selected by the carer to edit
      * Then this task sets up the list to display the locations of the dependent
      */
-    private class SetupLocationsListTask extends AsyncTask<Void, Void, DependentUser> {
+    private class SetupLocationsListTask extends AsyncTask<Void, Void, List<Location>> {
         Exception exception;
 
         @Override
-        protected DependentUser doInBackground(Void... voids) {
+        protected List<Location> doInBackground(Void... voids) {
             try {
-                return AccountController.getInstance().getDependent(dependentID);
+                return AccountController.getInstance().getDependent(dependentID).getLocations();
             } catch (Exception e) {
                 exception = e;
             }
@@ -117,13 +128,23 @@ public class EditDependentsActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(DependentUser dependentUser) {
+        protected void onPostExecute(List<Location> locations) {
             // Check if the dependent user has been successfully obtained
-            if (dependentUser == null) {
+            if (locations == null) {
                 Toast.makeText(EditDependentsActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
             } else {
-                setupList(dependentUser);
+                storeLocations(locations);
+                setupList();
             }
         }
     }
+
+        /**
+         * Helper function to store the list of locations since it cannot be accessed from the outer
+         * class
+         * @param locations
+         */
+        private void storeLocations(List<Location> locations) {
+            this.locations = locations;
+        }
 }
