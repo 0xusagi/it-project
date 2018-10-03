@@ -1,10 +1,15 @@
 package com.comp30023.spain_itproject.ui.carerhome;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -187,35 +192,62 @@ public class CarerHomeActivity extends AppCompatActivity {
         if (isSetOnClick) {
             dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                    String[] options = {"Call", "Message", "Edit"};
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
-                    builder.setTitle("Choose");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // the user clicked on options[which]
-                            switch (which) {
-                                // Edit button
-                                case 2:
-                                    // Make a new intent to display the edit dependents activity
-                                    Intent intent = new Intent(getApplicationContext(), EditDependentsActivity.class);
-                                    // Pass through the dependent id so that can edit easily
-                                    intent.putExtra("DependentID", getDependentAt(i).getId());
-                                    startActivity(intent);
-                                    break;
-
-                                // Default case
-                                default:
-                                    break;
-                            }
-                        }
-                    });
-                    builder.show();
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    setupAlertDialog(i);
                 }
             });
         }
+    }
+
+    /**
+     * Setup the alert dialog which displays the options on what to do when a dependent is clicked
+     * from the list view
+     * @param i
+     */
+    private void setupAlertDialog(final int i) {
+        String[] options = {"Call", "Message", "Edit"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
+        builder.setTitle("Choose");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on options[which]
+                Intent intent;
+                switch (which) {
+                    case 0:
+                        // Get the phone number of the dependent
+                        String phoneNumber = getDependentAt(i).getPhoneNumber();
+
+                        // Make a new calling intent
+                        intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:"+phoneNumber));
+
+                        // Check for permission
+                        if (ContextCompat.checkSelfPermission(getApplication(), Manifest.permission.CALL_PHONE)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(CarerHomeActivity.this,
+                                    new String[]{Manifest.permission.CALL_PHONE}, 1);
+                        } else {
+                            startActivity(intent);
+                        }
+                        break;
+                    // Edit button
+                    case 2:
+                        // Make a new intent to display the edit dependents activity
+                        intent = new Intent(getApplicationContext(), EditDependentsActivity.class);
+                        // Pass through the dependent id so that can edit easily
+                        intent.putExtra("DependentID", getDependentAt(i).getId());
+                        startActivity(intent);
+                        break;
+
+                    // Default case
+                    default:
+                        break;
+                }
+            }
+        });
+        builder.show();
     }
 
     /**
