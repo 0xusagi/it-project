@@ -19,13 +19,15 @@ const newUserFromType = (data) => {
         return new Dependent({
             mobile: data.mobile,
             name: data.name,
-            password: hash
+            password: hash,
+            firebaseToken: data.firebaseToken
         });
     } else if (data.userType === 'Carer') {
         return new Carer({
             mobile: data.mobile,
             name: data.name,
-            password: hash
+            password: hash,
+            firebaseToken: data.firebaseToken
         });
     } else {
         return false;
@@ -47,7 +49,6 @@ const newUser = (req, res, next) => {
     const newUser = newUserFromType(req.body);
 
     return findDuplicateUser(req.body.mobile).then((err, user) => {
-
         // Checking for duplicates
         if (user || err) {
             return res.status(400).json({message: "Mobile number already registered to a device"});

@@ -17,7 +17,8 @@ public class LoginSharedPreference {
         ID,
         PHONE_NUMBER,
         PIN,
-        IS_DEPENDENT
+        IS_DEPENDENT,
+        TOKEN
     }
 
     /**
@@ -39,7 +40,7 @@ public class LoginSharedPreference {
      * @param id
      */
     public static void setLogIn(Context context, String phoneNumber, String pin,
-                                boolean isDependent, String id) {
+                                boolean isDependent, String id, String token) {
         checkInstance(context);
 
         // Store the information of the user
@@ -49,6 +50,7 @@ public class LoginSharedPreference {
         editor.putString(Pref.PIN.name(), pin);
         editor.putBoolean(Pref.IS_DEPENDENT.name(), isDependent);
         editor.putString(Pref.ID.name(), id);
+        editor.putString(Pref.TOKEN.name(), token);
 
         editor.commit();
     }
@@ -114,5 +116,17 @@ public class LoginSharedPreference {
     public static boolean getIsDependent(Context context) {
         checkInstance(context);
         return instance.getBoolean(Pref.IS_DEPENDENT.name(), true);
+    }
+
+    public static void updateToken(Context context, String token) {
+        checkInstance(context);
+        SharedPreferences.Editor editor = instance.edit();
+        editor.putString(Pref.TOKEN.name(), token);
+        editor.commit();
+    }
+
+    public static String getToken(Context context) {
+        checkInstance(context);
+        return instance.getString(Pref.TOKEN.name(), "");
     }
 }

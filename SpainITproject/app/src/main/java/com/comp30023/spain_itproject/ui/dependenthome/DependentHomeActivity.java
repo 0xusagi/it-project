@@ -116,7 +116,9 @@ public class DependentHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (!responding) {
+                Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+                if (!(currentFragment instanceof CarersListFragment)) {
                     Fragment carersFragment = new CarersListFragment();
 
                     Bundle arguments = new Bundle();

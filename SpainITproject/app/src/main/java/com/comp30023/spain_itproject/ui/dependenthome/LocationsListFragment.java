@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.ui.LoginHandler;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.ui.views.ItemButton;
 
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ public class LocationsListFragment extends ListFragment<Location> {
 
         Bundle arguments = getArguments();
         user = (DependentUser) arguments.getSerializable(ARGUMENT_USER);
+
+        System.out.println("Token: " + LoginSharedPreference.getToken(getContext()));
 
         setList();
 
