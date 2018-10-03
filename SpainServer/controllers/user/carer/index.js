@@ -108,11 +108,13 @@ const isAlreadyAddedOrPending = (mobile, carerId) => {
             ]
         }).then((dependents) => {
             // console.log("dependents", dependents);
-            if (dependents.length > 0) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
+            var check = false;
+            dependents.forEach((dependent) => {
+                if (dependent.mobile === mobile) {
+                    resolve(true);
+                }
+            });
+            resolve(false);
         }).catch((err) => {
             // console.log("error checking whether dependent/carer already added; ", err);
             resolve(true);
