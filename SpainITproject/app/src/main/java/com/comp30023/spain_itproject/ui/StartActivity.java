@@ -38,7 +38,7 @@ public class StartActivity extends AppCompatActivity {
         createAccountButton = findViewById(R.id.createAccountButton);
         setCreateAccountButtonListener(this);
 
-        loginButton = findViewById(R.id.loginButton);
+        loginButton = findViewById(R.id.start_loginButton);
         setLoginButtonListener(this);
     }
 

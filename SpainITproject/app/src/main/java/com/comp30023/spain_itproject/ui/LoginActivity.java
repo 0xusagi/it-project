@@ -38,10 +38,10 @@ public class LoginActivity extends AppCompatActivity {
 
         messageText = (TextView) findViewById(R.id.login_message_text);
 
-        loginButton = (Button) findViewById(R.id.loginButton);
+        loginButton = (Button) findViewById(R.id.login_loginButton);
         setLoginButtonListener(this);
 
-        cancelButton = (Button) findViewById(R.id.cancelButton);
+        cancelButton = (Button) findViewById(R.id.login_cancelButton);
         setCancelButtonListener(this);
 
         phoneNumberText = (EditText) findViewById(R.id.phoneNumberLoginField);

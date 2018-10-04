@@ -39,9 +39,9 @@ public class StartActivityTest {
      */
     @Test
     public void testLoginButton() {
-        onView(withId(R.id.loginButton)).perform(click());
+        onView(withId(R.id.start_loginButton)).perform(click());
 
-        intended(hasComponent(AccountCreationActivity.class.getName()));
+        intended(hasComponent(LoginActivity.class.getName()));
     }
 
     @After
