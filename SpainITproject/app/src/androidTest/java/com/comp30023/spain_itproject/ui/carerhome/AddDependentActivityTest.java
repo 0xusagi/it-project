@@ -26,7 +26,10 @@ public class AddDependentActivityTest {
     }
 
     @Test
-    public void se
+    public void testSearchingDependent() {
+        // Create the dependent
+
+    }
 
     @After
     public void tearDown() throws Exception {
