@@ -10,8 +10,6 @@
     "test": "NODE_ENV=test mocha --require babel-register test"
   },
   "dependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/node": "^7.0.0",
     "basic-auth": "^2.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
@@ -20,9 +18,7 @@
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.10",
     "nodemon": "^1.18.3",
-    "randomstring": "^1.1.5"
-  },
-  "devDependencies": {
+    "randomstring": "^1.1.5",
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
