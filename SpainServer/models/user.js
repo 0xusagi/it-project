@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    firebaseToken: {
+        type: String,
+        required: true
+    },
     avatarLink: String
 }, {
     timestamps: true
@@ -34,6 +38,7 @@ const dependentSchema = new mongoose.Schema({
 }, options);
 
 const carerSchema = new mongoose.Schema({
+    pendingDependents: [String],
     dependents: [String]
 });
 

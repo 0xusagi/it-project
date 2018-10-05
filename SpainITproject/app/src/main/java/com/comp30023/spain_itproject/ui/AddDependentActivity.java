@@ -1,6 +1,8 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,10 +16,14 @@ import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
+import java.io.IOException;
+
 public class AddDependentActivity extends AppCompatActivity {
 
     private EditText mobileNumberField;
     private Button searchButton;
+
+    String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +47,45 @@ public class AddDependentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO send the query to the server
                 // Get the mobile number to query
-                String phoneNumber = mobileNumberField.getText().toString();
+                phoneNumber = mobileNumberField.getText().toString();
 
-                // Send to server
-                try {
-                    DependentUser dependentUser = AccountController.getInstance().getDependent(phoneNumber);
-                    displayInfoDialog(dependentUser.getName());
-                } catch (Exception e) {
-                    // Display error message as a toast
-                    Toast errorMsg = Toast.makeText(getApplicationContext(), "Dependent does not exist", Toast.LENGTH_SHORT);
-                    errorMsg.setGravity(Gravity.CENTER, 0, 0);
-                    errorMsg.show();
-                }
+                // Send to server and display the prompt to add
+                new GetDependentNameFromNumberTask().execute(phoneNumber);
             }
         });
+    }
+
+    /**
+     * Task to get the dependent's name from the server based on a phone number
+     */
+    private class GetDependentNameFromNumberTask extends AsyncTask<String, Void, String> {
+        private Exception exception;
+
+        @Override
+        protected String doInBackground(String... params) {
+            // First argument is the phone number of the dependent to search for
+            String phoneNumber = params[0];
+
+            try {
+                String name = AccountController.getInstance().getDependentNameByPhoneNumber(phoneNumber);
+
+                return name;
+            }
+            catch (Exception e) {
+                exception = e;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String name) {
+            if (name == null) {
+                Toast.makeText(AddDependentActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+            } else {
+                displayInfoDialog(name);
+            }
+        }
     }
 
     /**
@@ -77,6 +108,7 @@ public class AddDependentActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // TODO send a request to the server
+                new AddDependentTask().execute(phoneNumber);
             }
         });
 
@@ -89,10 +121,44 @@ public class AddDependentActivity extends AppCompatActivity {
             }
         });
 
-        AlertDialog alertDialog = dependentInfoDialogBuilder.create();
-        alertDialog.show();
+        dependentInfoDialogBuilder.show();
 
         // Clear the edit text field for entering mobile number
         mobileNumberField.setText("");
      }
+
+    /**
+     * Async task to add a dependent on the background thread which interacts with the server
+     * Calling execute(phoneNumber) always returns null
+     */
+    private class AddDependentTask extends AsyncTask<String, Void, Boolean> {
+         private Exception exception;
+
+         @Override
+         protected Boolean doInBackground(String... strings) {
+             // Dependent phone number is the first argument
+             String dependentPhoneNumber = strings[0];
+
+             try {
+                 System.out.println(LoginSharedPreference.getId(AddDependentActivity.this));
+                 AccountController.getInstance().requestDependent(LoginSharedPreference.getId(AddDependentActivity.this),
+                         dependentPhoneNumber);
+                 return true;
+
+             } catch (Exception e) {
+                 exception = e;
+                 return false;
+             }
+         }
+
+         @Override
+         protected void onPostExecute(Boolean success) {
+             if (success) {
+                 Toast.makeText(AddDependentActivity.this, "Dependent added", Toast.LENGTH_SHORT).show();
+             }
+             else {
+                 Toast.makeText(AddDependentActivity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
+             }
+         }
+    }
 }

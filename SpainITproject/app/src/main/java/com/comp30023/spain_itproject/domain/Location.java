@@ -8,30 +8,19 @@ import java.io.Serializable;
 
 public class Location implements Serializable, DisplayName {
 
-    @SerializedName("id")
-    private int id;
+    @SerializedName("googleId")
+    private String googleId;
 
-    @SerializedName("latLng")
-    private LatLng latLng;
+    @SerializedName("latitide")
+    private double latitude;
 
-    @SerializedName("address")
-    private Address address;
-
-    private Coordinates coords;
+    @SerializedName("longitude")
+    private double longitude;
 
     @SerializedName("displayName")
     private String displayName;
 
-    @SerializedName("description")
-    private String description;
-
-    @SerializedName("avatar")
-    private String avatar;
-
-    @SerializedName("popularity")
-    private float popularity;
-
-    public Location(LatLng latLng, Address address, String displayName) {
+    public Location(String googleId, double latitude, double longitude, String displayName) {
     }
 
     public String getDisplayName() {

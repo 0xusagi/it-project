@@ -29,12 +29,14 @@ import java.util.ArrayList;
 //Currently just displays the tag of the location
 public class MapFragment extends Fragment {
 
+    public static final String ARGUMENT_LOCATION = "LOCATION";
+
     private Location location;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        location = (Location) getArguments().getSerializable(ListFragment.ITEM_ARGUMENT);
+        location = (Location) getArguments().getSerializable(ARGUMENT_LOCATION);
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         return view;

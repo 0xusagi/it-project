@@ -1,17 +1,6 @@
 import { Location } from "../../models/location";
 import {Dependent} from "../../models/user";
 
-const getAllLocations = (req, res, next) => {
-    let response = Location.find({}, (err, locations) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        return res.status(200).json(locations);
-    });
-
-    return response;
-};
-
 const getLocation = (req, res, next) => {
     let response = Location.findById(req.params.id, (err, location) => {
         if (err) {
@@ -58,13 +47,29 @@ const addToDependent = (req, res) => {
     return Location.create(req.body)
         .then(location => addLocationToDependent(location, req.params.id))
         .then(updatedDependent => res.status(200).json(updatedDependent))
-        .catch(err => res.status(500).send({message: 'Server Error.'}));
+        .catch(err => {
+            console.log(err)
+            return res.status(400).send({message: 'Server Error. Unable to add location to dependent.'});
+        });
+};
+
+const getLocationsForDependents = (req, res) => {
+    return Dependent.findById(req.params.id)
+        .then(dependent => {
+            if (!dependent) {
+                throw "Dependent does not exist."
+            }
+            console.log(dependent)
+            return Location.find({_id: {$in: dependent.locations}})
+        })
+        .then(locations => res.status(200).json(locations))
+        .catch(err => res.send(400).json(err));
 };
 
 export const locationIndex = {
     get: getLocation,
-    getAll: getAllLocations,
     put: updateLocation,
     delete: deleteLocation,
-    addToDependent: addToDependent
+    addToDependent: addToDependent,
+    getLocationsForDependents: getLocationsForDependents
 };
