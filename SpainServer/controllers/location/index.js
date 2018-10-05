@@ -56,19 +56,9 @@ const addLocationToDependent = (location, dependentId) => {
  */
 const addToDependent = (req, res) => {
     return Location.create(req.body)
-        .then(location => {
-                if (!location) {
-                    return false
-                }
-                addLocationToDependent(location, req.params.id)
-        })
-        .then(updatedDependent => {
-            if (!updatedDependent) {
-                return res.status(400).send({message: 'unable to add location to dependent.'})
-            }
-            return res.status(200).json(updatedDependent)
-        })
-        .catch(err => res.status(500).send({message: 'Server Error.'}));
+        .then(location => addLocationToDependent(location, req.params.id))
+        .then(updatedDependent => res.status(200).json(updatedDependent))
+        .catch(err => res.status(400).send({message: 'Server Error. Unable to add location to dependent.'}));
 };
 
 export const locationIndex = {
