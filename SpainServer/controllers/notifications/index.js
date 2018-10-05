@@ -64,9 +64,9 @@ const sendNotification = (req, res, next) => {
                         data: {
                             time: '00:00 1 Jan 2018',
                             type: 'help',
-                            message: req.body.message,
-                            _id: dependent._id,
-                            name: dependent.name
+                            message: req.body.message.toString(),
+                            _id: dependent._id.toString(),
+                            name: dependent.name.toString()
                         },
                         // structure specific to android notifications
                         android: {
