@@ -26,7 +26,6 @@ public interface AccountService {
     public static final String CARER_REQUEST_ACCEPT = "accept";
     public static final String CARER_REQUEST_REJECT = "reject";
 
-
     @FormUrlEncoded
     @POST("/users/new")
     Call<UserModel> registerUser(

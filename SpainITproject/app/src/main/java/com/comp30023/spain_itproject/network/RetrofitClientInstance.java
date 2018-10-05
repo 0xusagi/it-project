@@ -18,7 +18,7 @@ public class RetrofitClientInstance {
     private static Retrofit retrofit;
 
     // This will be a Heroku-hosted link.
-    private static final String BASE_URL = "http://192.168.0.140:3000";
+    private static final String BASE_URL = "http://10.13.238.153:3000";
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

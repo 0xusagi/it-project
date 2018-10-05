@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         cancelButton = (Button) findViewById(R.id.login_cancelButton);
         setCancelButtonListener(this);
 
-        phoneNumberText = (EditText) findViewById(R.id.phoneNumberLoginField);
+        phoneNumberText = (EditText) findViewById(R.id.login_phoneNumberLoginField);
 
         setPinFields();
     }
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     //Set restrictions for the pin field
     private void setPinFields() {
 
-        pinText = (EditText) findViewById(R.id.pinLoginField);
+        pinText = (EditText) findViewById(R.id.login_pinLoginField);
 
         InputFilter.LengthFilter maxPinLength = new InputFilter.LengthFilter(PIN_LENGTH);
         InputFilter[] pinFilters = new InputFilter[1];
