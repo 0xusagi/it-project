@@ -139,12 +139,12 @@ public class EditDependentsActivity extends AppCompatActivity {
         }
     }
 
-        /**
-         * Helper function to store the list of locations since it cannot be accessed from the outer
-         * class
-         * @param locations
-         */
-        private void storeLocations(List<Location> locations) {
-            this.locations = locations;
-        }
+    /**
+     * Helper function to store the list of locations since it cannot be accessed from the outer
+     * class
+     * @param locations
+     */
+    private void storeLocations(List<Location> locations) {
+        this.locations = locations;
+    }
 }
