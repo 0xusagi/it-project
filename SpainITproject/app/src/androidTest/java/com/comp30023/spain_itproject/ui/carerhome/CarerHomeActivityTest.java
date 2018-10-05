@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.ui.carerhome;
 
+import android.accounts.Account;
 import android.content.ComponentName;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -42,11 +43,15 @@ import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class CarerHomeActivityTest {
+    private static final String CARER_NAME = "Carer1";
+    private static final String VALID_PHONENUMBER_CARER = "1234567890";
+    private static final String VALID_PIN = "1111";
 
-    private static AccountService service;
+    private static AccountService service = RetrofitClientInstance.getRetrofitInstance().create(AccountService.class);
 
-    private static String userId;
-    private static String dependentId;
+    // Store the carer user of the activity
+    private static UserModel carer;
+    private static String carerToken;
 
     @Rule
     public IntentsTestRule<CarerHomeActivity> mIntentsRule = new IntentsTestRule<>(
@@ -54,20 +59,27 @@ public class CarerHomeActivityTest {
 
     @BeforeClass
     public static void beforeSetup() throws Exception {
-        service = RetrofitClientInstance.getRetrofitInstance().create(AccountService.class);
+        // Create a carer for the activity
+        carerToken = FirebaseInstanceId.getInstance().getToken();
+        carer = service.registerUser(CARER_NAME,
+                VALID_PHONENUMBER_CARER,
+                VALID_PIN,
+                AccountService.USERTYPE_CARER,
+                carerToken)
+                .execute().body();
 
-        //Setup the dependent
-        service.registerUser("Dependent1", "1111111111", "1111", "Dependent", FirebaseInstanceId.getInstance().getToken()).execute();
-
-        // Register the carer
-        service.registerUser("Carer1", "0000000000", "1111", "Carer", FirebaseInstanceId.getInstance().getToken()).execute();
+        assert(carer  != null);
     }
 
     @Before
     public void setUp() throws Exception {
-        // Register a fake account for testing
-        LoginHandler.getInstance().login(getTargetContext(), "0000000000", "1111");
-        userId = LoginSharedPreference.getId(getTargetContext());
+        // Login a carer for the activity
+        LoginSharedPreference.setLogIn(mIntentsRule.getActivity().getApplicationContext(),
+                VALID_PHONENUMBER_CARER,
+                VALID_PIN,
+                false,
+                carer.getId(),
+                carerToken);
     }
 
     /**
@@ -79,7 +91,7 @@ public class CarerHomeActivityTest {
         onView(withId(R.id.carerHome_settingsButton))
                 .perform(click());
 
-        intended(hasComponent(new ComponentName(getTargetContext(), StartActivity.class)));
+        intended(hasComponent(StartActivity.class.getName()));
     }
 
     /**
@@ -111,30 +123,54 @@ public class CarerHomeActivityTest {
      */
     @Test
     public void checkListViewDependents() throws Exception {
-        // Add dependents to the carer
-        service.addDependent(userId, "1111111111");
+        // Create a dependent to add
+        String dependentPhoneNumber1 = "4837594837";
+        UserModel dependentUser1 =  service.registerUser("Dependent1",
+                dependentPhoneNumber1,
+                "1111",
+                AccountService.USERTYPE_DEPENDENT,
+                FirebaseInstanceId.getInstance().getToken())
+                .execute().body();
 
-        // Accept the request
-        service.acceptRequest(dependentId, userId, "accept");
+        String dependentPhoneNumber2 = "0492837261";
+        UserModel dependentUser2 = service.registerUser("Dependent2",
+                dependentPhoneNumber2,
+                "1111",
+                AccountService.USERTYPE_DEPENDENT,
+                FirebaseInstanceId.getInstance().getToken())
+                .execute().body();
+
+        assert(dependentUser1 != null);
+        assert(dependentUser2 != null);
+
+        // Send the friend request
+        service.addDependent(carer.getId(), dependentPhoneNumber1).execute();
+        service.addDependent(carer.getId(), dependentPhoneNumber2).execute();
+
+        // Accept the friend request
+        service.acceptRequest(dependentUser1.getId(), carer.getId(), AccountService.CARER_REQUEST_ACCEPT).execute();
+        service.acceptRequest(dependentUser2.getId(), carer.getId(), AccountService.CARER_REQUEST_ACCEPT).execute();
+
+        // Click the refresh button
+        onView(withId(R.id.carerHome_refreshButton)).perform(click());
 
         // Check if the list has only one field
         ListView listView = mIntentsRule.getActivity().findViewById(R.id.carerHome_dependentsList);
-        assert(listView.getAdapter().getCount() == 1);
+        assert(listView.getAdapter().getCount() == 2);
 
-        // Check if the listView can be clicked
-        onData(anything()).inAdapterView(withId(R.id.carerHome_dependentsList)).atPosition(0).perform(click());;
+        // Delete the dependent
+        service.deleteDependent(dependentUser1.getId()).execute();
+        service.deleteDependent(dependentUser2.getId()).execute();
     }
 
     @After
     public void tearDown() throws Exception {
         // Logout each time
-        LoginHandler.getInstance().logout(getTargetContext());
+        LoginSharedPreference.setLogOut(mIntentsRule.getActivity().getApplicationContext());
     }
 
     @AfterClass
-    public static void afterTearDown() throws Exception {
-        // Remove the fake account that was created from the server
-        service.deleteCarer(userId).execute();
-        service.deleteDependent(dependentId).execute();
+    public static void afterTearDown() throws  Exception {
+        service.deleteCarer(carer.getId()).execute();
     }
 }

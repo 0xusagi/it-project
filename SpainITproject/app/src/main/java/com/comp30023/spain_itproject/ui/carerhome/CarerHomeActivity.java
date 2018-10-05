@@ -47,6 +47,9 @@ public class CarerHomeActivity extends AppCompatActivity {
     // Add Dependent button
     private Button addDependentsButton;
 
+    // Refresh button
+    private ImageButton refreshButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +140,17 @@ public class CarerHomeActivity extends AppCompatActivity {
                 setupList();
             }
         }
+    }
+
+    private void setupRefreshButton() {
+        refreshButton = findViewById(R.id.carerHome_refreshButton);
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setupList();
+            }
+        });
     }
 
     /**
