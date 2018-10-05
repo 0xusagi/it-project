@@ -56,8 +56,31 @@ const sendNotification = (req, res, next) => {
                 carers.forEach((carer) => {
                     // Send a message to the device corresponding to the provided
                     // registration token.
-                    let cloneOfMessage = JSON.parse(JSON.stringify(exampleChatMessage));
-                    cloneOfMessage.token = carer.firebaseToken;
+                    var chatMessage = {
+                        notification: {
+                            title: 'Your Dependent Needs Help',
+                            body: 'Your dependent urgently needs help. Tap for more info'
+                        },
+                        data: {
+                            time: '00:00 1 Jan 2018',
+                            type: 'help',
+                            message: req.body.message,
+                            _id: dependent._id,
+                            name: dependent.name
+                        },
+                        // structure specific to android notifications
+                        android: {
+                            ttl: 3600 * 1000, // 1 hour in milliseconds
+                            priority: 'normal',
+                            notification: {
+                              title: 'Your Dependent Needs Help',
+                              body: 'Your dependent urgently needs help. Tap for more info',
+                              icon: 'stock_ticker_update',
+                              color: '#f45342'
+                            }
+                        },
+                        token: carer.firebaseToken
+                    };
                     admin.messaging().send(cloneOfMessage)
                       .then((response) => {
                         // Response is a message ID string.
