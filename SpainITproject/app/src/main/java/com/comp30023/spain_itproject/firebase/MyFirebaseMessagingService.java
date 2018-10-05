@@ -17,7 +17,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         //Update token on server and locally
         LoginHandler.getInstance().updateToken(context, token);
-
     }
 
 }

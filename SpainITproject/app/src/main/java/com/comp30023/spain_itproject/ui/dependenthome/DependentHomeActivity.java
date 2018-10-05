@@ -1,6 +1,7 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.AsyncTask;
@@ -14,10 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.ui.LoginHandler;
@@ -38,8 +39,7 @@ public class DependentHomeActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
 
     private FragmentManager fragmentManager;
-    private ListFragment<CarerUser> carersFragment;
-    ListFragment<Location> locationsFragment;
+    private Fragment locationsFragment;
 
     private Button messagesButton;
     private Button callsButton;
@@ -51,6 +51,10 @@ public class DependentHomeActivity extends AppCompatActivity {
 
     //Reference to signed in user's list of locations
     private ArrayList<Location> locations;
+
+    private boolean responding;
+
+    private ProgressBar spinner;
 
     /**
      * References the objects to the corresponding views
@@ -65,15 +69,21 @@ public class DependentHomeActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
+        responding = false;
+
+        spinner = (ProgressBar) findViewById(R.id.progressBar) ;
+        spinner.setVisibility(View.GONE);
+
         //Retrieve the logged in account from the server
         new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
+
         callsButton = (Button) findViewById(R.id.callButton);
         setCallsButtonListener(this);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        signOutButton = findViewById(R.id.signOutButton);
+        signOutButton = findViewById(R.id.tempSignOutButton);
         setSignOutButtonListener(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -106,11 +116,22 @@ public class DependentHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
-                transaction.replace(R.id.fragment_container, carersFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if (!(currentFragment instanceof CarersListFragment)) {
+                    Fragment carersFragment = new CarersListFragment();
+
+                    Bundle arguments = new Bundle();
+                    arguments.putSerializable(CarersListFragment.ARGUMENT_USER, user);
+
+                    carersFragment.setArguments(arguments);
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                    transaction.replace(R.id.fragment_container, carersFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
             }
         });
     }
@@ -137,6 +158,9 @@ public class DependentHomeActivity extends AppCompatActivity {
         @Override
         protected DependentUser doInBackground(String... strings) {
 
+            responding = true;
+
+            displaySpinner(true);
             try {
 
                 user = AccountController.getInstance().getDependent(strings[0]);
@@ -145,28 +169,78 @@ public class DependentHomeActivity extends AppCompatActivity {
 
             // Exception when can't connect to the server
             catch (Exception e) {
-                // When cannot get prompt whether to try again
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
 
             return null;
         }
 
         /**
-         * Load the list fragment of the dependent's locations
+         * Load the fragment to display
          * @param dependentUser
          */
         @Override
         protected void onPostExecute(DependentUser dependentUser) {
             super.onPostExecute(dependentUser);
 
-            carersFragment = new ListFragment<CarerUser>(LIST_NAME_CARERS, user, user.getCarers(), CarerFragment.class);
-            locationsFragment = new ListFragment<Location>(LIST_NAME_LOCATION, user, user.getLocations(), MapFragment.class);
+            displaySpinner(false);
 
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            if (user != null) {
 
-            transaction.add(R.id.fragment_container, locationsFragment);
-            transaction.commit();
+                try {
+
+                    Fragment fragment;
+
+                    //If there are pending requests, display them
+                    if (!user.hasPendingCarers()) {
+                        fragment = new LocationsListFragment();
+
+                        //Otherwise display the locations
+                    } else {
+                        fragment = new CarerRequestsListFragment();
+                    }
+
+                    Bundle arguments = new Bundle();
+                    arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
+                    fragment.setArguments(arguments);
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                    transaction.replace(R.id.fragment_container, fragment);
+                    transaction.commit();
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                responding = false;
+            }
         }
+    }
+
+    /**
+     * Sets wehether the refresh button should be displayed
+     * @param display
+     */
+    private void displaySpinner(final boolean display) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                int spinnerVisibility = display ? View.VISIBLE : View.GONE;
+                spinner.setVisibility(spinnerVisibility);
+            }
+        });
+    }
+
+    private void displayErrorToast(final Exception e) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Extends user by storing lists of objects related to being a Carer user
@@ -12,7 +13,14 @@ import java.util.ArrayList;
 public class CarerUser extends User implements Serializable {
 
     @SerializedName("dependents")
-    private ArrayList<DependentUser> dependents;
+    private List<String> dependentIds;
+
+    private List<DependentUser> confirmedDependents;
+
+    @SerializedName("pendingDependents")
+    private List<String> pendingDependents;
+
+    private List<DependentUser> pDependents;
 
     public CarerUser(String name, String phoneNumber, String pin, String id) {
         super(name, phoneNumber, pin, id);
@@ -21,23 +29,39 @@ public class CarerUser extends User implements Serializable {
     /**
      * @return The list of stored dependents
      */
-    public ArrayList<DependentUser> getDependents() {
-        return dependents;
+    public List<DependentUser> getDependents() throws Exception {
+
+        if (confirmedDependents == null) {
+            confirmedDependents = new ArrayList<DependentUser>();
+        }
+
+        if (!dependentIds.isEmpty()) {
+            confirmedDependents = AccountController.getInstance().getDependentsOfCarer(this);
+            dependentIds.clear();
+        }
+
+        return confirmedDependents;
     }
 
     /**
      * Adds a DependentUser by their stored phone number
-     * Adds the dependent first to the database and then locally
+     * Adds the request first to the database and then locally
      * @param dependentPhoneNumber The phone number of the dependent to be added
      * @throws Exception Thrown if there is an error while communicating with the database
      */
+    /*
     public void addDependent(String dependentPhoneNumber) throws Exception {
 
-        //Adds the dependent to the carers account externally
+        //Check if this carer has already sent a request to the dependent
+        for (DependentUser dependent : pendingDependents) {
+            if (dependent.getPhoneNumber().equals(dependentPhoneNumber))
+                throw new AlreadyAddedException();
+        }
+
+        //Adds the request to the carers account externally
         //Will throw an Exception if there is a method while communicating with the database
-        DependentUser dependent = AccountController.getInstance().addDependent(this, dependentPhoneNumber);
+        DependentUser dependent = AccountController.getInstance().requestDependent(this, dependentPhoneNumber);
 
-        dependents.add(dependent);
-
-    }
+        pendingDependents.add(dependent);
+    }*/
 }

@@ -34,6 +34,10 @@ const newUserFromType = (data) => {
     }
 };
 
+const findDuplicateUser = (mobile) => (
+    User.findOne({mobile: mobile}).exec()
+);
+
 /**
  * Create a new user in the mongo database from client-supplied parameters and
  * return a response if successful.
@@ -44,20 +48,24 @@ const newUserFromType = (data) => {
 const newUser = (req, res, next) => {
     const newUser = newUserFromType(req.body);
 
-    const response = newUser.save((error, user) => {
-        if (error) {
-            if (error.code === 11000) {
-                return res.status(400).json({message: "Mobile number already registered"});
-            } else {
-                return res.status(400).json(error);
-            }
+    return findDuplicateUser(req.body.mobile).then((err, user) => {
+        // Checking for duplicates
+        if (user || err) {
+            return res.status(400).json({message: "Mobile number already registered to a device"});
         }
-        return res.status(201).json(user);
-    });
 
-    return response;
+        return newUser.save((error, user) => {
+            if (error) {
+                if (error.code === 11000) {
+                    return res.status(400).json({message: "Mobile number already registered"});
+                } else {
+                    return res.status(400).json(error);
+                }
+            }
+            return res.status(201).json(user);
+        });
+    })
 };
-
 export const registrationController = {
     new: newUser
 };

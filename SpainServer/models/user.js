@@ -38,6 +38,7 @@ const dependentSchema = new mongoose.Schema({
 }, options);
 
 const carerSchema = new mongoose.Schema({
+    pendingDependents: [String],
     dependents: [String]
 });
 

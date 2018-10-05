@@ -2,13 +2,19 @@ package com.comp30023.spain_itproject.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Pair;
 
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
 import com.comp30023.spain_itproject.ui.dependenthome.DependentHomeActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.comp30023.spain_itproject.detailsvalidation.DetailsValidator;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 /**
  * Logs in users and starts appropriate activity
@@ -43,7 +49,7 @@ public class LoginHandler {
      */
     public void login(Context context, String phoneNumber, String pin) throws Exception {
 
-        String token = FirebaseInstanceId.getInstance().getId();
+        String token = FirebaseInstanceId.getInstance().getToken();
 
         Pair<String, Boolean> response = AccountController.getInstance().login(phoneNumber, pin, token);
 
@@ -68,7 +74,7 @@ public class LoginHandler {
 
         DetailsValidator.getInstance().checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
 
-        String token = FirebaseInstanceId.getInstance().getId();
+        String token = FirebaseInstanceId.getInstance().getToken();
 
         User user = AccountController.getInstance().registerAccount(name, phoneNumber, pin, isDependent, token);
 

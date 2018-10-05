@@ -39,6 +39,12 @@
                     android:layout_height="wrap_content"
                     android:text="Calls" />
 
+                <Button
+                    android:id="@+id/tempSignOutButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign Out" />
+
             </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
@@ -80,7 +86,6 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="true"
             android:orientation="vertical">
 
             <Button
@@ -96,6 +101,19 @@
         </android.support.constraint.ConstraintLayout>
 
     </android.support.design.widget.NavigationView>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_below="@+id/button"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_alignLeft="@+id/textview"
+        android:layout_alignStart="@+id/textview"
+        android:layout_alignParentBottom="true" />
 
 </android.support.v4.widget.DrawerLayout>
 

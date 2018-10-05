@@ -20,14 +20,13 @@ import com.comp30023.spain_itproject.ui.views.ItemButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment that displays a list of items that have a display name
  */
-@SuppressLint("ValidFragment")
-public class ListFragment<T extends DisplayName> extends Fragment {
 
-    public static final String ITEM_ARGUMENT = "ITEM";
+public abstract class ListFragment<T extends DisplayName> extends Fragment {
 
     /**
      * The maximum number of list buttons that are viewed within the frame
@@ -38,14 +37,10 @@ public class ListFragment<T extends DisplayName> extends Fragment {
      * The spacing between the location buttons
      */
     public static final float BUTTON_SPACING_WEIGHT = 0.2f;
-
-    private String name;
-    private Class nextClass;
-
-    private User user;
+    public static final int FIRST_BUTTON_ID = 2000;
 
     //Reference to signed in user's list
-    private ArrayList<T> list;
+    private List<T> list;
 
     //The parent view/layout
     private View view;
@@ -54,18 +49,10 @@ public class ListFragment<T extends DisplayName> extends Fragment {
     private Button previousPageButton;
     private Button nextPageButton;
     private ItemButton<T>[] buttons;
+    private TextView title;
 
     //Index in the list of the item that is at the top of the frame
     private int topIndex;
-
-    @SuppressLint("ValidFragment")
-    public ListFragment(String name, User user, ArrayList<T> list, Class nextClass) {
-        this.name = name;
-        this.user = user;
-        this.list = list;
-        this.nextClass = nextClass;
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,10 +60,10 @@ public class ListFragment<T extends DisplayName> extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText(name);
-
         frame = (LinearLayout) view.findViewById(R.id.frame);
+
+        title = (TextView) view.findViewById(R.id.list_title);
+        title.setVisibility(View.INVISIBLE);
 
         buttons = new ItemButton[BUTTONS_PER_PAGE];
         addButtonsToFrame();
@@ -89,6 +76,8 @@ public class ListFragment<T extends DisplayName> extends Fragment {
             }
         });
 
+        previousPageButton.setVisibility(View.INVISIBLE);
+
         nextPageButton = (Button) view.findViewById(R.id.nextPageButton);
         nextPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +86,7 @@ public class ListFragment<T extends DisplayName> extends Fragment {
             }
         });
 
-        setButtons(0);
+        nextPageButton.setVisibility(View.INVISIBLE);
 
         // Inflate the layout for this fragment
         return view;
@@ -113,18 +102,17 @@ public class ListFragment<T extends DisplayName> extends Fragment {
             //Include space before next button (if not the first button)
             if (!first) {
                 Space space = new Space(view.getContext());
-                space.setLayoutParams(new LinearLayout.LayoutParams(0,1, BUTTON_SPACING_WEIGHT));
+                space.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0, BUTTON_SPACING_WEIGHT));
                 frame.addView(space);
             }
 
-            buttons[i] = createItemButton();
-
+            buttons[i] = createItemButton(FIRST_BUTTON_ID + i);
             first = false;
         }
     }
 
     //Initialises the buttons within the frame
-    private ItemButton<T> createItemButton() {
+    private ItemButton<T> createItemButton(int id) {
         //Create the button
         ItemButton<T> button = new ItemButton<T>(view.getContext()) {
             @Override
@@ -134,14 +122,23 @@ public class ListFragment<T extends DisplayName> extends Fragment {
             }
         };
 
-        //Set the on-click listener
-        button.setOnClickListener(itemButtonListener);
-
         //Add the button to the frame and set the layout parameters
         frame.addView(button);
         button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f));
+        button.setVisibility(View.INVISIBLE);
+        button.setId(id);
 
         return button;
+    }
+
+    /**
+     * Set the behaviour for when the buttons are clicked
+     * @param listener
+     */
+    public void setButtonListeners(View.OnClickListener listener) {
+        for (ItemButton<T> button : buttons) {
+            button.setOnClickListener(listener);
+        }
     }
 
     //Changes the buttons viewed on the screen
@@ -204,40 +201,22 @@ public class ListFragment<T extends DisplayName> extends Fragment {
         }
     }
 
-    //When an item button is pressed, starts the next activity as determined by the class
-    //passed in the constructor
-    private View.OnClickListener itemButtonListener = new View.OnClickListener() {
+    /**
+     * Sets the list and sets the buttons to correspond with this list
+     * @param list
+     */
+    public void setList(List<T> list) {
+        this.list = list;
 
-        @Override
-        //When clicked, starts the next fragment and passes the location stored within the button
-        public void onClick(View v) {
+        setButtons(0);
+    }
 
-            //The item button that is pressed
-            ItemButton itemButton = (ItemButton) v;
-            Serializable item = itemButton.getItem();
-
-            FragmentManager fragmentManager = getFragmentManager();
-            assert fragmentManager != null;
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-            Bundle arguments = new Bundle();
-            arguments.putSerializable(ITEM_ARGUMENT, item);
-
-            try {
-
-                //Create new instance of the following class and pass the item
-                Fragment nextFragment = (Fragment) nextClass.newInstance();
-
-                nextFragment.setArguments(arguments);
-
-                transaction.replace(R.id.fragment_container, nextFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
+    /**
+     * Sets and displays the text above the list
+     * @param title
+     */
+    public void setTitle(String title) {
+        this.title.setText(title);
+        this.title.setVisibility(View.VISIBLE);
+    }
 }

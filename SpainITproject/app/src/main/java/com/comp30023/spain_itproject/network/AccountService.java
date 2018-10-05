@@ -13,13 +13,17 @@ import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 
+import java.util.List;
+
 /**
  * Retrofit-compatible interface that co-ordinates all our different HTTP requests.
  */
 public interface AccountService {
 
-    public static final String CARER_TYPE = "Carer";
-    public static final String DEPENDENT_TYPE = "Dependent";
+    public static final String USERTYPE_CARER = "Carer";
+    public static final String USERTYPE_DEPENDENT = "Dependent";
+    public static final String CARER_REQUEST_ACCEPT = "accept";
+    public static final String CARER_REQUEST_REJECT = "reject";
 
 
     @FormUrlEncoded
@@ -33,7 +37,7 @@ public interface AccountService {
     );
 
     @FormUrlEncoded
-    @POST("user/login")
+    @POST("/user/login")
     Call<UserModel> loginUser(
                             @Field("mobile") String phoneNumber,
                             @Field("password") String pin,
@@ -51,12 +55,10 @@ public interface AccountService {
             @Path("id") String id);
 
 
-    //CONFIRM
-    @FormUrlEncoded
-    @POST("/carers/{id}/addDependent")
-    Call<DependentUser> addDependent(
-                            @Path("id") String carerId,
-                            @Field("mobile") String dependentPhoneNumber);
+    // Get a UserModel which will be a name corresponding to the phone number of a dependent user
+    @GET("/dependent/name/{mobile}")
+    Call<UserModel> getDependentNameFromPhoneNumber(
+            @Path("mobile") String phoneNumber);
 
 
     //CONFIRM
@@ -65,6 +67,41 @@ public interface AccountService {
     Call<ResponseBody> addLocationToDependent(
                             @Path("id") String dependentId,
                             @Field("Location") Location location);
+
+    @FormUrlEncoded
+    @PUT("/carers/{id}/addDependent")
+    Call<ResponseBody> addDependent(
+            @Path("id") String carerId,
+            @Field("mobile") String dependentPhoneNumber);
+
+
+    @FormUrlEncoded
+    @PUT("/dependents/{dependentId}/acceptCarer/{carerId}")
+    Call<ResponseBody> acceptRequest(
+            @Path("dependentId") String dependentId,
+            @Path("carerId") String carerId,
+            @Field("accept") String accept
+    );
+
+    @GET("/dependents/{id}/carers")
+    Call<List<CarerUser>> getCarersOfDependent(
+            @Path("id") String id
+    );
+
+    @GET("/carers/{id}/dependents")
+    Call<List<DependentUser>> getDependentsOfCarer(
+            @Path("id") String id
+    );
+
+    @GET("/dependents/{id}/locations")
+    Call<List<Location>> getLocationsOfDependent(
+            @Path("id") String id
+    );
+
+    @GET("/dependents/{id}/pendingCarers")
+    Call<List<CarerUser>> getPendingCarersOfDependent(
+            @Path("id") String id
+    );
 
     //CONFIRM
     @FormUrlEncoded

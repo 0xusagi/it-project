@@ -124,4 +124,9 @@ public class LoginSharedPreference {
         editor.putString(Pref.TOKEN.name(), token);
         editor.commit();
     }
+
+    public static String getToken(Context context) {
+        checkInstance(context);
+        return instance.getString(Pref.TOKEN.name(), "");
+    }
 }
