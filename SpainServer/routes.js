@@ -4,6 +4,7 @@ import {loginController} from "./controllers/user/login";
 import {carerIndex} from "./controllers/user/carer";
 import {dependentIndex} from "./controllers/user/dependent";
 import {locationIndex} from "./controllers/location/index";
+import {notificationController} from "./controllers/notifications/index";
 
 const router = express.Router();
 
@@ -44,6 +45,9 @@ router.get('/dependent/:id/carers/pending', dependentIndex.getPending);
 
 // get a dependent's name by mobile number
 router.get('/dependent/name/:mobile', dependentIndex.getName);
+
+// '/depenedent/:id/getHelp'
+router.post('/dependent/:id/getHelp', notificationController.getHelp);
 
 /**
  * Locations
