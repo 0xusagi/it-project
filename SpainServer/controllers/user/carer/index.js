@@ -120,54 +120,6 @@ const isAlreadyAddedOrPending = (mobile, carerId) => {
     });
 };
 
-/**
- *
- * @param mobile
- * @param carerId
- * @returns {*}
- */
-const isAlreadyPending = (mobile, carerId) => {
-    return new Promise((resolve, reject) => {
-        Dependent.find({
-                pendingCarers: carerId
-            }).then((dependents) => {
-                dependents.forEach((dependent) => {
-                    if (dependent.mobile === mobile) {
-                        resolve(true);
-                    }
-                });
-                resolve(false);
-        }).catch((err) => {
-            // console.log("error checking whether dependent/carer already added; ", err);
-            resolve(true);
-        })
-    });
-};
-
-/**
- *
- * @param mobile
- * @param carerId
- * @returns {*}
- */
-const isAlreadyAdded = (mobile, carerId) => {
-    return new Promise((resolve, reject) => {
-        Dependent.find({
-                carers: carerId
-            }).then((dependents) => {
-                dependents.forEach((dependent) => {
-                    if (dependent.mobile === mobile) {
-                        resolve(true);
-                    }
-                });
-                resolve(false);
-        }).catch((err) => {
-            // console.log("error checking whether dependent/carer already added; ", err);
-            resolve(true);
-        })
-    });
-};
-
 
 /**
  * Deals with pending carers and dependents based on a carer id and a dependent mobile

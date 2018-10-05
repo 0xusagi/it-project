@@ -145,6 +145,6 @@ public class EditDependentsActivity extends AppCompatActivity {
      * @param locations
      */
     private void storeLocations(List<Location> locations) {
-            this.locations = locations;
-        }
+        this.locations = locations;
+    }
 }

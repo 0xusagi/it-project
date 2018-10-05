@@ -234,7 +234,6 @@ const acceptFriendRequest = (req, res, next) => {
 
 // Get all carers who are in the stage 'pending' for a certain dependent.
 const getPendingCarers = (req, res) => {
-    console.log(req.params.id);
     // Find by id, then get pending carers. find all who are in that range
     return Dependent.findById(req.params.id).exec()
         .then(dependent => {
