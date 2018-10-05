@@ -47,6 +47,10 @@ router.get('/dependent/name/:mobile', dependentIndex.getName);
 
 // Add a location to a dependent
 router.post('/dependent/:id/addLocation', locationIndex.addToDependent);
+
+// Get all locations for a dependent
+router.get('/dependent/:id/locations', locationIndex.getLocationsForDependents);
+
 /**
  * Locations
  */
