@@ -56,13 +56,21 @@ const sendNotification = (req, res, next) => {
                 carers.forEach((carer) => {
                     // Send a message to the device corresponding to the provided
                     // registration token.
+                    var currentdate = new Date();
+                    var datetime = "Last Sync: " + currentdate.getDate() + "/"
+                                    + (currentdate.getMonth()+1)  + "/"
+                                    + currentdate.getFullYear() + " @ "
+                                    + currentdate.getHours() + ":"
+                                    + currentdate.getMinutes() + ":"
+                                    + currentdate.getSeconds();
+
                     var chatMessage = {
                         notification: {
                             title: 'Your Dependent Needs Help',
                             body: 'Your dependent urgently needs help. Tap for more info'
                         },
                         data: {
-                            time: '00:00 1 Jan 2018',
+                            time: datetime.toString(),
                             type: 'help',
                             message: req.body.message.toString(),
                             _id: dependent._id.toString(),
@@ -93,7 +101,7 @@ const sendNotification = (req, res, next) => {
                         });
                       })
                       .catch((err) => {
-                        console.log('Error sending message(s)', error);
+                        console.log('Error sending message(s)', err);
                         return res.status(400).send({
                             error: err,
                             message: "Error sending message(s)",
