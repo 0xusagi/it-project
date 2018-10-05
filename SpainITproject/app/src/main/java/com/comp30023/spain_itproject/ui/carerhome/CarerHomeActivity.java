@@ -41,7 +41,6 @@ public class CarerHomeActivity extends AppCompatActivity {
     // The list of dependents of the carer which contains all information about the dependents
     // to be used when the carer wants to edit the dependent
     private List<DependentUser> dependents;
-
     // Dependents list
     private ListView dependentsList;
     private ArrayAdapter<String> arrayAdapter;
@@ -54,6 +53,7 @@ public class CarerHomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carer_home);
 
@@ -156,7 +156,6 @@ public class CarerHomeActivity extends AppCompatActivity {
     /**
      * Makes a list of the dependent names that a carer has,
      * If carer has none, then display a message
-     * @param carerUser
      * @return
      */
     private void setupList() {

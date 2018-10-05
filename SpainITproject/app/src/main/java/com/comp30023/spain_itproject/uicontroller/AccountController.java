@@ -105,28 +105,17 @@ public class AccountController {
     //CONFIRM
     /**
      * Add a location to a dependent's account
-     * @param dependent The dependent receiving the location
      * @throws BadRequestException If the request could not be completed because of invalid input
      * @throws NoConnectionException If the request could not be completed due to a connection issue
      */
-    public void addLocationToDependent(DependentUser dependent, String googleId, double latitude, double longitude, String displayName)
+    public void addLocationToDependent(String dependentId, String googleId, double latitude, double longitude, String displayName)
             throws Exception {
         checkService();
 
         //Create the call to the server
-        Call<ResponseBody> call = service.addLocationToDependent(dependent.getId(), googleId, latitude, longitude, displayName);
+        Call<ResponseBody> call = service.addLocationToDependent(dependentId, googleId, latitude, longitude, displayName);
 
-        try {
-            //Execute the call to the server
-            Response<ResponseBody> response = call.execute();
-
-            //If unsuccessful, throw an exception with the reason
-            if (!response.isSuccessful()) {
-                throw new Exception(response.message());
-            }
-        } catch (IOException e) {
-            throw new Exception(MESSAGE_SERVER_FAILURE);
-        }
+        executeCallNoResponse(call);
     }
     /**
      * Get a CarerUser from the server

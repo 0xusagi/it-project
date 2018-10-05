@@ -1,29 +1,13 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.akexorcist.googledirection.DirectionCallback;
-import com.akexorcist.googledirection.GoogleDirection;
-import com.akexorcist.googledirection.model.Direction;
-import com.akexorcist.googledirection.model.Info;
-import com.akexorcist.googledirection.model.Leg;
-import com.akexorcist.googledirection.model.Route;
-import com.akexorcist.googledirection.util.DirectionConverter;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.Location;
-import com.comp30023.spain_itproject.ui.CarerMapsActivity;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
-
-import java.util.ArrayList;
 
 //Fragment to be developed for when a journey is started
 //Currently just displays the tag of the location

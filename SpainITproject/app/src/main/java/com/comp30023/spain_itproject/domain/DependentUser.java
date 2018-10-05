@@ -113,7 +113,6 @@ public class DependentUser extends User {
 
     /**
      * Adds a location to a Dependent's list locally and externally
-     * @param location The location to be added
      * @throws Exception Thrown if there is an error when communicating with the server
      */
     public void addLocation(String googleId, double latitude, double longitude, String displayName) throws Exception {
@@ -121,7 +120,7 @@ public class DependentUser extends User {
         //Add location to dependent on the database
         //Throws exception if error occurs
         //If this statement not completed, does not add the location locally
-        AccountController.getInstance().addLocationToDependent(this, googleId, latitude, longitude, displayName);
+        AccountController.getInstance().addLocationToDependent(this.getId(), googleId, latitude, longitude, displayName);
 
         //Add location to dependent locally so consistent
         if (locations == null) {

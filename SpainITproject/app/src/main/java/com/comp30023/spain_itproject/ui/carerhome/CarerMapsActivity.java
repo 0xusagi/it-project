@@ -1,11 +1,8 @@
-package com.comp30023.spain_itproject.ui;
+package com.comp30023.spain_itproject.ui.carerhome;
 
 import android.Manifest;
-import android.accounts.Account;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Looper;
@@ -18,17 +15,8 @@ import android.util.Log;
 
 import android.widget.Toast;
 
-import com.akexorcist.googledirection.DirectionCallback;
-import com.akexorcist.googledirection.GoogleDirection;
-import com.akexorcist.googledirection.model.Direction;
-import com.akexorcist.googledirection.model.Info;
-import com.akexorcist.googledirection.model.Leg;
-import com.akexorcist.googledirection.model.Route;
-import com.akexorcist.googledirection.util.DirectionConverter;
-
 import com.comp30023.spain_itproject.R;
 
-import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,9 +35,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-
-import java.util.ArrayList;
 
 public class CarerMapsActivity extends FragmentActivity
         implements GoogleMap.OnMyLocationButtonClickListener,
@@ -59,15 +44,15 @@ public class CarerMapsActivity extends FragmentActivity
     static public final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
 
-    public static DependentUser getSelectedDependent() {
-        return selectedDependent;
+    public static String getSelectedDependent() {
+        return selectedDependentId;
     }
 
-    public static void setSelectedDependent(DependentUser selectedDependent) {
-        CarerMapsActivity.selectedDependent = selectedDependent;
+    public static void setSelectedDependent(String selectedDependentId) {
+        CarerMapsActivity.selectedDependentId = selectedDependentId;
     }
 
-    private static DependentUser selectedDependent;
+    private static String selectedDependentId;
     private GoogleMap mMap;
     private Location currentLocation;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -125,14 +110,16 @@ public class CarerMapsActivity extends FragmentActivity
 
                         LatLng placeLatLng = place.getLatLng();
 
+
                         AccountController accountController = AccountController.getInstance();
 
                         try {
-                            accountController.addLocationToDependent(selectedDependent, place.getId(), placeLatLng.latitude, placeLatLng.longitude, place.getName().toString());
+                            accountController.addLocationToDependent(selectedDependentId, place.getId(), placeLatLng.latitude, placeLatLng.longitude, place.getName().toString());
 
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Log.i("MapsFragment","From within the task " + place.getId());
 
                                     LatLng placeLatLng = place.getLatLng();
 
@@ -165,7 +152,7 @@ public class CarerMapsActivity extends FragmentActivity
         });
     }
 
-    @Override
+        @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
 
@@ -177,7 +164,11 @@ public class CarerMapsActivity extends FragmentActivity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+            Log.i("MapsFragment", "Permissions checked");
+
             mMap.setMyLocationEnabled(true);
+        }
+        else {
 
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -196,7 +187,7 @@ public class CarerMapsActivity extends FragmentActivity
             Location location = locationResult.getLastLocation();
 
 
-            Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
+            Log.i("MapsFragment", "Location: " + location.getLatitude() + " " + location.getLongitude());
             setCurrentLocation(location);
 
             autocompleteFragment.setBoundsBias(new LatLngBounds(
