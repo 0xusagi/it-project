@@ -1,6 +1,7 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.DisplayHelpRequestActivity;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
@@ -67,6 +69,8 @@ public class DependentHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dependent_home);
 
+        final Context context = this;
+
         fragmentManager = getSupportFragmentManager();
 
         responding = false;
@@ -78,6 +82,13 @@ public class DependentHomeActivity extends AppCompatActivity {
         new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
+        messagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DisplayHelpRequestActivity.class);
+                startActivity(intent);
+            }
+        });
 
         callsButton = (Button) findViewById(R.id.callButton);
         setCallsButtonListener(this);
