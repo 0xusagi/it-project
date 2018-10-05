@@ -107,12 +107,12 @@ const isAlreadyAddedOrPending = (mobile, carerId) => {
                 }
             ]
         }).then((dependents) => {
-            // console.log("dependents", dependents);
-            if (dependents.length > 0) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
+            dependents.forEach((dependent) => {
+                if (dependent.mobile === mobile) {
+                    resolve(true);
+                }
+            });
+            resolve(false);
         }).catch((err) => {
             // console.log("error checking whether dependent/carer already added; ", err);
             resolve(true);
@@ -131,11 +131,12 @@ const isAlreadyPending = (mobile, carerId) => {
         Dependent.find({
                 pendingCarers: carerId
             }).then((dependents) => {
-            if (dependents.length > 0) {
-                resolve(true);
-            } else {
+                dependents.forEach((dependent) => {
+                    if (dependent.mobile === mobile) {
+                        resolve(true);
+                    }
+                });
                 resolve(false);
-            }
         }).catch((err) => {
             // console.log("error checking whether dependent/carer already added; ", err);
             resolve(true);
@@ -154,11 +155,12 @@ const isAlreadyAdded = (mobile, carerId) => {
         Dependent.find({
                 carers: carerId
             }).then((dependents) => {
-            if (dependents.length > 0) {
-                resolve(true);
-            } else {
+                dependents.forEach((dependent) => {
+                    if (dependent.mobile === mobile) {
+                        resolve(true);
+                    }
+                });
                 resolve(false);
-            }
         }).catch((err) => {
             // console.log("error checking whether dependent/carer already added; ", err);
             resolve(true);
