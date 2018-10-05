@@ -56,4 +56,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Editing Dependents activity -->
+    <string name="editDependents_Title">Locations</string>
+    <string name="editDependents_addLocationsButton">Add Locations</string>
 </resources>

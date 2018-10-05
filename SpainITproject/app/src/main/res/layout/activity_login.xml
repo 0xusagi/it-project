@@ -27,11 +27,11 @@
         android:layout_marginStart="16dp"
         android:text="Phone Number:"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/phoneNumberLoginField"
+        app:layout_constraintBottom_toTopOf="@+id/login_phoneNumberLoginField"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/phoneNumberLoginField"
+        android:id="@+id/login_phoneNumberLoginField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -40,7 +40,7 @@
         android:ems="10"
         android:inputType="number"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/pinLoginField"
+        app:layout_constraintBottom_toTopOf="@+id/login_pinLoginField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,11 +53,11 @@
         android:layout_marginStart="16dp"
         android:text="PIN:"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/pinLoginField"
+        app:layout_constraintBottom_toTopOf="@+id/login_pinLoginField"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/pinLoginField"
+        android:id="@+id/login_pinLoginField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -67,14 +67,14 @@
         android:hint="4 Digits"
         android:inputType="numberPassword"
         android:maxLength="4"
-        app:layout_constraintBottom_toTopOf="@+id/loginButton"
+        app:layout_constraintBottom_toTopOf="@+id/login_loginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneNumberLoginField" />
+        app:layout_constraintTop_toBottomOf="@+id/login_phoneNumberLoginField" />
 
     <Button
-        android:id="@+id/cancelButton"
+        android:id="@+id/login_cancelButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -89,7 +89,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/login_loginButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -97,7 +97,7 @@
         android:layout_marginStart="16dp"
         android:text="Login"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/cancelButton"
+        app:layout_constraintBottom_toTopOf="@+id/login_cancelButton"
         app:layout_constraintDimensionRatio="5:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"

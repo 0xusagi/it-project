@@ -49,13 +49,16 @@ router.get('/dependent/name/:mobile', dependentIndex.getName);
 // '/depenedent/:id/getHelp'
 router.post('/dependent/:id/getHelp', notificationController.getHelp);
 
+// Add a location to a dependent
+router.post('/dependent/:id/addLocation', locationIndex.addToDependent);
+
+// Get all locations for a dependent
+router.get('/dependent/:id/locations', locationIndex.getLocationsForDependents);
+
 /**
  * Locations
  */
- // get all locations
-router.get('/locations', locationIndex.getAll);
 // basics; create new, get, update, delete
-router.post('/locations/new', locationIndex.new);
 router.get('/locations/:id', locationIndex.get);
 router.put('/locations/:id', locationIndex.put);
 router.delete('/locations/:id', locationIndex.delete);
