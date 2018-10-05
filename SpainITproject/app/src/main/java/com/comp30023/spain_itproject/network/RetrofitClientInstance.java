@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClientInstance {
 
     //Set BASE_URL to this constant when running the server locally and using an emulator
-    private static final String EMULATOR_URL = "http://10.13.61.209:3000";
+    private static final String EMULATOR_URL = "http://192.168.0.162:3000";
 
     private static Retrofit retrofit;
 

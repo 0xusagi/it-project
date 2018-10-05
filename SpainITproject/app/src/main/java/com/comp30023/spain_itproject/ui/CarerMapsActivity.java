@@ -12,8 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -42,20 +41,18 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity
+public class CarerMapsActivity extends FragmentActivity
         implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback {
 
     static public final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final String TAG = "MainActivity";
 
-
-    private Button directionButton;
     private GoogleMap mMap;
     private Location currentLocation;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -92,9 +89,6 @@ public class MapsActivity extends FragmentActivity
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //directionButton = (Button) findViewById(R.id.directionButton);
-        //setDirectionButtonListener(this);
-
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
@@ -108,7 +102,17 @@ public class MapsActivity extends FragmentActivity
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Log.i(TAG, "Place Selected: " + place.getLatLng());
+
+                LatLng placeLatLng = place.getLatLng();
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng,15));
+                // Zoom in, animating the camera.
+                mMap.animateCamera(CameraUpdateFactory.zoomIn());
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 5000, null);
+
+                mMap.addMarker(new MarkerOptions()
+                        .position(placeLatLng)
+                        .title(place.getName().toString()));
             }
 
             @Override
@@ -176,48 +180,4 @@ public class MapsActivity extends FragmentActivity
         // (the camera animates to the user's current position).
         return false;
     }
-
-    private void setDirectionButtonListener(final Context context) {
-        directionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String serverKey = "AIzaSyAuz2NzVF-uJS1ztPEHjSw1Xq22wVRVOCM";
-
-                double longitude = getCurrentLocation().getLongitude();
-                double latitude = getCurrentLocation().getLatitude();
-                LatLng origin = new LatLng(latitude, longitude);
-                LatLng destination = new LatLng(-37.815238, 144.974881);
-                GoogleDirection.withServerKey(serverKey)
-                        .from(origin)
-                        .to(destination)
-                        .execute(new DirectionCallback() {
-                            @Override
-                            public void onDirectionSuccess(Direction direction, String rawBody) {
-                                Route route = direction.getRouteList().get(0);
-                                Leg leg = route.getLegList().get(0);
-
-                                Info distanceInfo = leg.getDistance();
-                                Info durationInfo = leg.getDuration();
-                                String distance = distanceInfo.getText();
-                                String duration = durationInfo.getText();
-
-                                Toast.makeText(MapsActivity.this, "Distance = "
-                                        + distance + ". This will take approx. " + duration,
-                                        Toast.LENGTH_LONG).show();
-
-                                ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-                                PolylineOptions polylineOptions = DirectionConverter.createPolyline( context, directionPositionList, 5, Color.RED);
-                                mMap.addPolyline(polylineOptions);
-
-                            }
-
-                            @Override
-                            public void onDirectionFailure(Throwable t) {
-                                // Do something here
-                            }
-                        });
-            }
-        });
-    }
-
 }

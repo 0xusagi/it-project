@@ -161,14 +161,18 @@ public class CarerHomeActivity extends AppCompatActivity {
             dependentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String[] options = {"Call", "Message", "Add Dependent"};
+                    String[] options = {"Call", "Message", "Add Location"};
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
                     builder.setTitle("Choose");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // the user clicked on options[which]
+                            // If user clicks 'Add Location'.
+                            if (which == 2) {
+                                Intent intent = new Intent(CarerHomeActivity.this, CarerMapsActivity.class);
+                                startActivity(intent);
+                            }
                         }
                     });
                     builder.show();

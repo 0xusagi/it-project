@@ -56,7 +56,7 @@
             android:value="AIzaSyAuz2NzVF-uJS1ztPEHjSw1Xq22wVRVOCM" />
 
         <activity
-            android:name=".ui.MapsActivity"
+            android:name=".ui.CarerMapsActivity"
             android:label="@string/title_activity_maps"></activity>
     </application>
 
