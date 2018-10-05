@@ -134,6 +134,29 @@ const isAlreadyPending = (mobile, carerId) => {
                 dependents.forEach((dependent) => {
                     if (dependent.mobile === mobile) {
                         resolve(true);
+
+const addDependentToCarer = (req, res, next) => {
+    const options = {new: true};
+    const carerId = req.params.id;
+    const mobile = req.body.mobile;
+    const response = Dependent.find({mobile: mobile}, (err, dependents) => {
+        // Could not find dependent's mobile number in the database.
+        if (err || dependents.length === 0) {
+            return res.status(400).send({message: 'Dependent not found in database.'})
+        }
+        // Mobile number found, finding the carer and adding it to their list first
+        return Carer.findOneAndUpdate(carerId,
+            { $push: { dependents: dependents[0]._id } }, options,
+            (err, carer) => {
+                if (err) {
+                    return res.status(400).send(err);
+                }
+                // Add carer to list of pending carers for dependent
+                dependents[0].pendingCarers.push(carer);
+
+                return dependents[0].save((err, dependent) => {
+                    if (err) {
+                        return res.status(400).send(err);
                     }
                 });
                 resolve(false);
@@ -159,6 +182,7 @@ const isAlreadyAdded = (mobile, carerId) => {
                     if (dependent.mobile === mobile) {
                         resolve(true);
                     }
+                    return res.status(200).send({name: dependents[0].name});
                 });
                 resolve(false);
         }).catch((err) => {
