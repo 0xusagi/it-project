@@ -1,22 +1,18 @@
-package com.comp30023.spain_itproject.ui;
+package com.comp30023.spain_itproject.ui.carerhome;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
-
-import java.io.IOException;
 
 public class AddDependentActivity extends AppCompatActivity {
 
@@ -146,6 +142,7 @@ public class AddDependentActivity extends AppCompatActivity {
                  return true;
 
              } catch (Exception e) {
+                 e.printStackTrace();
                  exception = e;
                  return false;
              }
