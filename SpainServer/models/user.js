@@ -34,8 +34,7 @@ export const User = mongoose.model('user', userSchema);
 const dependentSchema = new mongoose.Schema({
     pendingCarers: [Array],
     carers: [Array],
-    homeLocation: locationSchema,
-    destinations: [locationSchema]
+    locations: [String]
 }, options);
 
 const carerSchema = new mongoose.Schema({

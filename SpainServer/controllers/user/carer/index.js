@@ -76,29 +76,27 @@ const addDependentToCarer = (req, res, next) => {
     const options = {new: true};
     const carerId = req.params.id;
     const mobile = req.body.mobile;
-    const response = Dependent.find({mobile: mobile}, (err, dependent) => {
+    const response = Dependent.find({mobile: mobile}, (err, dependents) => {
         // Could not find dependent's mobile number in the database.
-        if (err || !dependent) {
+        if (err || dependents.length === 0) {
             return res.status(400).send({message: 'Dependent not found in database.'})
         }
-        console.log(dependent);
         // Mobile number found, finding the carer and adding it to their list first
         return Carer.findOneAndUpdate(carerId,
-            { $push: { dependents: dependent._id } }, options,
+            { $push: { dependents: dependents[0]._id } }, options,
             (err, carer) => {
-                console.log(carer);
                 if (err) {
                     return res.status(400).send(err);
                 }
                 // Add carer to list of pending carers for dependent
-                dependent.pendingCarers.push(carer);
+                dependents[0].pendingCarers.push(carer);
 
-                return dependent.save((err, dependent) => {
+                return dependents[0].save((err, dependent) => {
                     if (err) {
                         return res.status(400).send(err);
                     }
 
-                    return res.status(200).send({name: dependent.name});
+                    return res.status(200).send({name: dependents[0].name});
                 });
             })
     });
