@@ -81,7 +81,7 @@ const sendNotification = (req, res, next) => {
                         },
                         token: carer.firebaseToken
                     };
-                    admin.messaging().send(cloneOfMessage)
+                    admin.messaging().send(chatMessage)
                       .then((response) => {
                         // Response is a message ID string.
                         console.log('Successfully sent a message: ', response);
