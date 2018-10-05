@@ -45,6 +45,7 @@ router.put('/dependents/:id/addCarer', dependentIndex.addCarer);
 // get a dependent's name by mobile number
 router.get('/dependent/name/:mobile', dependentIndex.getName);
 
+// Add a location to a dependent
 router.post('/dependent/:id/addLocation', locationIndex.addToDependent);
 /**
  * Locations
@@ -53,7 +54,6 @@ router.post('/dependent/:id/addLocation', locationIndex.addToDependent);
 router.get('/locations', locationIndex.getAll);
 
 // basics; create new, get, update, delete
-router.post('/locations/new', locationIndex.new);
 router.get('/locations/:id', locationIndex.get);
 router.put('/locations/:id', locationIndex.put);
 router.delete('/locations/:id', locationIndex.delete);
