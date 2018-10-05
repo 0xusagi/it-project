@@ -15,8 +15,6 @@ const router = express.Router();
 router.post('/users/new', registrationController.new);
 router.post('/user/login', loginController.login);
 
-router.get('/send/notification', notificationController.send);
-
 /**
  * Carers
  */
@@ -49,7 +47,7 @@ router.get('/dependent/:id/carers/pending', dependentIndex.getPending);
 router.get('/dependent/name/:mobile', dependentIndex.getName);
 
 // '/depenedent/:id/getHelp'
-router.post('/dependent/:id/getHelp', notificationController.dependentHelp);
+router.post('/dependent/:id/getHelp', notificationController.getHelp);
 
 /**
  * Locations

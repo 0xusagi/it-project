@@ -1,4 +1,6 @@
 import * as admin from 'firebase-admin';
+import { Carer } from "../../models/user";
+import { Dependent } from "../../models/user";
 
 var serviceAccount = require('../../config/spain-a0ca5-firebase-adminsdk-feod7-242ceecc87.json');
 
@@ -42,14 +44,21 @@ const sendNotification = (req, res, next) => {
     // first, find the dependent with specified id, then send message to all their carers
     const response = Dependent.findById(req.params.id).exec()
         .then((dependent) => {
+            console.log('Found dependent: ', dependent);
             return Carer.find({'_id': { $in: dependent.carers }}, (err, carers) => {
+                console.log('Found carers: ', carers);
+                if (carers.length === 0) {
+                    return res.status(400).json({
+                        message: "Sorry, this dependent has no carers."
+                    });
+                }
                 // now we have their carers
                 carers.forEach((carer) => {
                     // Send a message to the device corresponding to the provided
                     // registration token.
                     let cloneOfMessage = JSON.parse(JSON.stringify(exampleChatMessage));
                     cloneOfMessage.token = carer.firebaseToken;
-                    admin.messaging().send(exampleChatMessage)
+                    admin.messaging().send(cloneOfMessage)
                       .then((response) => {
                         // Response is a message ID string.
                         console.log('Successfully sent a message: ', response);
@@ -79,5 +88,5 @@ const sendNotification = (req, res, next) => {
 }
 
 export const notificationController = {
-    send: sendNotification
+    getHelp: sendNotification
 };
