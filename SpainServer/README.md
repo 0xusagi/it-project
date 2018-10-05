@@ -12,3 +12,7 @@ run the server using `yarn nodemon-babel` or `npm run nodemon-babel`
 './views' - provides templates which are rendered and served by our routes
 './tests' - self explanatory
 './middlewares' - express js middelwares that process requests before handing them to the routes (controllers)
+
+# Deploying to heroku
+If you're on the master branch:
+git subtree push --prefix SpainServer heroku master
