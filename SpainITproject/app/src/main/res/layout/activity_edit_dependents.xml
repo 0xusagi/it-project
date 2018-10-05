@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.carerhome.EditDependentsActivity">
+
+    <TextView
+        android:id="@+id/editDependents_title"
+        android:layout_width="383dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/editDependents_Title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/editDependents_locationsList"
+        android:layout_width="386dp"
+        android:layout_height="447dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="12dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/editDependents_addLocationsButton"
+        app:layout_constraintTop_toBottomOf="@+id/editDependents_title"
+        tools:layout_editor_absoluteX="0dp"></ListView>
+
+    <Button
+        android:id="@+id/editDependents_addLocationsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/editDependents_addLocationsButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+</android.support.constraint.ConstraintLayout>

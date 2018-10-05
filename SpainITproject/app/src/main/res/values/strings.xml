@@ -57,4 +57,10 @@
         completions."
     </string>
     <string name="title_activity_maps">Map</string>
+
+
+    <!-- Editing Dependents activity -->
+    <string name="editDependents_Title">Locations</string>
+    <string name="editDependents_addLocationsButton">Add Locations</string>
+>>>>>>> master
 </resources>
