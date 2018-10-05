@@ -32,14 +32,17 @@ public interface AccountService {
                             @Field("name") String name,
                             @Field("mobile") String phoneNumber,
                             @Field("password") String pin,
-                            @Field("userType") String userType);
-
+                            @Field("userType") String userType,
+                            @Field("firebaseToken") String firebaseToken
+    );
 
     @FormUrlEncoded
     @POST("/user/login")
     Call<UserModel> loginUser(
                             @Field("mobile") String phoneNumber,
-                            @Field("password") String pin);
+                            @Field("password") String pin,
+                            @Field("firebaseToken") String firebaseToken
+    );
 
 
     @GET("/carers/{id}")
@@ -98,6 +101,21 @@ public interface AccountService {
     @GET("/dependents/{id}/pendingCarers")
     Call<List<CarerUser>> getPendingCarersOfDependent(
             @Path("id") String id
+    );
+
+    //CONFIRM
+    @FormUrlEncoded
+    @PUT("/dependents/{id}/")
+    Call<ResponseBody> updateDependentToken(
+            @Path("id") String id,
+            @Field("firebaseToken") String token
+    );
+
+    @FormUrlEncoded
+    @PUT("/carers/{id}/")
+    Call<ResponseBody> updateCarerToken(
+            @Path("id") String id,
+            @Field("firebaseToken") String token
     );
 
 }

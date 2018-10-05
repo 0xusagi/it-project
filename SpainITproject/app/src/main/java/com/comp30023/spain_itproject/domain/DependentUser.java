@@ -57,6 +57,10 @@ public class DependentUser extends User {
      */
     public List<CarerUser> getCarers() throws Exception {
 
+        if (confirmedCarers == null) {
+            confirmedCarers = new ArrayList<CarerUser>();
+        }
+
         //If carers have yet to be retrieved from the server, retrieve them
         if (!carers.isEmpty()) {
 

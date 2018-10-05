@@ -20,7 +20,7 @@ const newUserFromType = (data) => {
             mobile: data.mobile,
             name: data.name,
             password: hash,
-            firebaseToken: data.firebaseToken,
+            firebaseToken: data.firebaseToken
         });
     } else if (data.userType === 'Carer') {
         return new Carer({

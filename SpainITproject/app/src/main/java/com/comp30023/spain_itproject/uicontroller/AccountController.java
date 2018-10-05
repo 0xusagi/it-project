@@ -50,14 +50,15 @@ public class AccountController {
      * @throws BadRequestException If the request could not be completed because of invalid input
      * @throws NoConnectionException If the request could not be completed due to a connection issue
      */
-    public User registerAccount(String name, String phoneNumber, String pin, Boolean isDependent)
+    public User registerAccount(String name, String phoneNumber, String pin, Boolean isDependent, String token)
             throws BadRequestException, NoConnectionException {
+
         checkService();
 
         String userType = isDependent ? AccountService.USERTYPE_DEPENDENT : AccountService.USERTYPE_CARER;
 
         //Create the call to the server
-        Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType);
+        Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType, token);
 
         UserModel userModel = executeCallReturnResponse(call);
         User user;
@@ -80,12 +81,12 @@ public class AccountController {
      * @throws BadRequestException If the request could not be completed because of invalid input
      * @throws NoConnectionException If the request could not be completed due to a connection issue
      */
-    public Pair<String, Boolean> login(String phoneNumber, String pin)
+    public Pair<String, Boolean> login(String phoneNumber, String pin, String token)
             throws BadRequestException, NoConnectionException {
         checkService();
 
         //Create the call to the server
-        Call<UserModel> call = service.loginUser(phoneNumber, pin);
+        Call<UserModel> call = service.loginUser(phoneNumber, pin, token);
 
         UserModel response = executeCallReturnResponse(call);
 
@@ -323,6 +324,31 @@ public class AccountController {
 
         } catch (IOException e) {
             throw new NoConnectionException();
+        }
+    }
+
+    /**
+     * Update the users token on the server
+     * @param token The new token
+     */
+    public void updateToken(String userId, boolean isDependent, String token) {
+
+        checkService();
+
+        Call<ResponseBody> call;
+
+        if (isDependent) {
+            call = service.updateDependentToken(userId, token);
+        } else {
+            call = service.updateCarerToken(userId, token);
+        }
+
+        try {
+            Response<ResponseBody> response = call.execute();
+
+        } catch (IOException e) {
+            // TODO If this update fails, should the app close or log out?
+            e.printStackTrace();
         }
     }
 }

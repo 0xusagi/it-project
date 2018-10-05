@@ -45,13 +45,18 @@ router.get('/dependent/:id/carers/pending', dependentIndex.getPending);
 // get a dependent's name by mobile number
 router.get('/dependent/name/:mobile', dependentIndex.getName);
 
+// Add a location to a dependent
+router.post('/dependent/:id/addLocation', locationIndex.addToDependent);
+
+// Get all locations for a dependent
+router.get('/dependent/:id/locations', locationIndex.getLocationsForDependents);
+
 /**
  * Locations
  */
  // get all locations
 router.get('/locations', locationIndex.getAll);
 // basics; create new, get, update, delete
-router.post('/locations/new', locationIndex.new);
 router.get('/locations/:id', locationIndex.get);
 router.put('/locations/:id', locationIndex.put);
 router.delete('/locations/:id', locationIndex.delete);
