@@ -1,41 +1,5 @@
 import { Location } from "../../models/location";
-
-/**
- * Create a new location in the mongo database from client-supplied parameters and
- * return a response if successful.
- * @param req
- * @param res
- * @param next
- */
-const newLocation = (req, res, next) => {
-    const newLocation = new Location({
-        // firstly, the required fields:
-        lat: req.body.lat,
-        long: req.body.long,
-        displayName: req.body.displayName,
-        // all other optional fields
-        addressLine1: req.body.addressLine1,
-        addressLine2: req.body.addressLine2,
-        postcode: req.body.postcode,
-        state: req.body.state,
-        description: req.body.description,
-        imageUrl: req.body.imageUrl,
-        popularity: req.body.popularity
-    });
-
-    if (newLocation === false) {
-        return res.status(400).json({message: "User Error (Wrong user type inputted)"});
-    }
-
-    const response = newLocation.save((error, location) => {
-        if (error) {
-            return res.status(400).json(error);
-        }
-        return res.status(201).json(location);
-    });
-
-    return response;
-};
+import {Dependent} from "../../models/user";
 
 const getAllLocations = (req, res, next) => {
     let response = Location.find({}, (err, locations) => {
@@ -81,10 +45,26 @@ const deleteLocation = (req, res, next) => {
     return response;
 };
 
+const addLocationToDependent = (location, dependentId) => {
+    return Dependent.findByIdAndUpdate(dependentId, {$push: {locations: location._id}}, {new: true})
+};
+
+/**
+ * Add locations to a dependent
+ * @param req
+ * @param res
+ */
+const addToDependent = (req, res) => {
+    return Location.create(req.body)
+        .then(location => addLocationToDependent(location, req.params.id))
+        .then(updatedDependent => res.status(200).json(updatedDependent))
+        .catch(err => res.status(500).send({message: 'Server Error.'}));
+};
+
 export const locationIndex = {
-    new: newLocation,
     get: getLocation,
     getAll: getAllLocations,
     put: updateLocation,
-    delete: deleteLocation
+    delete: deleteLocation,
+    addToDependent: addToDependent
 };

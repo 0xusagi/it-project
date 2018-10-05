@@ -1,4 +1,5 @@
 import {Carer, Dependent} from "../../models/user";
+import {User} from "../../models/user";
 import bcrypt from 'bcryptjs';
 
 /**
@@ -30,6 +31,7 @@ const newUserFromType = (data) => {
         return false;
     }
 };
+
 /**
  * Create a new user in the mongo database from client-supplied parameters and
  * return a response if successful.
@@ -39,11 +41,6 @@ const newUserFromType = (data) => {
  */
 const newUser = (req, res, next) => {
     const newUser = newUserFromType(req.body);
-
-    // console.log(newUser);
-    if (newUser === false) {
-        return res.status(400).json({message: "User Error (Wrong user type inputted)"});
-    }
 
     const response = newUser.save((error, user) => {
         if (error) {
