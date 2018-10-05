@@ -13,6 +13,10 @@ run the server using `yarn nodemon-babel` or `npm run nodemon-babel`
 './tests' - self explanatory
 './middlewares' - express js middelwares that process requests before handing them to the routes (controllers)
 
-# Deploying to heroku
+## Deploying to heroku
 If you're on the master branch:
 git subtree push --prefix SpainServer heroku master
+
+To login to heroku, cd into the Spain repo and run heroku login
+To see a log of heroku (if something went wrong in deployment), run 
+heroku logs
