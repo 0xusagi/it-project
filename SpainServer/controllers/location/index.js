@@ -83,7 +83,7 @@ const deleteLocation = (req, res, next) => {
 };
 
 const addLocationToDependent = (location, dependentId) => {
-    return Dependent.findByIdAndUpdate(dependentId, {$push: {locations: location}})
+    return Dependent.findByIdAndUpdate(dependentId, {$push: {locations: location}}, {new: true})
 };
 
 /**
@@ -94,6 +94,7 @@ const addLocationToDependent = (location, dependentId) => {
 const addToDependent = (req, res) => {
     return Location.create(req.body)
         .then(location => addLocationToDependent(location, req.params.id))
+        .then(newLocation => res.status(200).send(newLocation))
         .catch(err => res.status(500).send({message: 'Server Error.'}));
 };
 
