@@ -112,7 +112,7 @@ public class DependentHomeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 ViewGroup group = (ViewGroup) getWindow().getDecorView().getRootView();
-                helpWindow = new HelpPopupWindow(context, group);
+                helpWindow = new HelpPopupWindow(context, user, group);
 
                 //Show at centre of screen
                 helpWindow.showAtLocation(drawerLayout, Gravity.CENTER, 0, 0);

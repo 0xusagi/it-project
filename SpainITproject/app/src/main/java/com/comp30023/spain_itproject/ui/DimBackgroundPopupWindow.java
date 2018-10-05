@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.ui.dependenthome;
+package com.comp30023.spain_itproject.ui;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;

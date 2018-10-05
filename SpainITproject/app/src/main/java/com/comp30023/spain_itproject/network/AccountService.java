@@ -121,7 +121,7 @@ public interface AccountService {
 
     //CONFIRM
     @FormUrlEncoded
-    @POST("/dependents/{id}/requestHelp")
+    @POST("/dependent/{id}/getHelp")
     Call<ResponseBody> requestHelp(
             @Path("id") String id,
             @Field(MyFirebaseMessagingService.DATA_MESSAGE_BODY) String message

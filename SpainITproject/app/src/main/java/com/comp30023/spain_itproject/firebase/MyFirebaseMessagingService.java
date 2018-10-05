@@ -1,9 +1,18 @@
 package com.comp30023.spain_itproject.firebase;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.NotificationCompat;
 
+import com.comp30023.spain_itproject.HelpRequestActivity;
+import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -23,6 +32,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String MESSAGE_TYPE_CHAT = "chat";
     public static final String MESSAGE_TYPE_HELP = "help";
+
+    public static final String EXTRA_MESSAGE = "MESSAGE";
 
     public static MyFirebaseMessagingService getInstance() {
 
@@ -81,20 +92,53 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         DataMessage message;
 
+        System.out.println("Message type: " + type);
+        System.out.println("Sender id: " + senderId);
+        System.out.println("Sender name: " + senderName);
+        System.out.println("Message: " + body);
+
+        /*Class classType;
+
         switch (type) {
             case MESSAGE_TYPE_CHAT:
                 message = new ChatDataMessage(senderId, senderName, body);
+                classType = null;
+
                 break;
             case MESSAGE_TYPE_HELP:
                 message = new HelpDataMessage(senderId, senderName, body);
+                classType = HelpRequestActivity.class;
+
                 break;
             default:
                 message = null;
+                classType = null;
                 break;
         }
 
         if (message != null) {
-            message.handle(this);
-        }
+
+            Intent intent = new Intent(this, classType);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            intent.putExtra(EXTRA_MESSAGE, message);
+
+            int uniqueInt = (int) System.currentTimeMillis() & 0xff);
+
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), uniqueInt, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+            notificationBuilder.setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent);
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, notificationBuilder.build());
+
+
+            message.handle(getApplicationContext());
+        }*/
     }
 }
