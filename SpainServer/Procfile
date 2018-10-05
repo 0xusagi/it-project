@@ -1,2 +1,0 @@
-web: yarn run babel-node app.js --presets es2015 NODE_ENV=dev
-

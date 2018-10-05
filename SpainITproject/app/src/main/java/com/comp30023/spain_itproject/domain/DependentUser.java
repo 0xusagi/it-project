@@ -43,7 +43,7 @@ public class DependentUser extends User {
         }
 
         //If locations have yet to be retrieved from server, retrieve them
-        if (!locationIds.isEmpty()) {
+        if (locationIds != null && !locationIds.isEmpty()) {
             locations = AccountController.getInstance().getLocationsOfDependent(this);
             locationIds.clear();
         }
