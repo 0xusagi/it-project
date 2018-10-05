@@ -100,19 +100,19 @@ const isAlreadyAddedOrPending = (mobile, carerId) => {
     return new Promise((resolve, reject) => {
         Dependent.find({
             $or: [{
-                    carers: carerId
-                },
+                carers: carerId
+            },
                 {
                     pendingCarers: carerId
                 }
             ]
         }).then((dependents) => {
-            dependents.forEach((dependent) => {
-                if (dependent.mobile === mobile) {
-                    resolve(true);
-                }
-            });
-            resolve(false);
+            // console.log("dependents", dependents);
+            if (dependents.length > 0) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
         }).catch((err) => {
             // console.log("error checking whether dependent/carer already added; ", err);
             resolve(true);
@@ -137,32 +137,32 @@ const sendFriendRequest = (req, res, next) => {
     // console.log("carerId", carerId);
     let mobile = req.body.mobile;
     let response = Dependent.find({
-            mobile: mobile
-        }).exec()
+        mobile: mobile
+    }).exec()
         .then(function(dependents) {
-        // use doc
-        // console.log("dependents[0]", dependents[0]);
-        if (dependents.length === 0) {
-            return res.status(400).send({
-                message: 'Dependent not found in database.'
-            });
-        }
-        // console.log("carerId", carerId);
-
-        // Firstly check whether the carer exists
-        Carer.findById(carerId).exec()
-            .then((carer) => {
-            // do nothing
-            })
-            .catch((err) => {
+            // use doc
+            // console.log("dependents[0]", dependents[0]);
+            if (dependents.length === 0) {
                 return res.status(400).send({
-                    message: 'Carer not found in database.'
+                    message: 'Dependent not found in database.'
                 });
-                console.log("error finding carer:", err);
-            });
+            }
+            // console.log("carerId", carerId);
 
-        // Then check if the mobile has already been added by this carer before.
-        isAlreadyAddedOrPending(mobile, carerId).then((check) => {
+            // Firstly check whether the carer exists
+            Carer.findById(carerId).exec()
+                .then((carer) => {
+                    // do nothing
+                })
+                .catch((err) => {
+                    return res.status(400).send({
+                        message: 'Carer not found in database.'
+                    });
+                    console.log("error finding carer:", err);
+                });
+
+            // Then check if the mobile has already been added by this carer before.
+            isAlreadyAddedOrPending(mobile, carerId).then((check) => {
                 // if so, return 400 already sent request
 
                 // console.log("check", check);
@@ -173,24 +173,24 @@ const sendFriendRequest = (req, res, next) => {
                 } else {
                     // console.log("searching for carer: ", carerId);
                     return Carer.findOneAndUpdate({
-                            _id: carerId
-                        }, {
-                            $push: {
-                                pendingDependents: dependents[0]._id
-                            }
-                        }, options)
+                        _id: carerId
+                    }, {
+                        $push: {
+                            pendingDependents: dependents[0]._id
+                        }
+                    }, options)
                         .then((carer) => {
                             // console.log("carer", carer);
                             // Add carer to list of pending carers for dependent
                             dependents[0].pendingCarers.push(carer._id);
 
                             return dependents[0].save().then((dependent) => {
-                                    // console.log("saving dependent: ", dependent);
-                                    return res.status(200).send({
-                                        message: "Friend request sent",
-                                        name: dependent.name
-                                    });
-                                })
+                                // console.log("saving dependent: ", dependent);
+                                return res.status(200).send({
+                                    message: "Friend request sent",
+                                    name: dependent.name
+                                });
+                            })
                                 .catch((err) => {
                                     return res.status(400).send(err);
                                 });
@@ -200,15 +200,15 @@ const sendFriendRequest = (req, res, next) => {
                         });
                 }
             })
-            .catch((err) => {
-                console.log(err);
-            });
-    }).catch((err) => {
-        console.log("err", err);
-        return res.status(500).send({
-            message: 'Internal server error.'
-        })
-    });
+                .catch((err) => {
+                    console.log(err);
+                });
+        }).catch((err) => {
+            console.log("err", err);
+            return res.status(500).send({
+                message: 'Internal server error.'
+            })
+        });
     return response;
 };
 
