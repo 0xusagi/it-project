@@ -54,8 +54,6 @@ router.get('/dependent/:id/locations', locationIndex.getLocationsForDependents);
 /**
  * Locations
  */
- // get all locations
-router.get('/locations', locationIndex.getAll);
 // basics; create new, get, update, delete
 router.get('/locations/:id', locationIndex.get);
 router.put('/locations/:id', locationIndex.put);
