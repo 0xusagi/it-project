@@ -52,6 +52,8 @@ const sendNotification = (req, res, next) => {
                         message: "Sorry, this dependent has no carers."
                     });
                 }
+                var carerIdsArray = [];
+                var failedToSendArray = [];
                 // now we have their carers
                 carers.forEach((carer) => {
                     // Send a message to the device corresponding to the provided
@@ -93,23 +95,20 @@ const sendNotification = (req, res, next) => {
                       .then((response) => {
                         // Response is a message ID string.
                         console.log('Successfully sent a message: ', response);
-                        return res.status(200).send({
-                            response: response,
-                            depId: dependent._id,
-                            message: "Sent message to carer",
-                            carerId: carer._id
-                        });
+                        carerIdsArray.push(carer._id);
                       })
                       .catch((err) => {
                         console.log('Error sending message(s)', err);
-                        return res.status(400).send({
-                            error: err,
-                            message: "Error sending message(s)",
-                            carerId: carer._id
-                        });
+                        failedToSendArray.push(carer._id);
                       });
                 })
-                return res.status(200).json(carers);
+                return res.status(200).send({
+                    response: response,
+                    depId: dependent._id,
+                    message: "Sent messages to carers",
+                    carerId: carerIdsArray,
+                    failedMessages: failedToSendArray
+                });
             });
         }).catch((err) => {
             console.log('error: ', err);
