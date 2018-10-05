@@ -1,10 +1,13 @@
 package com.comp30023.spain_itproject.ui;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +28,8 @@ import com.akexorcist.googledirection.util.DirectionConverter;
 
 import com.comp30023.spain_itproject.R;
 
+import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -53,6 +58,16 @@ public class CarerMapsActivity extends FragmentActivity
 
     static public final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
+
+    public static DependentUser getSelectedDependent() {
+        return selectedDependent;
+    }
+
+    public static void setSelectedDependent(DependentUser selectedDependent) {
+        CarerMapsActivity.selectedDependent = selectedDependent;
+    }
+
+    private static DependentUser selectedDependent;
     private GoogleMap mMap;
     private Location currentLocation;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -101,18 +116,47 @@ public class CarerMapsActivity extends FragmentActivity
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public void onPlaceSelected(Place place) {
+            public void onPlaceSelected(final Place place) {
 
-                LatLng placeLatLng = place.getLatLng();
+                @SuppressLint("StaticFieldLeak")
+                AsyncTask task = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng,15));
-                // Zoom in, animating the camera.
-                mMap.animateCamera(CameraUpdateFactory.zoomIn());
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 5000, null);
+                        LatLng placeLatLng = place.getLatLng();
 
-                mMap.addMarker(new MarkerOptions()
-                        .position(placeLatLng)
-                        .title(place.getName().toString()));
+                        AccountController accountController = AccountController.getInstance();
+
+                        try {
+                            accountController.addLocationToDependent(selectedDependent, place.getId(), placeLatLng.latitude, placeLatLng.longitude, place.getName().toString());
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    LatLng placeLatLng = place.getLatLng();
+
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng,15));
+                                    // Zoom in, animating the camera.
+                                    mMap.animateCamera(CameraUpdateFactory.zoomIn());
+                                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 5000, null);
+
+                                    mMap.addMarker(new MarkerOptions()
+                                            .position(placeLatLng)
+                                            .title(place.getName().toString()));
+                                }
+                            });
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        return null;
+                    }
+
+                };
+                task.execute();
+
             }
 
             @Override

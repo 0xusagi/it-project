@@ -162,14 +162,14 @@ public class AccountController {
     /**
      * Add a location to a dependent's account
      * @param dependent The dependent receiving the location
-     * @param location The location to be added
      * @throws Exception Thrown with a message if there is no contact made with the server or if unsuccessful response
      */
-    public void addLocationToDependent(DependentUser dependent, Location location) throws Exception {
+    public void addLocationToDependent(DependentUser dependent, String googleId, double latitude, double longitude, String displayName)
+            throws Exception {
         checkService();
 
         //Create the call to the server
-        Call<ResponseBody> call = service.addLocationToDependent(dependent.getId(), location);
+        Call<ResponseBody> call = service.addLocationToDependent(dependent.getId(), googleId, latitude, longitude, displayName);
 
         try {
             //Execute the call to the server

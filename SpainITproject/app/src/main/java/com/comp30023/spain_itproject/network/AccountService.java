@@ -60,9 +60,8 @@ public interface AccountService {
     @POST("dependents/{id}/locations/new")
     Call<ResponseBody> addLocationToDependent(
                             @Path("id") String dependentId,
-                            @Field("GoogleId") String PlaceId,
-                            @Field("Latitude") double Latitude,
-                            @Field("Longitude") double Longitude,
-                            @Field("DisplayName") String DisplayName);
-
+                            @Field("GoogleId") String googleId,
+                            @Field("Latitude") double latitude,
+                            @Field("Longitude") double longitude,
+                            @Field("DisplayName") String displayName);
 }

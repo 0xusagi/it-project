@@ -135,7 +135,7 @@ public class CarerHomeActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<DependentUser> dependentUsers) {
+        protected void onPostExecute(final ArrayList<DependentUser> dependentUsers) {
             // TODO Handle null request
             // If there are no dependentUsers, then print an error messaeg
             if (dependentUsers == null) {
@@ -172,6 +172,7 @@ public class CarerHomeActivity extends AppCompatActivity {
                             if (which == 2) {
                                 Intent intent = new Intent(CarerHomeActivity.this, CarerMapsActivity.class);
                                 startActivity(intent);
+                                CarerMapsActivity.setSelectedDependent(new DependentUser("Dick", "0412008113", "1234", "1234"));
                             }
                         }
                     });
