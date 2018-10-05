@@ -15,12 +15,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static MyFirebaseMessagingService instance;
 
-    public static final String DATA_MESSAGE_ID = "";
-    public static final String DATA_MESSAGE_BODY = "";
-    public static final String DATA_MESAGE_TYPE = "";
-    public static final String DATA_MESSAGE_TIME = "";
+    public static final String DATA_MESSAGE_ID = "_id";
+    public static final String DATA_MESSAGE_NAME = "name";
+    public static final String DATA_MESSAGE_BODY = "message";
+    public static final String DATA_MESAGE_TYPE = "type";
+    public static final String DATA_MESSAGE_TIME = "time";
 
-    public static final String MESSAGE_TYPE_CHAT = "";
+    public static final String MESSAGE_TYPE_CHAT = "chat";
     public static final String MESSAGE_TYPE_HELP = "help";
 
     public static MyFirebaseMessagingService getInstance() {
@@ -56,10 +57,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String type = data.getString(DATA_MESAGE_TYPE);
         String senderId = data.getString(DATA_MESSAGE_ID);
+        String senderName = data.getString(DATA_MESSAGE_NAME);
         String message = data.getString(DATA_MESSAGE_BODY);
 
         if (type != null) {
-            startHandling(type, senderId, message);
+            startHandling(type, senderId, senderName, message);
         }
     }
 
@@ -67,23 +69,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String type = data.get(DATA_MESAGE_TYPE);
         String senderId = data.get(DATA_MESSAGE_ID);
+        String senderName = data.get(DATA_MESSAGE_NAME);
         String body = data.get(DATA_MESSAGE_BODY);
 
         if (type != null) {
-            startHandling(type, senderId, body);
+            startHandling(type, senderId, senderName, body);
         }
     }
 
-    private void startHandling(String type, String senderId, String body) {
+    private void startHandling(String type, String senderId, String senderName, String body) {
 
         DataMessage message;
 
         switch (type) {
             case MESSAGE_TYPE_CHAT:
-                message = new ChatDataMessage(senderId, body);
+                message = new ChatDataMessage(senderId, senderName, body);
                 break;
             case MESSAGE_TYPE_HELP:
-                message = new HelpDataMessage(senderId, body);
+                message = new HelpDataMessage(senderId, senderName, body);
                 break;
             default:
                 message = null;

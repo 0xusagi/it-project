@@ -7,8 +7,8 @@ import com.comp30023.spain_itproject.HelpRequestActivity;
 
 public class HelpDataMessage extends DataMessage {
 
-    public HelpDataMessage(String senderId, String messageBody) {
-        super(senderId, messageBody);
+    public HelpDataMessage(String senderId, String senderName, String messageBody) {
+        super(senderId, senderName, messageBody);
     }
 
     @Override

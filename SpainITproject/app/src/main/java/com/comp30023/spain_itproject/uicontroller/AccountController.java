@@ -351,4 +351,14 @@ public class AccountController {
             e.printStackTrace();
         }
     }
+
+    public void sendHelpRequest(DependentUser requester, String message)
+            throws BadRequestException, NoConnectionException {
+
+        checkService();
+
+        Call<ResponseBody> call = service.requestHelp(requester.getId(), message);
+
+        executeCallNoResponse(call);
+    }
 }
