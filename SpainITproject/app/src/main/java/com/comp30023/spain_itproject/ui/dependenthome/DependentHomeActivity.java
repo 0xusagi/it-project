@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.comp30023.spain_itproject.DisplayHelpRequestActivity;
+import com.comp30023.spain_itproject.ui.DisplayHelpRequestActivity;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;

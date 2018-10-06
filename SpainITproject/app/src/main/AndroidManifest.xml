@@ -71,7 +71,7 @@
         <activity
             android:name=".ui.MapsFragment"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".DisplayHelpRequestActivity"></activity>
+        <activity android:name=".ui.DisplayHelpRequestActivity"></activity>
     </application>
 
 </manifest>
