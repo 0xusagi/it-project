@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.io.Serializable;
 
-public abstract class DataMessage implements Serializable {
+public class DataMessage implements Serializable {
 
     private String senderId;
     private String senderName;
@@ -16,7 +16,9 @@ public abstract class DataMessage implements Serializable {
         this.messageBody = messageBody;
     }
 
-    public abstract void handle(Context context);
+    public void launchActivity(Context context) {
+
+    }
 
     public String getSenderId() {
         return senderId;

@@ -10,7 +10,7 @@ public class ChatDataMessage extends DataMessage {
     }
 
     @Override
-    public void handle(Context context) {
+    public void launchActivity(Context context) {
 
     }
 }

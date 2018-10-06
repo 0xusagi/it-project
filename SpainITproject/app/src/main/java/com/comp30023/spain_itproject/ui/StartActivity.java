@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.firebase.DataMessage;
 import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
 
 /**
@@ -16,7 +17,7 @@ import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
  * Provides users option to sign in or create an account
  * If previously signed in, directs to appropriate HomeActivity (depending on whether signed in as a Dependent or Carer)
  */
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends BroadcastActivity {
 
     private Button createAccountButton;
     private Button loginButton;
@@ -35,7 +36,10 @@ public class StartActivity extends AppCompatActivity {
         Bundle extras = intent.getExtras();
 
         if (extras != null && !extras.isEmpty()) {
-            MyFirebaseMessagingService.getInstance().handleMessage(extras);
+            DataMessage message = MyFirebaseMessagingService.toDataMessage(extras);
+            message.launchActivity(this);
+            finish();
+            return;
         }
 
         // Login the user if the user has already logged in without logging out

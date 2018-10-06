@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.ui.BroadcastActivity;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
  * Activity that opens when a DependentUser is logged in
  * Manages the fragments of the
  */
-public class DependentHomeActivity extends AppCompatActivity {
+public class DependentHomeActivity extends BroadcastActivity {
 
     public static final String LIST_NAME_LOCATION = "Locations";
     public static final String LIST_NAME_CARERS = "Carers";
