@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -50,6 +51,9 @@ public class CarerHomeActivity extends AppCompatActivity {
 
     // Add Dependent button
     private Button addDependentsButton;
+
+    // Refresh button
+    private ImageButton refreshButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +148,17 @@ public class CarerHomeActivity extends AppCompatActivity {
         }
     }
 
+    private void setupRefreshButton() {
+        refreshButton = findViewById(R.id.carerHome_refreshButton);
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setupList();
+            }
+        });
+    }
+  
     /**
      * Helper method to store the dependents list into the class since cannot be accessed in the
      * inner field

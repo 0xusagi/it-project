@@ -1,7 +1,10 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
 import android.content.Context;
+
 import android.content.Intent;
+
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,10 +15,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroupOverlay;
 import android.widget.Button;
 
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -42,6 +50,8 @@ public class DependentHomeActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private Fragment locationsFragment;
+
+    private PopupWindow helpWindow;
 
     private Button messagesButton;
     private Button callsButton;
@@ -104,7 +114,20 @@ public class DependentHomeActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionbar.setTitle("");
         actionbar.setSubtitle("");
+
         helpButton = (Button) findViewById(R.id.helpButton);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ViewGroup group = (ViewGroup) getWindow().getDecorView().getRootView();
+                helpWindow = new HelpPopupWindow(context, user, group);
+
+                //Show at centre of screen
+                helpWindow.showAtLocation(drawerLayout, Gravity.CENTER, 0, 0);
+
+            }
+        });
     }
 
     /**
@@ -253,5 +276,16 @@ public class DependentHomeActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        //If the helpbutton is on display, dismiss it
+        if (helpWindow != null && helpWindow.isShowing()) {
+            helpWindow.dismiss();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@babel/node": "^7.0.0"
+  }
+}

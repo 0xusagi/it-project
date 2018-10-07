@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
 
 /**
  * Launching activity
@@ -30,6 +31,13 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+
+        if (extras != null && !extras.isEmpty()) {
+            MyFirebaseMessagingService.getInstance().handleMessage(extras);
+        }
+
         // Login the user if the user has already logged in without logging out
         if (LoginHandler.getInstance().isLoggedIn(this)) {
             LoginHandler.getInstance().continueLogin(this);
@@ -38,7 +46,7 @@ public class StartActivity extends AppCompatActivity {
         createAccountButton = findViewById(R.id.createAccountButton);
         setCreateAccountButtonListener(this);
 
-        loginButton = findViewById(R.id.loginButton);
+        loginButton = findViewById(R.id.start_loginButton);
         setLoginButtonListener(this);
     }
 

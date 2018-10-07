@@ -135,6 +135,23 @@ public class AccountController {
     }
 
     /**
+     * Delete a carer from the server
+     * @param id
+     * @return
+     * @throws BadRequestException
+     * @throws NoConnectionException
+     */
+    public CarerUser deleteCarer(String id)
+        throws BadRequestException, NoConnectionException {
+        checkService();
+
+        // Contact the server to delete the carer
+        Call<CarerUser> call = service.deleteCarer(id);
+
+        return executeCallReturnResponse(call);
+    }
+
+    /**
      * Get a CarerUser from the server
      * @param id The ID of the user being requested
      * @return The requested user
@@ -147,6 +164,16 @@ public class AccountController {
 
         // Contact the server to request the list of dependents for a carer
         Call<DependentUser> call = service.getDependent(id);
+
+        return executeCallReturnResponse(call);
+    }
+
+    public DependentUser deleteDependent(String id)
+        throws BadRequestException, NoConnectionException {
+        checkService();
+
+        // Contact the server to delete the dependent
+        Call<DependentUser> call = service.deleteDependent(id);
 
         return executeCallReturnResponse(call);
     }
@@ -349,5 +376,15 @@ public class AccountController {
             // TODO If this update fails, should the app close or log out?
             e.printStackTrace();
         }
+    }
+
+    public void sendHelpRequest(DependentUser requester, String message)
+            throws BadRequestException, NoConnectionException {
+
+        checkService();
+
+        Call<ResponseBody> call = service.requestHelp(requester.getId(), message);
+
+        executeCallNoResponse(call);
     }
 }
