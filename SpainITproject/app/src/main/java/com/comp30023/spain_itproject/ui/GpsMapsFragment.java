@@ -29,14 +29,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.comp30023.spain_itproject.ui.carerhome.CarerMapsActivity.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
-
 /**
  * Extension of the SupportMapFagment with handling of device GPS permissions and device location pinpointing
  */
 public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker, OnMapReadyCallback {
 
-    GoogleMap map;
+    static public final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
+    public GoogleMap map;
 
     // This is a google location, not our Location object.
     private Location currentLocation;

@@ -10,13 +10,18 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
 
+import com.comp30023.spain_itproject.ui.GpsMapsFragment;
+import com.comp30023.spain_itproject.ui.NavigationMapsFragment;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,13 +41,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class CarerMapsActivity extends FragmentActivity
-        implements GoogleMap.OnMyLocationButtonClickListener,
-        GoogleMap.OnMyLocationClickListener,
-        OnMapReadyCallback {
-
-    static public final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-
+public class CarerMapsActivity extends AppCompatActivity {
 
     public static String getSelectedDependent() {
         return selectedDependentId;
@@ -52,42 +51,29 @@ public class CarerMapsActivity extends FragmentActivity
         CarerMapsActivity.selectedDependentId = selectedDependentId;
     }
 
+    private GpsMapsFragment fragment;
     private static String selectedDependentId;
-    private GoogleMap mMap;
-    private Location currentLocation;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private LocationRequest mLocationRequest;
-    PlaceAutocompleteFragment autocompleteFragment;
-
-    public int getLocationCallbackCount() {
-        return locationCallbackCount;
-    }
-
-    public void setLocationCallbackCount(int locationCallbackCount) {
-        this.locationCallbackCount = locationCallbackCount;
-    }
-
-    private int locationCallbackCount = 0;
-
-
-    public Location getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(Location currentLocation) {
-        this.currentLocation = currentLocation;
-    }
+    private PlaceAutocompleteFragment autocompleteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fragment = new GpsMapsFragment();
 
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        transaction.replace(R.id.carerMapsActivity_mapFrame, fragment);
+        transaction.commit();
+
+
+        createAutocompleteFragment();
+
+    }
+
+    private void createAutocompleteFragment() {
 
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
@@ -98,17 +84,26 @@ public class CarerMapsActivity extends FragmentActivity
 
         autocompleteFragment.setFilter(typeFilter);
 
-
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(final Place place) {
+
+                final LatLng placeLatLng = place.getLatLng();
+
+                fragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng,15));
+                // Zoom in, animating the camera.
+                fragment.map.animateCamera(CameraUpdateFactory.zoomIn());
+                fragment.map.animateCamera(CameraUpdateFactory.zoomTo(15), 5000, null);
+
+                fragment.map.addMarker(new MarkerOptions()
+                        .position(placeLatLng)
+                        .title(place.getName().toString()));
 
                 @SuppressLint("StaticFieldLeak")
                 AsyncTask task = new AsyncTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
 
-                        LatLng placeLatLng = place.getLatLng();
 
 
                         AccountController accountController = AccountController.getInstance();
@@ -124,14 +119,6 @@ public class CarerMapsActivity extends FragmentActivity
 
                                     LatLng placeLatLng = place.getLatLng();
 
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng,15));
-                                    // Zoom in, animating the camera.
-                                    mMap.animateCamera(CameraUpdateFactory.zoomIn());
-                                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 5000, null);
-
-                                    mMap.addMarker(new MarkerOptions()
-                                            .position(placeLatLng)
-                                            .title(place.getName().toString()));
                                 }
                             });
 
@@ -153,67 +140,4 @@ public class CarerMapsActivity extends FragmentActivity
         });
     }
 
-        @Override
-    public void onMapReady(GoogleMap map) {
-        mMap = map;
-
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(12000); // two minute interval
-        mLocationRequest.setFastestInterval(12000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-            Log.i("MapsFragment", "Permissions checked");
-
-            mMap.setMyLocationEnabled(true);
-        }
-        else {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-
-        mMap.setOnMyLocationButtonClickListener(this);
-        mMap.setOnMyLocationClickListener(this);
-
-    }
-
-    LocationCallback mLocationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            setLocationCallbackCount(getLocationCallbackCount() + 1);
-            Location location = locationResult.getLastLocation();
-
-
-            Log.i("MapsFragment", "Location: " + location.getLatitude() + " " + location.getLongitude());
-            setCurrentLocation(location);
-
-            autocompleteFragment.setBoundsBias(new LatLngBounds(
-                    new LatLng(getCurrentLocation().getLatitude() - 1, getCurrentLocation().getLongitude() - 1),
-                    new LatLng(getCurrentLocation().getLatitude() + 1, getCurrentLocation().getLongitude() + 1)));
-
-            // Only center the map the first time.
-            if (getLocationCallbackCount() == 1) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-            }
-        }
-    };
-
-    @Override
-    public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
-        }
-
-
-    @Override
-    public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
-        return false;
-    }
 }

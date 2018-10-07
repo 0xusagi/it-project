@@ -1,18 +1,27 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MapsFragment">
+    tools:context=".ui.carerhome.CarerMapsActivity">
 
-
-    <fragment
-        android:id="@+id/place_autocomplete_fragment"
+    <fragment android:id="@+id/place_autocomplete_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        />
+        xmlns:android="http://schemas.android.com/apk/res/android" />
 
-</fragment>
+    <FrameLayout
+        android:id="@+id/carerMapsActivity_mapFrame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/place_autocomplete_fragment"
+        app:layout_constraintVertical_bias="0.477">
 
+    </FrameLayout>
+</android.support.constraint.ConstraintLayout>
