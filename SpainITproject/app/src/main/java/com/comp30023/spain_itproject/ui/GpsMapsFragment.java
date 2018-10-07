@@ -2,14 +2,23 @@ package com.comp30023.spain_itproject.ui;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.comp30023.spain_itproject.DisplayMarker;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -29,15 +38,59 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
 
     GoogleMap map;
 
+    // This is a google location, not our Location object.
+    private Location currentLocation;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationRequest mLocationRequest;
+    private int locationCallbackCount = 0;
+
     List<MarkerOptions> pendingMarkers;
     List<Marker> markers;
 
     GoogleMap.OnMarkerClickListener pendingListener;
 
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public int getLocationCallbackCount() {
+        return locationCallbackCount;
+    }
+
+    public void setLocationCallbackCount(int locationCallbackCount) {
+        this.locationCallbackCount = locationCallbackCount;
+    }
+
+    // This gets called periodically depending upon what's set in mLocationRequest.
+    LocationCallback mLocationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            setLocationCallbackCount(getLocationCallbackCount() + 1);
+            Location location = locationResult.getLastLocation();
+
+
+            Log.i("MapsFragment", "Location: " + location.getLatitude() + " " + location.getLongitude());
+            setCurrentLocation(location);
+
+            // Only center the map the first time.
+            if (getLocationCallbackCount() == 1) {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+            }
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
 
         View view = super.onCreateView(layoutInflater, viewGroup, bundle);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
 
         //Set the map
         getMapAsync(this);
@@ -47,10 +100,14 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
 
     private void enableMyLocation() {
 
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(12000); // 20 second interval
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
         //Check if my location permission is granted
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
             map.setMyLocationEnabled(true);
         }
         else {

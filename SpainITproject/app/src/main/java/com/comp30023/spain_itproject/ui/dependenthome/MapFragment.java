@@ -28,44 +28,7 @@ public class MapFragment extends Fragment {
 
 
 
-   /** private void setDirectionButtonListener(final Context context) {
-        String serverKey = "AIzaSyAuz2NzVF-uJS1ztPEHjSw1Xq22wVRVOCM";
 
-        double longitude = getCurrentLocation().getLongitude();
-        double latitude = getCurrentLocation().getLatitude();
-        LatLng origin = new LatLng(latitude, longitude);
-        LatLng destination = new LatLng(-37.815238, 144.974881);
-        GoogleDirection.withServerKey(serverKey)
-                .from(origin)
-                .to(destination)
-                .execute(new DirectionCallback() {
-                    @Override
-                    public void onDirectionSuccess(Direction direction, String rawBody) {
-                        Route route = direction.getRouteList().get(0);
-                        Leg leg = route.getLegList().get(0);
-
-                        Info distanceInfo = leg.getDistance();
-                        Info durationInfo = leg.getDuration();
-                        String distance = distanceInfo.getText();
-                        String duration = durationInfo.getText();
-
-                        Toast.makeText(CarerMapsActivity.this, "Distance = "
-                                        + distance + ". This will take approx. " + duration,
-                                Toast.LENGTH_LONG).show();
-
-                        ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-                        PolylineOptions polylineOptions = DirectionConverter.createPolyline( context, directionPositionList, 5, Color.RED);
-                        mMap.addPolyline(polylineOptions);
-
-                    }
-
-                    @Override
-                    public void onDirectionFailure(Throwable t) {
-                        // Do something here
-                    }
-                });
-    }
-    */
 }
 
 

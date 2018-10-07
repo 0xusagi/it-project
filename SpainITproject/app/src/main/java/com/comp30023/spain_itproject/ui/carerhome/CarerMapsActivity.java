@@ -112,6 +112,7 @@ public class CarerMapsActivity extends FragmentActivity
 
 
                         AccountController accountController = AccountController.getInstance();
+                        Log.i("HELP", selectedDependentId);
 
                         try {
                             accountController.addLocationToDependent(selectedDependentId, place.getId(), placeLatLng.latitude, placeLatLng.longitude, place.getName().toString());

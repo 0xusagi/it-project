@@ -63,7 +63,7 @@ public interface AccountService {
 
     //CONFIRM
     @FormUrlEncoded
-    @POST("/dependents/{id}/locations/new")
+    @POST("/dependent/{id}/addLocation")
     Call<ResponseBody> addLocationToDependent(
                             @Path("id") String dependentId,
                             @Field("GoogleId") String googleId,
