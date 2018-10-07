@@ -107,7 +107,7 @@ public class CarerMapsActivity extends AppCompatActivity {
 
 
                         AccountController accountController = AccountController.getInstance();
-                        Log.i("HELP", selectedDependentId);
+                        Log.i("HELP", selectedDependentId + place.getId() + placeLatLng.latitude + placeLatLng.longitude + place.getName().toString());
 
                         try {
                             accountController.addLocationToDependent(selectedDependentId, place.getId(), placeLatLng.latitude, placeLatLng.longitude, place.getName().toString());

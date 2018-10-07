@@ -61,15 +61,15 @@ public interface AccountService {
             @Path("mobile") String phoneNumber);
 
 
-    //CONFIRM
+
     @FormUrlEncoded
     @POST("/dependent/{id}/addLocation")
     Call<ResponseBody> addLocationToDependent(
                             @Path("id") String dependentId,
-                            @Field("GoogleId") String googleId,
-                            @Field("Latitude") double latitude,
-                            @Field("Longitude") double longitude,
-                            @Field("DisplayName") String displayName);
+                            @Field("googleId") String googleId,
+                            @Field("lat") double latitude,
+                            @Field("long") double longitude,
+                            @Field("displayName") String displayName);
 
 
     @FormUrlEncoded
@@ -101,8 +101,6 @@ public interface AccountService {
     Call<List<Location>> getLocationsOfDependent(
             @Path("id") String id
     );
-
-
 
     @GET("/dependents/{id}/pendingCarers")
     Call<List<CarerUser>> getPendingCarersOfDependent(
