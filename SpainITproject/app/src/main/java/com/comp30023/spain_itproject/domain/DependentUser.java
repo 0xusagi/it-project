@@ -11,26 +11,27 @@ import java.util.List;
  */
 public class DependentUser extends User {
 
-    @SerializedName("destinations")
+    @SerializedName("locations")
     private List<String> locationIds;
-
-    private List<Location> locations;
+    private List<Location> locationObjects;
 
     private Location currentLocation;
 
-    //Server responds with list of ids (Strings) of carers
-    private List<String> carers;
-    private List<CarerUser> confirmedCarers;
+    //Server responds with list of ids (Strings) of confirmedCarerIds
+    @SerializedName("carers")
+    private List<String> confirmedCarerIds;
+    private List<CarerUser> confirmedCarerObjects;
 
-    //Server responds with list of ids (Strings of pending carers
-    private List<String> pendingCarers;
-    private List<CarerUser> pCarers;
+    //Server responds with list of ids (Strings of pending confirmedCarerIds
+    @SerializedName("pendingCarers")
+    private List<String> pendingCarerIds;
+    private List<CarerUser> pendingCarerObjects;
 
     public DependentUser(String name, String phoneNumber, String pin, String id) {
         super(name, phoneNumber, pin, id);
 
-        locations = new ArrayList<Location>();
-        confirmedCarers = new ArrayList<CarerUser>();
+        locationObjects = new ArrayList<Location>();
+        confirmedCarerObjects = new ArrayList<CarerUser>();
     }
 
     /**
@@ -38,57 +39,57 @@ public class DependentUser extends User {
      */
     public List<Location> getLocations() throws Exception {
 
-        if (locations == null) {
-            locations = new ArrayList<Location>();
-        }
-
         //If locations have yet to be retrieved from server, retrieve them
         if (locationIds != null && !locationIds.isEmpty()) {
-            locations = AccountController.getInstance().getLocationsOfDependent(this);
+            locationObjects = AccountController.getInstance().getLocationsOfDependent(this);
             locationIds.clear();
         }
 
-        return locations;
+        if (locationObjects == null) {
+            locationObjects = new ArrayList<Location>();
+        }
+
+        return locationObjects;
     }
 
     /**
-     * Retrieves the list of CarerUser objects from the server that are carers of the DependentUser
-     * @return The list of confirmedCarers associated with the dependent account
+     * Retrieves the list of CarerUser objects from the server that are confirmedCarerIds of the DependentUser
+     * @return The list of confirmedCarerObjects associated with the dependent account
      */
     public List<CarerUser> getCarers() throws Exception {
 
-        if (confirmedCarers == null) {
-            confirmedCarers = new ArrayList<CarerUser>();
+        //If confirmedCarerIds have yet to be retrieved from the server, retrieve them
+        if (!confirmedCarerIds.isEmpty()) {
+
+            confirmedCarerObjects = AccountController.getInstance().getCarersOfDependent(this);
+            confirmedCarerIds.clear();
         }
 
-        //If carers have yet to be retrieved from the server, retrieve them
-        if (!carers.isEmpty()) {
-
-            confirmedCarers = AccountController.getInstance().getCarersOfDependent(this);
-            carers.clear();
+        if (confirmedCarerObjects == null) {
+            confirmedCarerObjects = new ArrayList<CarerUser>();
         }
 
-        return confirmedCarers;
+        return confirmedCarerObjects;
     }
 
     /**
-     * @return The list of confirmedCarers that have requested to aid this dependent
+     * @return The list of confirmedCarerObjects that have requested to aid this dependent
      */
     public List<CarerUser> getPendingCarers() throws Exception {
 
-        if (pCarers == null) {
-            pCarers = new ArrayList<>();
+        if (pendingCarerObjects == null) {
+            pendingCarerObjects = new ArrayList<>();
         }
 
-        //If there are pending carers that have yet to be retrieved from the server, retrieve them
-        if (!pendingCarers.isEmpty()) {
+        //If there are pending confirmedCarerIds that have yet to be retrieved from the server, retrieve them
+        if (pendingCarerIds != null && !pendingCarerIds.isEmpty()) {
 
-            for (String id : pendingCarers) {
+            for (String id : pendingCarerIds) {
 
                 boolean contains = false;
 
                 //Ensure that not already downloaded/in the list
-                for (CarerUser carer : pCarers) {
+                for (CarerUser carer : pendingCarerObjects) {
                     if (id.equals(carer.getId())) {
                         contains = true;
                         break;
@@ -97,18 +98,22 @@ public class DependentUser extends User {
 
                 //Retrieve the carer and add it to the list
                 if (!contains) {
-                    pCarers.add(AccountController.getInstance().getCarer(id));
+                    pendingCarerObjects.add(AccountController.getInstance().getCarer(id));
                 }
             }
 
             //UNCOMMENT WHEN ENDPOINT COMPLETE
-            //pCarers = AccountController.getInstance().getPendingCarersOfDependent(this);
+            //pendingCarerObjects = AccountController.getInstance().getPendingCarersOfDependent(this);
 
             //Clear list of ids as all CarerUser objects have been retrieved
-            pendingCarers.clear();
+            pendingCarerIds.clear();
         }
 
-        return pCarers;
+        if (pendingCarerObjects == null) {
+            pendingCarerObjects = new ArrayList<>();
+        }
+
+        return pendingCarerObjects;
     }
 
     /**
@@ -123,11 +128,11 @@ public class DependentUser extends User {
         AccountController.getInstance().addLocationToDependent(this.getId(), googleId, latitude, longitude, displayName);
 
         //Add location to dependent locally so consistent
-        if (locations == null) {
-            locations = new ArrayList<Location>();
+        if (locationObjects == null) {
+            locationObjects = new ArrayList<Location>();
         }
         Location location = new Location(googleId, latitude, longitude, displayName);
-        locations.add(location);
+        locationObjects.add(location);
     }
 
     /**
@@ -145,8 +150,8 @@ public class DependentUser extends User {
         getPendingCarers().remove(carer);
         if (accept) {
 
-            if (confirmedCarers == null) {
-                confirmedCarers = new ArrayList<CarerUser>();
+            if (confirmedCarerObjects == null) {
+                confirmedCarerObjects = new ArrayList<CarerUser>();
             }
             getCarers().add(carer);
         }
@@ -155,9 +160,9 @@ public class DependentUser extends User {
     }
 
     /**
-     * @return Whether the dependent has requests by carers
+     * @return Whether the dependent has requests by confirmedCarerIds
      */
     public boolean hasPendingCarers() {
-        return !pendingCarers.isEmpty() || ((pCarers != null) && !pCarers.isEmpty());
+        return !pendingCarerIds.isEmpty() || ((pendingCarerObjects != null) && !pendingCarerObjects.isEmpty());
     }
 }
