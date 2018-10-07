@@ -2,14 +2,16 @@ package com.comp30023.spain_itproject.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.firebase.DataMessage;
+import com.comp30023.spain_itproject.firebase.InvalidMessageException;
 import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
+
+import java.nio.file.Path;
 
 /**
  * Launching activity
@@ -32,26 +34,33 @@ public class StartActivity extends BroadcastActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-
-        if (extras != null && !extras.isEmpty()) {
-            DataMessage message = MyFirebaseMessagingService.toDataMessage(extras);
-            message.launchActivity(this);
-            finish();
-            return;
-        }
-
-        // Login the user if the user has already logged in without logging out
-        if (LoginHandler.getInstance().isLoggedIn(this)) {
-            LoginHandler.getInstance().continueLogin(this);
-        }
-
         createAccountButton = findViewById(R.id.createAccountButton);
         setCreateAccountButtonListener(this);
 
         loginButton = findViewById(R.id.start_loginButton);
         setLoginButtonListener(this);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Login the user if the user has already logged in without logging out
+        if (LoginHandler.getInstance().isLoggedIn(this)) {
+
+            //FCM messages when in background pass data component to launch activity
+            //Check if data received when in background
+            try {
+                DataMessage message = DataMessage.toDataMessage(getIntent());
+                message.handle(this);
+
+                //When extras does not contain a valid message, just continue with login
+            } catch (InvalidMessageException e) {
+                LoginHandler.getInstance().continueLogin(this);
+            }
+        }
+
     }
 
     private void setCreateAccountButtonListener(final Context context) {

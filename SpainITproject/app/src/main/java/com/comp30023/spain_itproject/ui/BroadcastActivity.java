@@ -6,14 +6,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.comp30023.spain_itproject.ui.MessageReceivedActivity;
+import com.comp30023.spain_itproject.firebase.DataMessage;
 
-public class BroadcastActivity extends AppCompatActivity {
+/**
+ * An activity that extends from this receives broadcasts regarding message handling
+ */
+public abstract class BroadcastActivity extends AppCompatActivity {
 
-    public static final String OPEN_NEW_ACTIVITY = "OPEN_NEW_ACTIVITY";
+    public static final String HANDLE_MESSAGE = "HANDLE_MESSAGE";
+
+    public static final String EXTRA_MESSAGE = "MESSAGE";
 
     BroadcastReceiver receiver;
     IntentFilter intentFilter;
@@ -28,14 +32,13 @@ public class BroadcastActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                System.out.println("Broadcast received");
-                Intent newIntent = new Intent(activityContext, MessageReceivedActivity.class);
-                startActivity(newIntent);
+                //Extract the message from the intent and handle
+                DataMessage message = (DataMessage) intent.getSerializableExtra(EXTRA_MESSAGE);
+                message.handle(activityContext);
             }
         };
 
-        intentFilter = new IntentFilter(OPEN_NEW_ACTIVITY);
-
+        intentFilter = new IntentFilter(HANDLE_MESSAGE);
     }
 
     @Override
