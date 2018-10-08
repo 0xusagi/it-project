@@ -51,28 +51,34 @@ public class NavigationMapsFragment extends GpsMapsFragment {
          double latitude = getCurrentLocation().getLatitude();
          LatLng origin = new LatLng(latitude, longitude);
          // This is some random spot near Melbourne Uni I picked for testing.
-         LatLng destination = new LatLng(location.getLatitude(), location.getLongitude());
-         GoogleDirection.withServerKey(serverKey)
+
+        Double destinationLat = location.getLatitude();
+        Double destinationLon = location.getLongitude();
+
+        LatLng destination = new LatLng(destinationLat, destinationLon);
+        GoogleDirection.withServerKey(serverKey)
          .from(origin)
          .to(destination)
          .execute(new DirectionCallback() {
                 @Override
                 public void onDirectionSuccess(Direction direction, String rawBody) {
 
-                    System.out.println("Direction size: " + direction.getRouteList().size());
-                    Route route = direction.getRouteList().get(0);
-                    Leg leg = route.getLegList().get(0);
+                    if (direction.getRouteList().size() > 0) {
+                        Route route = direction.getRouteList().get(0);
+                        Leg leg = route.getLegList().get(0);
 
-                    Info distanceInfo = leg.getDistance();
-                    Info durationInfo = leg.getDuration();
-                    String distance = distanceInfo.getText();
-                    String duration = durationInfo.getText();
+                        Info distanceInfo = leg.getDistance();
+                        Info durationInfo = leg.getDuration();
+                        String distance = distanceInfo.getText();
+                        String duration = durationInfo.getText();
 
-                    Toast.makeText(getActivity(), "Distance = " + distance + ". This will take approx. " + duration, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Distance = " + distance + ". This will take approx. " + duration, Toast.LENGTH_LONG).show();
 
-                    ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-                    PolylineOptions polylineOptions = DirectionConverter.createPolyline( getActivity(), directionPositionList, 5, Color.RED);
-                    map.addPolyline(polylineOptions);
+                        ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
+                        PolylineOptions polylineOptions = DirectionConverter.createPolyline( getActivity(), directionPositionList, 5, Color.RED);
+                        map.addPolyline(polylineOptions);
+                    }
+
                 }
 
                 @Override
@@ -87,7 +93,6 @@ public class NavigationMapsFragment extends GpsMapsFragment {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            System.out.println("Got location: " + locationResult.toString());
             setDestination(location);
         }
     }

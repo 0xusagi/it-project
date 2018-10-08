@@ -11,10 +11,10 @@ public class Location implements Serializable, DisplayName {
     @SerializedName("googleId")
     private String googleId;
 
-    @SerializedName("latitide")
+    @SerializedName("lat")
     private double latitude;
 
-    @SerializedName("longitude")
+    @SerializedName("long")
     private double longitude;
 
     @SerializedName("displayName")
