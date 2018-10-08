@@ -66,7 +66,27 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
     }
 
     // This gets called periodically depending upon what's set in mLocationRequest.
-    LocationCallback mLocationCallback = new LocationCallback() {
+    LocationCallback mLocationCallback;
+    private void onLocationResult1(LocationResult locationResult) {
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+
+        View view = super.onCreateView(layoutInflater, viewGroup, bundle);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        mLocationCallback = new MyLocationCallback();
+
+        //Set the map
+        getMapAsync(this);
+
+        return view;
+    }
+
+    public class MyLocationCallback extends LocationCallback {
+
         @Override
         public void onLocationResult(LocationResult locationResult) {
             setLocationCallbackCount(getLocationCallbackCount() + 1);
@@ -82,20 +102,6 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
             }
         }
-    };
-
-    @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-
-        View view = super.onCreateView(layoutInflater, viewGroup, bundle);
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-
-
-        //Set the map
-        getMapAsync(this);
-
-        return view;
     }
 
     private void enableMyLocation() {
@@ -116,6 +122,14 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    public void setLocationCallback(LocationCallback locationCallback) {
+        mLocationCallback = locationCallback;
+
+        if (map != null) {
+            enableMyLocation();
         }
     }
 
@@ -146,6 +160,10 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
         }
 
         enableMyLocation();
+    }
+
+    public GoogleMap getMap() {
+        return map;
     }
 
 

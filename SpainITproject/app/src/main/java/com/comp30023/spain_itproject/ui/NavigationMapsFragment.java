@@ -1,6 +1,10 @@
 package com.comp30023.spain_itproject.ui;
 
 import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -10,6 +14,10 @@ import com.akexorcist.googledirection.model.Info;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.comp30023.spain_itproject.domain.Location;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -17,42 +25,71 @@ import java.util.ArrayList;
 
 public class NavigationMapsFragment extends GpsMapsFragment {
 
+    public static final String ARGUMENT_LOCATION = "LOCATION";
+
     private final String serverKey = "AIzaSyAuz2NzVF-uJS1ztPEHjSw1Xq22wVRVOCM";
 
+    private Location location;
+
+    @Override
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        View view = super.onCreateView(layoutInflater, viewGroup, bundle);
+
+        Bundle arguments = getArguments();
+
+        location = (Location) arguments.getSerializable(ARGUMENT_LOCATION);
+
+        setLocationCallback(new NavigationMapsLocationCallback());
+
+        return view;
+    }
+
     // This can easily take a location, for now it's hard-coded in.
-    public void setDestination() {
+    public void setDestination(Location location) {
 
          double longitude = getCurrentLocation().getLongitude();
          double latitude = getCurrentLocation().getLatitude();
          LatLng origin = new LatLng(latitude, longitude);
          // This is some random spot near Melbourne Uni I picked for testing.
-         LatLng destination = new LatLng(-37.815238, 144.974881);
+         LatLng destination = new LatLng(location.getLatitude(), location.getLongitude());
          GoogleDirection.withServerKey(serverKey)
          .from(origin)
          .to(destination)
          .execute(new DirectionCallback() {
-        @Override
-        public void onDirectionSuccess(Direction direction, String rawBody) {
-        Route route = direction.getRouteList().get(0);
-        Leg leg = route.getLegList().get(0);
+                @Override
+                public void onDirectionSuccess(Direction direction, String rawBody) {
 
-        Info distanceInfo = leg.getDistance();
-        Info durationInfo = leg.getDuration();
-        String distance = distanceInfo.getText();
-        String duration = durationInfo.getText();
+                    System.out.println("Direction size: " + direction.getRouteList().size());
+                    Route route = direction.getRouteList().get(0);
+                    Leg leg = route.getLegList().get(0);
 
-        Toast.makeText(getActivity(), "Distance = " + distance + ". This will take approx. " + duration, Toast.LENGTH_LONG).show();
+                    Info distanceInfo = leg.getDistance();
+                    Info durationInfo = leg.getDuration();
+                    String distance = distanceInfo.getText();
+                    String duration = durationInfo.getText();
 
-        ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-        PolylineOptions polylineOptions = DirectionConverter.createPolyline( getActivity(), directionPositionList, 5, Color.RED);
-        map.addPolyline(polylineOptions);
-        }
+                    Toast.makeText(getActivity(), "Distance = " + distance + ". This will take approx. " + duration, Toast.LENGTH_LONG).show();
 
-        @Override
-        public void onDirectionFailure(Throwable t) {
-        // Do something here
-        }
+                    ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
+                    PolylineOptions polylineOptions = DirectionConverter.createPolyline( getActivity(), directionPositionList, 5, Color.RED);
+                    map.addPolyline(polylineOptions);
+                }
+
+                @Override
+                public void onDirectionFailure(Throwable t) {
+                // Do something here
+                    System.out.println("Direction failure");
+                }
         });
+    }
+
+    public class NavigationMapsLocationCallback extends MyLocationCallback {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            System.out.println("Got location: " + locationResult.toString());
+            setDestination(location);
+        }
     }
 
     public void clearDestination() {

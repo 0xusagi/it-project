@@ -45,11 +45,6 @@ public class HelpRequestActivity extends AppCompatActivity {
 
                 return null;
             }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-            }
         };
 
     }

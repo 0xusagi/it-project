@@ -26,4 +26,12 @@ public class Location implements Serializable, DisplayName {
     public String getDisplayName() {
         return displayName;
     }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
 }

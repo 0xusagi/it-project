@@ -51,7 +51,7 @@ public class DisplayHelpRequestActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment.setDestination();
+                //fragment.setDestination();
             }
         });
     }
