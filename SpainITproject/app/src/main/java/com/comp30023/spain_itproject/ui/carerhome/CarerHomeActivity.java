@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.ui.BroadcastActivity;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
@@ -37,7 +38,7 @@ import java.util.List;
  * Contains a list of dependents, upon clicking the dependents, allowing the carer to perform
  * various different activities in order to observe or contact the dependent
  */
-public class CarerHomeActivity extends AppCompatActivity {
+public class CarerHomeActivity extends BroadcastActivity {
 
     // The list of dependents of the carer which contains all information about the dependents
     // to be used when the carer wants to edit the dependent

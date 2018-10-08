@@ -13,6 +13,7 @@ import retrofit2.http.Path;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.firebase.DataMessage;
 import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
 
 import java.util.List;
@@ -134,6 +135,6 @@ public interface AccountService {
     @POST("/dependent/{id}/getHelp")
     Call<ResponseBody> requestHelp(
             @Path("id") String id,
-            @Field(MyFirebaseMessagingService.DATA_MESSAGE_BODY) String message
+            @Field(DataMessage.DATA_MESSAGE_BODY) String message
     );
 }
