@@ -106,7 +106,7 @@ public interface AccountService {
             @Path("id") String id
     );
 
-    @GET("/dependents/{id}/locations")
+    @GET("/dependent/{id}/locations")
     Call<List<Location>> getLocationsOfDependent(
             @Path("id") String id
     );
