@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -72,11 +73,14 @@ public class NavigationMapsFragment extends GpsMapsFragment {
                         String distance = distanceInfo.getText();
                         String duration = durationInfo.getText();
 
-                        Toast.makeText(getActivity(), "Distance = " + distance + ". This will take approx. " + duration, Toast.LENGTH_LONG).show();
+                        Activity activity = getActivity();
+                        if (activity != null) {
+                            Toast.makeText(activity, "Distance = " + distance + ". This will take approx. " + duration, Toast.LENGTH_LONG).show();
 
-                        ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-                        PolylineOptions polylineOptions = DirectionConverter.createPolyline( getActivity(), directionPositionList, 5, Color.RED);
-                        map.addPolyline(polylineOptions);
+                            ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
+                            PolylineOptions polylineOptions = DirectionConverter.createPolyline( activity, directionPositionList, 5, Color.RED);
+                            map.addPolyline(polylineOptions);
+                        }
                     }
 
                 }
