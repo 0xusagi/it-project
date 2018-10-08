@@ -14,8 +14,6 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-
     <!-- Calling permissions -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
@@ -69,8 +67,8 @@
         <activity android:name=".ui.carerhome.CarerHomeActivity" />
         <activity android:name=".ui.carerhome.AddDependentActivity" />
         <activity android:name=".ui.carerhome.EditDependentsActivity" />
-            android:label="@string/title_activity_maps" />
         <activity android:name=".ui.DisplayHelpRequestActivity"></activity>
+        <activity android:name=".ui.MessageReceivedActivity"></activity>
     </application>
 
 </manifest>

@@ -2,6 +2,9 @@ package com.comp30023.spain_itproject.firebase;
 
 import android.content.Context;
 
+/**
+ * The chat message that is received.
+ */
 public class ChatDataMessage extends DataMessage {
 
 
@@ -9,6 +12,7 @@ public class ChatDataMessage extends DataMessage {
         super(senderId, senderName, messageBody);
     }
 
+    //TODO
     @Override
     public void handle(Context context) {
 
