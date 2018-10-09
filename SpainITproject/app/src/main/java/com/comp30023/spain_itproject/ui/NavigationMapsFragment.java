@@ -31,6 +31,7 @@ public class NavigationMapsFragment extends GpsMapsFragment {
     private final String serverKey = "AIzaSyAuz2NzVF-uJS1ztPEHjSw1Xq22wVRVOCM";
 
     private Location location;
+    private boolean first;
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -41,6 +42,7 @@ public class NavigationMapsFragment extends GpsMapsFragment {
         location = (Location) arguments.getSerializable(ARGUMENT_LOCATION);
 
         setLocationCallback(new NavigationMapsLocationCallback());
+        first = true;
 
         return view;
     }
@@ -97,7 +99,12 @@ public class NavigationMapsFragment extends GpsMapsFragment {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            setDestination(location);
+
+
+            if (first) {
+                setDestination(location);
+                first = false;
+            }
         }
     }
 
