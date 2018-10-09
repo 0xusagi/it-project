@@ -4,6 +4,7 @@ import android.util.Pair;
 
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.firebase.realtime_database.ChatService;
 import com.comp30023.spain_itproject.network.AccountService;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.ErrorResponse;
@@ -20,8 +21,6 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
-
-import static com.comp30023.spain_itproject.network.NoConnectionException.MESSAGE_SERVER_FAILURE;
 
 
 /**
@@ -117,6 +116,7 @@ public class AccountController {
 
         executeCallNoResponse(call);
     }
+
     /**
      * Get a CarerUser from the server
      * @param id The ID of the user being requested
@@ -131,7 +131,10 @@ public class AccountController {
         // Contact the server to request the list of dependents for a carer
         Call<CarerUser> call = service.getCarer(id);
 
-        return executeCallReturnResponse(call);
+        CarerUser user = executeCallReturnResponse(call);
+        user.setChatListeners();
+
+        return user;
     }
 
     /**
@@ -165,7 +168,10 @@ public class AccountController {
         // Contact the server to request the list of dependents for a carer
         Call<DependentUser> call = service.getDependent(id);
 
-        return executeCallReturnResponse(call);
+        DependentUser user = executeCallReturnResponse(call);
+        user.setChatListeners();
+
+        return user;
     }
 
     public DependentUser deleteDependent(String id)
@@ -216,6 +222,10 @@ public class AccountController {
         Call<ResponseBody> call = service.acceptRequest(dependent.getId(), carer.getId(), stringAccept);
 
         executeCallNoResponse(call);
+
+        if (accept) {
+            ChatService.getInstance().addChatListener(dependent, carer.getId());
+        }
     }
 
     /**

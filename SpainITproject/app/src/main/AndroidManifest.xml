@@ -67,8 +67,9 @@
         <activity android:name=".ui.carerhome.CarerHomeActivity" />
         <activity android:name=".ui.carerhome.AddDependentActivity" />
         <activity android:name=".ui.carerhome.EditDependentsActivity" />
-        <activity android:name=".ui.DisplayHelpRequestActivity"></activity>
-        <activity android:name=".ui.MessageReceivedActivity"></activity>
+        <activity android:name=".ui.DisplayHelpRequestActivity" />
+        <activity android:name=".ui.MessageReceivedActivity" />
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

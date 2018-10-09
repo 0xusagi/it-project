@@ -2,6 +2,9 @@ package com.comp30023.spain_itproject.network;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A class to correspond with the JSON model (user.js) on the MongoDB
  */
@@ -30,5 +33,4 @@ public class UserModel {
     public String getName() {
         return name;
     }
-
 }
