@@ -99,11 +99,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            try {
-                timeText.setText(message.getTimeStamp().toString());
+            /*try {
+                timeText.setText(message.getTimeStamp());
             } catch (ParseException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             nameText.setText(message.getSenderName());
         }

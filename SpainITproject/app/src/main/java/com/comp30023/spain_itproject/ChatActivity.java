@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.firebase.FirebaseQueryLiveData;
@@ -61,7 +62,11 @@ public class ChatActivity extends BroadcastActivity {
         messageRecycler = (RecyclerView) findViewById(R.id.recyclerview_message_list);
         messageListAdapter = new MessageListAdapter(this, messages);
         messageRecycler.setAdapter(messageListAdapter);
-        messageRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
+
+        messageRecycler.setLayoutManager(layoutManager);
 
         inputText = (EditText) findViewById(R.id.edittext_chatbox);
         sendMessageButton = (Button) findViewById(R.id.button_chatbox_send);
@@ -79,12 +84,11 @@ public class ChatActivity extends BroadcastActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                ChatMessage message = dataSnapshot.getValue(ChatMessage.class);
-
-                System.out.println("Message retrieved: " + message.getMessage());
+                final ChatMessage message = dataSnapshot.getValue(ChatMessage.class);
 
                 messages.add(message);
                 messageListAdapter.notifyDataSetChanged();
+                messageRecycler.scrollToPosition(messageListAdapter.getItemCount()-1);
             }
 
             @Override
