@@ -52,6 +52,8 @@ public class ChatActivity extends BroadcastActivity {
     private EditText inputText;
     private Button sendMessageButton;
 
+    private ChildEventListener listener;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +82,7 @@ public class ChatActivity extends BroadcastActivity {
 
         dbReference = FirebaseDatabase.getInstance().getReference().child("chats").child(path);
 
-        dbReference.addChildEventListener(new ChildEventListener() {
+        listener = dbReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
@@ -127,4 +129,9 @@ public class ChatActivity extends BroadcastActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbReference.removeEventListener(listener);
+    }
 }
