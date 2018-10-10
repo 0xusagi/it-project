@@ -1,9 +1,7 @@
 package com.comp30023.spain_itproject.ui.videocalls;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telecom.InCallService;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +16,7 @@ import com.sinch.android.rtc.video.VideoCallListener;
 
 import java.util.List;
 
-public class IncomingVideoCallActivity extends BaseVideoCallActivity {
+public class IncomingVideoCallActivity extends BaseActivity {
     private String callId;
 
     // Views

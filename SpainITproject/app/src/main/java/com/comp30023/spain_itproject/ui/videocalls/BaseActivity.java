@@ -10,7 +10,7 @@ import android.os.Bundle;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
 
-public abstract class BaseVideoCallActivity extends AppCompatActivity implements ServiceConnection {
+public abstract class BaseActivity extends AppCompatActivity implements ServiceConnection {
 
     private SinchClientService.SinchServiceInterface sinchInterface;
 

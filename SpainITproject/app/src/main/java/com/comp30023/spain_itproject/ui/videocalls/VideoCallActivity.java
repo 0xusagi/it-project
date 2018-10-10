@@ -1,9 +1,7 @@
 package com.comp30023.spain_itproject.ui.videocalls;
 
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.telecom.InCallService;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +22,7 @@ import com.sinch.android.rtc.video.VideoController;
 
 import java.util.List;
 
-public class VideoCallActivity extends BaseVideoCallActivity {
+public class VideoCallActivity extends BaseActivity {
 
     private String callId;
 

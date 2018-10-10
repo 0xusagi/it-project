@@ -20,7 +20,7 @@ import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 import com.sinch.android.rtc.video.VideoController;
 
-public class SinchClientService {
+public class SinchClientService extends Service {
     public static final String CALL_ID = "Call_ID";
     private final String APP_KEY = "29522bfe-2ee2-44d4-bff0-4af14c6b6801";
     private final String APP_SECRET = "3ev38vtThEekNXamuYZq+g==";
@@ -29,18 +29,19 @@ public class SinchClientService {
     private String userId;
 
     private SinchClient client;
+    private SinchServiceInterface serviceInterface = new SinchServiceInterface();
 
     /**
      * Start the client service to be able to make calls and listen to incoming calls
      * @param userId mongodb id of the user
      */
-    public void start(Context context, String userId) {
+    private void start(String userId) {
         if (client == null) {
             this.userId = userId;
 
             // Create the client
             client = Sinch.getSinchClientBuilder()
-                    .context(context)
+                    .context(getApplicationContext())
                     .userId(userId)
                     .applicationKey(APP_KEY)
                     .applicationSecret(APP_SECRET)
@@ -53,7 +54,7 @@ public class SinchClientService {
 
             // Add listeners
             addSinchClientListener();
-            addCallClientListener(context);
+            addCallClientListener();
 
             // Start the client
             client.start();
@@ -123,14 +124,14 @@ public class SinchClientService {
     /**
      * Add a call listener to the client
      */
-    private void addCallClientListener(final Context context) {
+    private void addCallClientListener() {
         client.getCallClient().addCallClientListener(new CallClientListener() {
             @Override
             public void onIncomingCall(CallClient callClient, Call call) {
-                Intent intent = new Intent(context, IncomingVideoCallActivity.class);
+                Intent intent = new Intent(SinchClientService.this, IncomingVideoCallActivity.class);
                 intent.putExtra(CALL_ID, call.getCallId());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                SinchClientService.this.startActivity(intent);
             }
         });
     }
@@ -143,25 +144,50 @@ public class SinchClientService {
         return (client != null && client.isStarted());
     }
 
-    public Call callUserVideo(String userId) {
-        return client.getCallClient().callUserVideo(userId);
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return serviceInterface;
     }
 
-    public VideoController getVideoController() {
-        if (!isStarted()) {
-            return null;
+    public class SinchServiceInterface extends Binder {
+
+        public Call callUserVideo(String userId) {
+            return client.getCallClient().callUserVideo(userId);
         }
-        return client.getVideoController();
-    }
 
-    public AudioController getAudioController() {
-        if (!isStarted()) {
-            return null;
+        public String getUserName() {
+            return userId;
         }
-        return client.getAudioController();
-    }
 
-    public Call getCall(String callId) {
-        return client.getCallClient().getCall(callId);
+        public boolean isStarted() {
+            return SinchClientService.this.isStarted();
+        }
+
+        public void startClient(String userName) {
+            start(userName);
+        }
+
+        public void stopClient() {
+            stop();
+        }
+
+        public Call getCall(String callId) {
+            return client.getCallClient().getCall(callId);
+        }
+
+        public VideoController getVideoController() {
+            if (!isStarted()) {
+                return null;
+            }
+            return client.getVideoController();
+        }
+
+        public AudioController getAudioController() {
+            if (!isStarted()) {
+                return null;
+            }
+            return client.getAudioController();
+        }
     }
 }
