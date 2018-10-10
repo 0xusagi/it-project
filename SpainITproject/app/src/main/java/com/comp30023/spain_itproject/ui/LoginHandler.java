@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Pair;
 
+import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
 import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.ui.carerhome.CarerHomeActivity;
 import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
@@ -16,6 +17,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
+import com.sinch.android.rtc.Sinch;
 
 /**
  * Logs in users and starts appropriate activity
@@ -58,6 +60,7 @@ public class LoginHandler {
         Boolean isDependent = response.second;
 
         LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent, userId, token);
+
         displayHomeScreen(context);
     }
 

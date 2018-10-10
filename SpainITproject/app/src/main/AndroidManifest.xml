@@ -52,7 +52,10 @@
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.carerhome.AddDependentActivity" />
         <activity android:name=".ui.carerhome.EditDependentsActivity" />
-        <activity android:name=".ui.MessageReceivedActivity"></activity>
+        <activity android:name=".ui.MessageReceivedActivity" />
+        <activity android:name=".ui.videocalls.BaseVideoCallActivity" />
+        <activity android:name=".ui.videocalls.VideoCallActivity" />
+        <activity android:name=".ui.videocalls.IncomingVideoCallActivity"></activity>
     </application>
 
 </manifest>
