@@ -6,16 +6,38 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * A class to represent a chat message sent amongst two users
  */
 public class ChatMessage implements Serializable, Comparable<ChatMessage> {
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public void setReceiverId(String receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
     private String message;
     private String senderName;
@@ -30,6 +52,15 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         this.senderName = senderName;
         this.timeStamp = timeStamp;
         this.message = message;
+
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+        df.setTimeZone(tz);
+        String timeStamp = df.format(new Date());
+    }
+
+    public ChatMessage(){
+
     }
 
     public String getSenderId() {
@@ -42,6 +73,14 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
 
     public String getSenderName() {
         return senderName;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getTimeStamp() throws ParseException {
+        return timeStamp;
     }
 
     /**

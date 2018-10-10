@@ -69,7 +69,7 @@
         <activity android:name=".ui.carerhome.EditDependentsActivity" />
         <activity android:name=".ui.DisplayHelpRequestActivity" />
         <activity android:name=".ui.MessageReceivedActivity" />
-        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".ChatActivity" />
     </application>
 
 </manifest>

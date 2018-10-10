@@ -96,5 +96,5 @@ public abstract class User implements DisplayName {
         }
     }
 
-    public abstract void setChatListeners() throws Exception;
+    public abstract void setChatListeners();
 }

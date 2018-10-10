@@ -4,7 +4,7 @@ import android.util.Pair;
 
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.firebase.realtime_database.ChatService;
+import com.comp30023.spain_itproject.firebase.realtime_database.FirebaseChatService;
 import com.comp30023.spain_itproject.network.AccountService;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.ErrorResponse;
@@ -91,9 +91,7 @@ public class AccountController {
 
         UserModel response = executeCallReturnResponse(call);
 
-        String userType = response.getUserType();
-        boolean isDependent = userType.equals(AccountService.USERTYPE_DEPENDENT);
-
+        boolean isDependent = AccountService.USERTYPE_DEPENDENT.equals(response.getUserType());
         String userId = response.getId();
 
         Pair<String, Boolean> pair = new Pair<String, Boolean>(userId, isDependent);
@@ -132,7 +130,6 @@ public class AccountController {
         Call<CarerUser> call = service.getCarer(id);
 
         CarerUser user = executeCallReturnResponse(call);
-        user.setChatListeners();
 
         return user;
     }
@@ -169,7 +166,6 @@ public class AccountController {
         Call<DependentUser> call = service.getDependent(id);
 
         DependentUser user = executeCallReturnResponse(call);
-        user.setChatListeners();
 
         return user;
     }
@@ -222,10 +218,6 @@ public class AccountController {
         Call<ResponseBody> call = service.acceptRequest(dependent.getId(), carer.getId(), stringAccept);
 
         executeCallNoResponse(call);
-
-        if (accept) {
-            ChatService.getInstance().addChatListener(dependent, carer.getId());
-        }
     }
 
     /**

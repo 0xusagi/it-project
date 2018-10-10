@@ -93,13 +93,7 @@ public class DependentHomeActivity extends BroadcastActivity {
         new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
-        messagesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, DisplayHelpRequestActivity.class);
-                startActivity(intent);
-            }
-        });
+        setMessagesButtonListener(this);
 
         callsButton = (Button) findViewById(R.id.callButton);
         setCallsButtonListener(this);
@@ -158,6 +152,32 @@ public class DependentHomeActivity extends BroadcastActivity {
 
                     Bundle arguments = new Bundle();
                     arguments.putSerializable(CarersListFragment.ARGUMENT_USER, user);
+
+                    carersFragment.setArguments(arguments);
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                    transaction.replace(R.id.fragment_container, carersFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            }
+        });
+    }
+
+
+    private void setMessagesButtonListener(final Context context) {
+        messagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+                if (!(currentFragment instanceof CarersMessagesListFragment)) {
+                    Fragment carersFragment = new CarersMessagesListFragment();
+
+                    Bundle arguments = new Bundle();
+                    arguments.putSerializable(CarersMessagesListFragment.ARGUMENT_USER, user);
 
                     carersFragment.setArguments(arguments);
 

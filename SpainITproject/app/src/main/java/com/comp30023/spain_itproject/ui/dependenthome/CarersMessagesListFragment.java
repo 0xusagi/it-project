@@ -1,20 +1,16 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.comp30023.spain_itproject.ChatActivity;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.ui.views.ItemButton;
@@ -78,25 +74,17 @@ public class CarersMessagesListFragment extends ListFragment<CarerUser> {
         super.setButtonListeners(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //The item button that is pressed
                 ItemButton itemButton = (ItemButton) v;
-                CarerUser requester = (CarerUser) itemButton.getItem();
+                CarerUser carer = (CarerUser) itemButton.getItem();
 
-                // Get the phone number of the dependent
-                String phoneNumber = requester.getPhoneNumber();
+                Intent intent = new Intent(getContext(), ChatActivity.class);
+                intent.putExtra(ChatActivity.EXTRA_CURRENT_USER, user);
+                intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER, carer);
 
-                // Make a new calling intent
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:"+phoneNumber));
+                startActivity(intent);
 
-                // Check for permission
-                if (ContextCompat.checkSelfPermission(getActivity().getApplication(), Manifest.permission.CALL_PHONE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.CALL_PHONE}, 1);
-                } else {
-                    startActivity(intent);
-                }
             }
         });
     }

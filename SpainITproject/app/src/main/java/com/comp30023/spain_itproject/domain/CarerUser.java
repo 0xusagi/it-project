@@ -1,6 +1,6 @@
 package com.comp30023.spain_itproject.domain;
 
-import com.comp30023.spain_itproject.firebase.realtime_database.ChatService;
+import com.comp30023.spain_itproject.firebase.realtime_database.FirebaseChatService;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.google.gson.annotations.SerializedName;
 
@@ -48,11 +48,11 @@ public class CarerUser extends User implements Serializable {
 
         if (dependentIds != null && !dependentIds.isEmpty()) {
             for (String id : dependentIds) {
-                ChatService.getInstance().addChatListener(this, id);
+                FirebaseChatService.getInstance().addChatListener(this, id);
             }
         } else if (confirmedDependents != null && !confirmedDependents.isEmpty()) {
             for (DependentUser dependent : confirmedDependents) {
-                ChatService.getInstance().addChatListener(this, dependent.getId());
+                FirebaseChatService.getInstance().addChatListener(this, dependent.getId());
             }
         }
     }
