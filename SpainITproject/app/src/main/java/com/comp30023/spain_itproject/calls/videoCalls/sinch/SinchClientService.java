@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.ui.videocalls.IncomingVideoCallActivity;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.ClientRegistration;
@@ -30,6 +31,26 @@ public class SinchClientService extends Service {
 
     private SinchClient client;
     private SinchServiceInterface serviceInterface = new SinchServiceInterface();
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        String userId = LoginSharedPreference.getId(getApplicationContext());
+
+        if (userId != null) {
+            start(userId);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (client != null && client.isStarted()) {
+            client.stopListeningOnActiveConnection();
+            client.terminate();
+        }
+
+        super.onDestroy();
+    }
 
     /**
      * Start the client service to be able to make calls and listen to incoming calls
