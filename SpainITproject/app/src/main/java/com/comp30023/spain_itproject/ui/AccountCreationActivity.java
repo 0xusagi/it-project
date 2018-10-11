@@ -15,12 +15,13 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.ui.videocalls.BaseActivity;
 
 /**
  * Activity for uses to create/register an account
  * When an account is registered, logs in the account and launches the corresponding HomeActivity (either CarerHomeActivity or DependentHomeActivity)
  */
-public class AccountCreationActivity extends AppCompatActivity {
+public class AccountCreationActivity extends BaseActivity {
 
     public static final int PIN_LENGTH = 4;
 
@@ -82,10 +83,16 @@ public class AccountCreationActivity extends AppCompatActivity {
         setPinFields();
 
         registerButton = (Button) findViewById(R.id.registerButton);
+        registerButton.setEnabled(false);
         setRegisterButtonListener(this);
 
         cancelButton = (Button) findViewById(R.id.cancelButton);
         setCancelButtonListener(this);
+    }
+
+    @Override
+    public void onServiceConnected() {
+        registerButton.setEnabled(true);
     }
 
     /**

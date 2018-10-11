@@ -30,6 +30,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".calls.videoCalls.sinch.SinchClientService"></service>
 
         <activity android:name=".ui.StartActivity">
             <intent-filter>

@@ -9,11 +9,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.comp30023.spain_itproject.firebase.DataMessage;
+import com.comp30023.spain_itproject.ui.videocalls.BaseActivity;
 
 /**
  * An activity that extends from this receives broadcasts regarding message handling
  */
-public abstract class BroadcastActivity extends AppCompatActivity {
+public abstract class BroadcastActivity extends BaseActivity {
 
     public static final String HANDLE_MESSAGE = "HANDLE_MESSAGE";
 
