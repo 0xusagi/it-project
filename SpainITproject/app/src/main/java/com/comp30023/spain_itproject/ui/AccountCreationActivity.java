@@ -151,6 +151,13 @@ public class AccountCreationActivity extends BaseActivity {
                         }
                         return null;
                     }
+
+                    @Override
+                    protected void onPostExecute(Object object) {
+                        if (getSinchInterface() != null && !getSinchInterface().isStarted()) {
+                            getSinchInterface().startClient(LoginSharedPreference.getId(AccountCreationActivity.this));
+                        }
+                    }
                 };
 
                 task.execute();

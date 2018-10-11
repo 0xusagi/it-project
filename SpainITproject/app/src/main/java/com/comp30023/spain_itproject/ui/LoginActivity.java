@@ -111,6 +111,13 @@ public class LoginActivity extends BaseActivity {
                         }
                         return null;
                     }
+
+                    @Override
+                    protected void onPostExecute(Object object) {
+                        if (getSinchInterface() != null && !getSinchInterface().isStarted()) {
+                            getSinchInterface().startClient(LoginSharedPreference.getId(LoginActivity.this));
+                        }
+                    }
                 };
 
                 task.execute();

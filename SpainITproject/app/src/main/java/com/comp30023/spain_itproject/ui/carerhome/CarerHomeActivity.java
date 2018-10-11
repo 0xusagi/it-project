@@ -22,12 +22,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.ui.BroadcastActivity;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
+import com.comp30023.spain_itproject.ui.videocalls.VideoCallActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
+import com.sinch.android.rtc.calling.Call;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,7 +175,6 @@ public class CarerHomeActivity extends BroadcastActivity {
     /**
      * Makes a list of the dependent names that a carer has,
      * If carer has none, then display a message
-     * @param carerUser
      * @return
      */
     private void setupList() {
@@ -221,7 +223,7 @@ public class CarerHomeActivity extends BroadcastActivity {
      * @param i
      */
     private void setupAlertDialog(final int i) {
-        String[] options = {"Call", "Message", "Edit"};
+        String[] options = {"Call", "Message", "Edit", "Video Call"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
         builder.setTitle("Choose");
@@ -254,6 +256,21 @@ public class CarerHomeActivity extends BroadcastActivity {
                         intent = new Intent(getApplicationContext(), EditDependentsActivity.class);
                         // Pass through the dependent id so that can edit easily
                         intent.putExtra("DependentID", getDependentAt(i).getId());
+                        startActivity(intent);
+                        break;
+
+                    case 3:
+                        if (getSinchInterface() == null || !getSinchInterface().isStarted()) {
+                            break;
+                        }
+
+                        // Start the video call
+                        Call call = getSinchInterface().callUserVideo(getDependentAt(i).getId());
+                        String callId = call.getCallId();
+
+                        // Star tthe intent
+                        intent = new Intent(getApplicationContext(), VideoCallActivity.class);
+                        intent.putExtra(SinchClientService.CALL_ID, callId);
                         startActivity(intent);
                         break;
 

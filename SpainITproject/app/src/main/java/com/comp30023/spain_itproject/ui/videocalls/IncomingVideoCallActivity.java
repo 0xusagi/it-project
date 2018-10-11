@@ -116,6 +116,16 @@ public class IncomingVideoCallActivity extends BaseActivity {
         }
 
         @Override
+        public void onVideoTrackPaused(Call call) {
+
+        }
+
+        @Override
+        public void onVideoTrackResumed(Call call) {
+
+        }
+
+        @Override
         public void onCallProgressing(Call call) {
 
         }
