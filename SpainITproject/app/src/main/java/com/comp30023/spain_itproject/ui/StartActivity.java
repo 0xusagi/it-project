@@ -1,8 +1,12 @@
 package com.comp30023.spain_itproject.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,6 +24,10 @@ import java.nio.file.Path;
  * If previously signed in, directs to appropriate HomeActivity (depending on whether signed in as a Dependent or Carer)
  */
 public class StartActivity extends BroadcastActivity {
+    private final int REQUEST_CALL_PHONE = 0;
+    private final int REQUEST_RECORD_AUDIO = 1;
+    private final int REQUEST_CAMERA = 2;
+    private final int REQUEST_RECORD_AUDIO_AND_CAMERA = 3;
 
     private Button createAccountButton;
     private Button loginButton;
@@ -39,6 +47,9 @@ public class StartActivity extends BroadcastActivity {
 
         loginButton = findViewById(R.id.start_loginButton);
         setLoginButtonListener(this);
+
+        // Request for all the permission required for the application to run
+        checkVideoCallPermissions();
     }
 
 
@@ -82,5 +93,23 @@ public class StartActivity extends BroadcastActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    private void checkVideoCallPermissions() {
+        int permissionRecordAudio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+        int permissionCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+
+        if (permissionRecordAudio != PackageManager.PERMISSION_GRANTED &&
+                permissionCamera != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA},
+                    REQUEST_RECORD_AUDIO_AND_CAMERA);
+        }
+        else if (permissionRecordAudio != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
+        }
+        else if (permissionCamera != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+        }
     }
 }

@@ -1,11 +1,15 @@
 package com.comp30023.spain_itproject.calls.videoCalls.sinch;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
@@ -26,6 +30,7 @@ public class SinchClientService extends Service {
     private final String APP_KEY = "29522bfe-2ee2-44d4-bff0-4af14c6b6801";
     private final String APP_SECRET = "3ev38vtThEekNXamuYZq+g==";
     private final String HOSTNAME = "clientapi.sinch.com";
+
 
     private String userId;
 
@@ -211,4 +216,6 @@ public class SinchClientService extends Service {
             return client.getAudioController();
         }
     }
+
+
 }

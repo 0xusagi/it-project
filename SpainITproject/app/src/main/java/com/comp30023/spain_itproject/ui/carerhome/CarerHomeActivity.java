@@ -43,10 +43,7 @@ import java.util.List;
  * various different activities in order to observe or contact the dependent
  */
 public class CarerHomeActivity extends BroadcastActivity {
-    private final int REQUEST_CALL_PHONE = 0;
-    private final int REQUEST_RECORD_AUDIO = 1;
-    private final int REQUEST_CAMERA = 2;
-    private final int REQUEST_RECORD_AUDIO_AND_CAMERA = 3;
+
 
     // The list of dependents of the carer which contains all information about the dependents
     // to be used when the carer wants to edit the dependent
@@ -268,7 +265,6 @@ public class CarerHomeActivity extends BroadcastActivity {
 
                     case 3:
                         dependentSelected = getDependentAt(i);
-                        checkVideoCallPermissions();
                         startVideoCall();
                         break;
 
@@ -289,46 +285,6 @@ public class CarerHomeActivity extends BroadcastActivity {
      */
     private DependentUser getDependentAt(int i) {
         return dependents.get(i);
-    }
-
-    private void checkVideoCallPermissions() {
-        int permissionRecordAudio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
-        int permissionCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-
-        if (permissionRecordAudio != PackageManager.PERMISSION_GRANTED &&
-                permissionCamera != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA},
-                    REQUEST_RECORD_AUDIO_AND_CAMERA);
-        }
-        else if (permissionRecordAudio != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
-        }
-        else if (permissionCamera != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
-        }
-        else {
-            startVideoCall();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch(requestCode) {
-            case REQUEST_CAMERA:
-                startVideoCall();
-                break;
-
-            case REQUEST_RECORD_AUDIO:
-                startVideoCall();
-                break;
-
-            case REQUEST_RECORD_AUDIO_AND_CAMERA:
-                startVideoCall();
-                break;
-
-            default:
-                break;
-        }
     }
 
     private void startVideoCall() {
