@@ -31,6 +31,7 @@ public class VideoCallActivity extends BaseActivity {
     private TextView callerName;
 
     private Button endCallButton;
+    private Button flipCameraButton;
 
     private boolean isAddedListener = false;
     private boolean isAddedVideoViews = false;
@@ -47,6 +48,10 @@ public class VideoCallActivity extends BaseActivity {
         // Setup the endCall button
         endCallButton = findViewById(R.id.videoCall_endCallButton);
         setupEndCallButton();
+
+        // Setup the flip camera button
+        flipCameraButton = findViewById(R.id.videoCall_flipCameraButton);
+        setupFlipCameraButton();
 
         // Get the call id of the user
         callId = getIntent().getStringExtra(SinchClientService.CALL_ID);
@@ -204,6 +209,9 @@ public class VideoCallActivity extends BaseActivity {
         isAddedVideoViews = true;
     }
 
+    /**
+     * Remove the video views that are displayed in the video call
+     */
     private void removeVideoViews() {
         // Early exit
         if (getSinchInterface() == null) {
@@ -219,5 +227,12 @@ public class VideoCallActivity extends BaseActivity {
             localView.removeAllViews();
             isAddedVideoViews = false;
         }
+    }
+
+    /**
+     * Setup the button to flip the camera
+     */
+    private void setupFlipCameraButton() {
+        getSinchInterface().getVideoController().toggleCaptureDevicePosition();
     }
 }
