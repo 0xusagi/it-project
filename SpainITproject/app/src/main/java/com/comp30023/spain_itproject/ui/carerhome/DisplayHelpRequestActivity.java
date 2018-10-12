@@ -1,8 +1,9 @@
-package com.comp30023.spain_itproject.ui;
+package com.comp30023.spain_itproject.ui.carerhome;
 
 import android.app.Activity;
 import android.content.Context;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
@@ -12,14 +13,15 @@ import android.view.View;
 import android.widget.Button;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.ui.maps.NavigationMapsFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 
 public class DisplayHelpRequestActivity extends AppCompatActivity {
 
     private Button button2;
     private Button button3;
 
-    private NavigationMapsFragment fragment;
-
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,7 @@ public class DisplayHelpRequestActivity extends AppCompatActivity {
         final Context context = this;
         final Activity activity = this;
 
-        fragment = new NavigationMapsFragment();
+        fragment = new SupportMapFragment();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -39,30 +41,8 @@ public class DisplayHelpRequestActivity extends AppCompatActivity {
         transaction.commit();
 
         button2 = findViewById(R.id.button2);
-        setButton2Listener(this);
 
         button3 = findViewById(R.id.button3);
-        setButton3Listener(this);
 
-    }
-
-
-    private void setButton2Listener(final Context context) {
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //fragment.setDestination();
-            }
-        });
-    }
-
-
-    private void setButton3Listener(final Context context) {
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragment.clearDestination();
-            }
-        });
     }
 }

@@ -7,11 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.firebase.DataMessage;
-import com.comp30023.spain_itproject.firebase.InvalidMessageException;
-import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
-
-import java.nio.file.Path;
+import com.comp30023.spain_itproject.firebase.cloud_messaging.DataMessage;
+import com.comp30023.spain_itproject.firebase.cloud_messaging.InvalidMessageException;
 
 /**
  * Launching activity

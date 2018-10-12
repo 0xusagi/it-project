@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.firebase;
+package com.comp30023.spain_itproject.firebase.cloud_messaging;
 
 import android.content.Context;
 

@@ -1,8 +1,7 @@
-package com.comp30023.spain_itproject.firebase.realtime_database;
+package com.comp30023.spain_itproject.domain;
 
 import android.support.annotation.NonNull;
 
-import com.google.firebase.database.DataSnapshot;
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.io.Serializable;
@@ -10,7 +9,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -50,13 +48,12 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.senderName = senderName;
-        this.timeStamp = timeStamp;
         this.message = message;
 
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+        TimeZone tz = TimeZone.getDefault();
+        DateFormat df = SimpleDateFormat.getDateTimeInstance();
         df.setTimeZone(tz);
-        String timeStamp = df.format(new Date());
+        this.timeStamp = df.format(new Date());
     }
 
     public ChatMessage(){

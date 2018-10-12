@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.ui;
+package com.comp30023.spain_itproject.ui.maps;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.comp30023.spain_itproject.DisplayMarker;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;

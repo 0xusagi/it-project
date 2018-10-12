@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.ui;
+package com.comp30023.spain_itproject.ui.maps;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -16,9 +16,8 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.comp30023.spain_itproject.domain.Location;
-import com.google.android.gms.location.LocationCallback;
+import com.comp30023.spain_itproject.ui.maps.GpsMapsFragment;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 

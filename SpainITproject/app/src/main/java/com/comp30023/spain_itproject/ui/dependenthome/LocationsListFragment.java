@@ -13,12 +13,10 @@ import android.view.ViewGroup;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
-import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
-import com.comp30023.spain_itproject.ui.NavigationMapsFragment;
+import com.comp30023.spain_itproject.ui.maps.NavigationMapsFragment;
 import com.comp30023.spain_itproject.ui.views.ItemButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

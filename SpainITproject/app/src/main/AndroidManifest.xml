@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <service android:name=".firebase.MyFirebaseMessagingService">
+        <service android:name=".firebase.cloud_messaging.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -67,9 +67,8 @@
         <activity android:name=".ui.carerhome.CarerHomeActivity" />
         <activity android:name=".ui.carerhome.AddDependentActivity" />
         <activity android:name=".ui.carerhome.EditDependentsActivity" />
-        <activity android:name=".ui.DisplayHelpRequestActivity" />
-        <activity android:name=".ui.MessageReceivedActivity" />
-        <activity android:name=".ChatActivity" />
+        <activity android:name=".ui.carerhome.DisplayHelpRequestActivity" />
+        <activity android:name=".ui.chat.ChatActivity" />
     </application>
 
 </manifest>

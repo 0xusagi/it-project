@@ -1,75 +1,106 @@
 package com.comp30023.spain_itproject.firebase.realtime_database;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Pair;
+import android.arch.core.util.Function;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Transformations;
 
+import com.comp30023.spain_itproject.ChatService;
+import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.User;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+/**
+ * A chat service utilising Firebase's RealTimeDatabase
+ */
+public class FirebaseChatService extends ChatService {
 
-public class FirebaseChatService implements ChildEventListener {
+    private static final FirebaseDatabase database = MyFirebaseDatabase.getDatabase();
+
+    //Reference to where all chat instances are stored
+    private static final DatabaseReference baseReference = database.getReference().child("chats");
+
+    //Database reference to the chat between the currentUser and chatPartner
+    private DatabaseReference chatReference;
+
+    //LiveData representing the most recently received chat message
+    private LiveData<ChatMessage> latestMessage;
+
+    //private LiveData<List<ChatMessage>> pastMessages;
 
 
-    public static final String BASE_CHAT_PATH = "";
+    /**
+     * Creates the references and listeners to a chat room
+     * @param currentUser The currently logged in user
+     * @param chatPartner The user they are messaging
+     */
+    public FirebaseChatService(User currentUser, User chatPartner) {
+        super(currentUser, chatPartner);
 
+        String referenceName = getChatReferenceName(currentUser, chatPartner.getId());
 
-    private static FirebaseChatService instance;
-    public static FirebaseChatService getInstance() {
-        if (instance == null) {
-            instance = new FirebaseChatService();
-        }
+        chatReference = baseReference.child(referenceName);
 
-        return instance;
+        //Set the listener for incoming children (messages) of the chatReference
+        LiveData<DataSnapshot> latestMessageSnapshot = new FirebaseChildListenerLiveData(chatReference);
+
+        //Map the incoming message to the latestMessage
+        latestMessage = Transformations.map(latestMessageSnapshot, new Function<DataSnapshot, ChatMessage>() {
+            @Override
+            public ChatMessage apply(DataSnapshot snapshot) {
+                return snapshot.getValue(ChatMessage.class);
+            }
+        });
+
+        /*pastMessages = Transformations.map(new FirebaseSingleValueListenerLiveData(chatReference), new Function<DataSnapshot, List<ChatMessage>>() {
+            @Override
+            public List<ChatMessage> apply(DataSnapshot snapshot) {
+
+                List<ChatMessage> messages = new ArrayList<ChatMessage>();
+
+                if (snapshot.exists()) {
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        messages.add(child.getValue(ChatMessage.class));
+                    }
+                }
+
+                return messages;
+            }
+        });*/
     }
 
+    /*public LiveData<List<ChatMessage>> getMessageHistory() {
 
-    private User user;
+        return pastMessages;
+    }*/
 
-    private Map<String, ChildEventListener> listeners;
+    /**
+     * Sends the chat message
+     * @param message The message to be sent
+     */
+    public void sendMessage(ChatMessage message) {
 
-
-    private FirebaseDatabase firebaseDatabase;
-
-    private DatabaseReference baseChatReference;
-
-    private void checkDatabaseInstance() {
-        if (firebaseDatabase == null) {
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            firebaseDatabase.setPersistenceEnabled(true);
-
-            baseChatReference = firebaseDatabase.getReference().child(BASE_CHAT_PATH);
-        }
+        //Adds the message as a child to the chat instance
+        chatReference.push().setValue(message);
     }
 
-    public void addChatListener(final User currentUser, String partnerId) {
-
-        checkDatabaseInstance();
-
-        if (listeners == null) {
-            listeners = new HashMap<String, ChildEventListener>();
-        }
-
-        String referenceName = getReferenceName(currentUser, partnerId);
-
-        //Get the reference from the database
-        DatabaseReference chatReference = baseChatReference.child(referenceName);
-
-        //Handle incoming messages
-        ChildEventListener listener = chatReference.addChildEventListener(this);
+    /**
+     * Returns the live data that represents the listener for most recent chat message
+     * @return
+     */
+    public LiveData<ChatMessage> getLatestMessageLiveData() {
+        return latestMessage;
     }
 
-
-    public static String getReferenceName(User currentUser, String partnerId) {
+    /**
+     * Determines the name for the chat instance between the two users
+     * @param currentUser The logged in user
+     * @param partnerId The user they are chatting to
+     * @return The name of the chat instance to listen to
+     */
+    private static String getChatReferenceName(User currentUser, String partnerId) {
 
         //Determine the reference from the agreed naming convention (DependentUser.id-CarerUser.id)
         String reference;
@@ -83,104 +114,4 @@ public class FirebaseChatService implements ChildEventListener {
         return reference;
     }
 
-
-    public void fetchMessages(final User currentUser, List<User> partners) {
-
-        for (User partner : partners) {
-
-            String referenceName = getReferenceName(currentUser, partner.getId());
-
-            checkDatabaseInstance();
-
-            DatabaseReference chatReference = baseChatReference.child(referenceName);
-
-            //Retrieve chat history
-            chatReference.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    //Get children (messages) for the chat room instance in the database
-                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-
-                    //Add each message to the current user
-                    for (DataSnapshot child : children) {
-
-                        ChatMessage message = child.getValue(ChatMessage.class);
-                        currentUser.putMessage(message);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
-
-    public void sendMessage(User sender, User receiver, String body) {
-
-        checkDatabaseInstance();
-
-        ChatMessage message = new ChatMessage(sender.getId(), sender.getName(), receiver.getId(), body);
-
-        String referenceName = getReferenceName(sender, receiver.getId());
-        DatabaseReference chatReference = baseChatReference.child(BASE_CHAT_PATH + referenceName);
-
-        //TODO
-        //AccountController.getInstance().sendMessage(sender, receiver, body);
-
-        chatReference.push().setValue(message);
-    }
-
-
-    public void clearListeners() {
-        listeners.clear();
-    }
-
-    public void removeChatListener(String partnerId) {
-        listeners.remove(partnerId);
-    }
-
-
-    @Override
-    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-        ChatMessage message = dataSnapshot.getValue(ChatMessage.class);
-        user.putMessage(message);
-    }
-
-
-    public DatabaseReference getChatReference(User currentUser, String partnerId) {
-
-        checkDatabaseInstance();
-
-        String chatReferenceName = getReferenceName(currentUser, partnerId);
-
-        DatabaseReference chatReference = baseChatReference.child(chatReferenceName);
-
-        return chatReference;
-    }
-
-    @Override
-    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-    }
-
-    @Override
-    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-    }
-
-    @Override
-    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-    }
 }

@@ -13,8 +13,7 @@ import retrofit2.http.Path;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
-import com.comp30023.spain_itproject.firebase.DataMessage;
-import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
+import com.comp30023.spain_itproject.firebase.cloud_messaging.DataMessage;
 
 import java.util.List;
 
