@@ -2,6 +2,7 @@ package com.comp30023.spain_itproject.ui.videocalls;
 
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import java.util.List;
 public class VideoCallActivity extends BaseActivity {
 
     private String callId;
+    private long startTime;
 
     // Views
     private TextView callTime;
@@ -36,6 +38,23 @@ public class VideoCallActivity extends BaseActivity {
     private boolean isAddedListener = false;
     private boolean isAddedVideoViews = false;
 
+    //runs without a timer by reposting this handler at the end of the runnable
+    Handler timerHandler = new Handler();
+    Runnable timerRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            long millis = System.currentTimeMillis() - startTime;
+            int seconds = (int) (millis / 1000);
+            int minutes = seconds / 60;
+            seconds = seconds % 60;
+
+            callTime.setText(String.format("%d:%02d", minutes, seconds));
+
+            timerHandler.postDelayed(this, 500);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +62,8 @@ public class VideoCallActivity extends BaseActivity {
 
         // Get the views
         callTime = findViewById(R.id.videoCall_callTime);
+        callTime.setText("0:00");
+        startTime = 0;
         callerName = findViewById(R.id.videoCall_remoteCallerName);
 
         // Setup the endCall button
@@ -102,7 +123,9 @@ public class VideoCallActivity extends BaseActivity {
                         AudioController audioController = getSinchInterface().getAudioController();
                         audioController.enableSpeaker();
 
-                        // TODO start the timer
+                        // Start the timer
+                        startTime = System.currentTimeMillis();
+                        timerHandler.postDelayed(timerRunnable, 0);
                     }
 
                     @Override
@@ -155,7 +178,9 @@ public class VideoCallActivity extends BaseActivity {
     public void onStop() {
         super.onStop();
 
-        // TODO cancel the timers
+        // Cancel the timer
+        timerHandler.removeCallbacks(timerRunnable);
+
         removeVideoViews();
     }
 
@@ -233,6 +258,11 @@ public class VideoCallActivity extends BaseActivity {
      * Setup the button to flip the camera
      */
     private void setupFlipCameraButton() {
-        getSinchInterface().getVideoController().toggleCaptureDevicePosition();
+        flipCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSinchInterface().getVideoController().toggleCaptureDevicePosition();
+            }
+        });
     }
 }

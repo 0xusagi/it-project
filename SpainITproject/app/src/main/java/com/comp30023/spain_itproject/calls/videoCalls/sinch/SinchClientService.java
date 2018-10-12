@@ -27,6 +27,8 @@ import com.sinch.android.rtc.video.VideoController;
 
 public class SinchClientService extends Service {
     public static final String CALL_ID = "Call_ID";
+    public static final String CALLER_USER_ID="CallerUserId";
+
     private final String APP_KEY = "29522bfe-2ee2-44d4-bff0-4af14c6b6801";
     private final String APP_SECRET = "3ev38vtThEekNXamuYZq+g==";
     private final String HOSTNAME = "clientapi.sinch.com";
@@ -156,6 +158,7 @@ public class SinchClientService extends Service {
             public void onIncomingCall(CallClient callClient, Call call) {
                 Intent intent = new Intent(SinchClientService.this, IncomingVideoCallActivity.class);
                 intent.putExtra(CALL_ID, call.getCallId());
+                intent.putExtra(CALLER_USER_ID, call.getRemoteUserId());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 SinchClientService.this.startActivity(intent);
             }

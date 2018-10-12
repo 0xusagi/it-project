@@ -1,15 +1,22 @@
 package com.comp30023.spain_itproject.ui.videocalls;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
+import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
+import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.sinch.android.rtc.PushPair;
+import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.video.VideoCallListener;
@@ -18,6 +25,7 @@ import java.util.List;
 
 public class IncomingVideoCallActivity extends BaseActivity {
     private String callId;
+    private String callerUserId;
 
     // Views
     private TextView callerName;
@@ -32,6 +40,13 @@ public class IncomingVideoCallActivity extends BaseActivity {
 
         // Get the call id
         callId = getIntent().getStringExtra(SinchClientService.CALL_ID);
+
+        // Get the caller id
+        callerUserId = getIntent().getStringExtra(SinchClientService.CALLER_USER_ID);
+
+        // Setup the callerName view
+        callerName = findViewById(R.id.incomingVideoCall_callerName);
+        setupCallerName();
 
         // Setup the buttons
         setupAcceptButton();
@@ -150,5 +165,51 @@ public class IncomingVideoCallActivity extends BaseActivity {
         public void onShouldSendPushNotification(Call call, List<PushPair> list) {
             // No push notifications
         }
+    }
+
+    /**
+     * Get the name of the caller task
+     */
+    private class GetCallerNameTask extends AsyncTask<Void, Void, String> {
+        private Exception exception;
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            User user;
+            // Check if dependent or carer's phone
+            // If dependent
+            if (LoginSharedPreference.getIsDependent(IncomingVideoCallActivity.this)) {
+                try {
+                    user = AccountController.getInstance().getCarer(callerUserId);
+                    return user.getName();
+                } catch (Exception e) {
+                    exception = e;
+                }
+            } else {
+                try {
+                    user = AccountController.getInstance().getDependent(callerUserId);
+                    return user.getName();
+                } catch (Exception e) {
+                    exception = e;
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String name) {
+            // Check if the user is obtained
+            if (name == null) {
+                callerName.setText("Caller name cannot be obtained");
+            }
+
+            // Display the name on the screen
+            callerName.setText(name);
+        }
+    }
+
+    private void setupCallerName() {
+        new GetCallerNameTask().execute();
     }
 }
