@@ -117,7 +117,8 @@ public class ChatActivity extends BroadcastActivity {
                             chatService.sendMessage(newMessage);
 
                             //If no error thrown, clear the text
-                            inputText.getText().clear();
+                            //inputText.getText().clear();
+                            inputText.setText("");
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -126,6 +127,7 @@ public class ChatActivity extends BroadcastActivity {
                         return null;
                     }
                 };
+                task.execute();
             }
         });
     }

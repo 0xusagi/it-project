@@ -140,10 +140,10 @@ public interface AccountService {
     );
 
     @FormUrlEncoded
-    @PUT("users/{senderId}/sendMessage")
+    @POST("user/sendMessage")
     Call<ResponseBody> sendChat(
-            @Path("senderId") String senderId,
-            @Field("receiverId") String receivierId,
+            @Field("senderId") String senderId,
+            @Field("receiverId") String receiverId,
             @Field ("message") String message
     );
 }

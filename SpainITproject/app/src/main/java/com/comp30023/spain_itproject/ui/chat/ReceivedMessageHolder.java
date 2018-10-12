@@ -22,6 +22,7 @@ public class ReceivedMessageHolder extends MessageHolder {
     }
 
     void bind(ChatMessage message) {
+        super.bind(message);
         nameText.setText(message.getSenderName());
     }
 }
