@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.NoConnectionException;
@@ -69,7 +70,7 @@ public class HelpPopupWindow extends DimBackgroundPopupWindow {
             protected Object doInBackground(Object[] objects) {
 
                 try {
-                    AccountController.getInstance().sendHelpRequest(user, message);
+                    ServiceFactory.getInstance().notificationSendingService().sendHelp(user, message);
                 } catch (BadRequestException e) {
                     e.printStackTrace();
                 } catch (NoConnectionException e) {

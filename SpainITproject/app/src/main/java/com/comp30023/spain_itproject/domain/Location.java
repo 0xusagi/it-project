@@ -1,41 +1,37 @@
 package com.comp30023.spain_itproject.domain;
 
 import com.comp30023.spain_itproject.uicontroller.MapsService;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 public class Location implements Serializable, DisplayName {
 
-    @SerializedName("id")
-    private int id;
+    @SerializedName("googleId")
+    private String googleId;
 
-    @SerializedName("address")
-    private Address address;
+    @SerializedName("lat")
+    private double latitude;
 
-    private Coordinates coords;
+    @SerializedName("long")
+    private double longitude;
 
     @SerializedName("displayName")
     private String displayName;
 
-    @SerializedName("description")
-    private String description;
-
-    @SerializedName("avatar")
-    private String avatar;
-
-    @SerializedName("popularity")
-    private float popularity;
-
-    public Location(Address address, String displayName) {
-        this.address = address;
-        this.displayName = displayName;
-
-        coords = MapsService.getCoordinates(address);
-
+    public Location(String googleId, double latitude, double longitude, String displayName) {
     }
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
     }
 }

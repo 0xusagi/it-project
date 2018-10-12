@@ -1,9 +1,8 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,15 +10,12 @@ import android.os.AsyncTask;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroupOverlay;
 import android.widget.Button;
 
 import android.widget.PopupWindow;
@@ -91,6 +87,7 @@ public class DependentHomeActivity extends BroadcastActivity {
         new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
+        setMessagesButtonListener(this);
 
         callsButton = (Button) findViewById(R.id.callButton);
         setCallsButtonListener(this);
@@ -149,6 +146,32 @@ public class DependentHomeActivity extends BroadcastActivity {
 
                     Bundle arguments = new Bundle();
                     arguments.putSerializable(CarersListFragment.ARGUMENT_USER, user);
+
+                    carersFragment.setArguments(arguments);
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                    transaction.replace(R.id.fragment_container, carersFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            }
+        });
+    }
+
+
+    private void setMessagesButtonListener(final Context context) {
+        messagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+                if (!(currentFragment instanceof CarersMessagesListFragment)) {
+                    Fragment carersFragment = new CarersMessagesListFragment();
+
+                    Bundle arguments = new Bundle();
+                    arguments.putSerializable(CarersMessagesListFragment.ARGUMENT_USER, user);
 
                     carersFragment.setArguments(arguments);
 

@@ -13,8 +13,7 @@ import retrofit2.http.Path;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
-import com.comp30023.spain_itproject.firebase.DataMessage;
-import com.comp30023.spain_itproject.firebase.MyFirebaseMessagingService;
+import com.comp30023.spain_itproject.firebase.cloud_messaging.DataMessage;
 
 import java.util.List;
 
@@ -71,12 +70,16 @@ public interface AccountService {
             @Path("mobile") String phoneNumber);
 
 
-    //CONFIRM
+
     @FormUrlEncoded
-    @POST("/dependents/{id}/locations/new")
+    @POST("/dependent/{id}/addLocation")
     Call<ResponseBody> addLocationToDependent(
                             @Path("id") String dependentId,
-                            @Field("Location") Location location);
+                            @Field("googleId") String googleId,
+                            @Field("lat") double latitude,
+                            @Field("long") double longitude,
+                            @Field("displayName") String displayName);
+
 
     @FormUrlEncoded
     @PUT("/carers/{id}/addDependent")
@@ -103,12 +106,10 @@ public interface AccountService {
             @Path("id") String id
     );
 
-    @GET("/dependents/{id}/locations")
+    @GET("/dependent/{id}/locations")
     Call<List<Location>> getLocationsOfDependent(
             @Path("id") String id
     );
-
-
 
     @GET("/dependents/{id}/pendingCarers")
     Call<List<CarerUser>> getPendingCarersOfDependent(
@@ -136,5 +137,13 @@ public interface AccountService {
     Call<ResponseBody> requestHelp(
             @Path("id") String id,
             @Field(DataMessage.DATA_MESSAGE_BODY) String message
+    );
+
+    @FormUrlEncoded
+    @POST("user/sendMessage")
+    Call<ResponseBody> sendChat(
+            @Field("senderId") String senderId,
+            @Field("receiverId") String receiverId,
+            @Field ("message") String message
     );
 }

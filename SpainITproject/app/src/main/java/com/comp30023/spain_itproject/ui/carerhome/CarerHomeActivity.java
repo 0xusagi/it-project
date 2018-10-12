@@ -8,10 +8,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.ui.chat.ChatActivity;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
@@ -43,7 +42,6 @@ public class CarerHomeActivity extends BroadcastActivity {
     // The list of dependents of the carer which contains all information about the dependents
     // to be used when the carer wants to edit the dependent
     private List<DependentUser> dependents;
-
     // Dependents list
     private ListView dependentsList;
     private ArrayAdapter<String> arrayAdapter;
@@ -57,8 +55,11 @@ public class CarerHomeActivity extends BroadcastActivity {
     // Refresh button
     private ImageButton refreshButton;
 
+    private CarerUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carer_home);
 
@@ -129,6 +130,7 @@ public class CarerHomeActivity extends BroadcastActivity {
             // Get the carer User from the server
             try {
                 CarerUser carer = AccountController.getInstance().getCarer(strings[0]);
+                user = carer;
                 return carer.getDependents();
             } catch (Exception e) {
                 exception = e;
@@ -172,7 +174,6 @@ public class CarerHomeActivity extends BroadcastActivity {
     /**
      * Makes a list of the dependent names that a carer has,
      * If carer has none, then display a message
-     * @param carerUser
      * @return
      */
     private void setupList() {
@@ -249,6 +250,15 @@ public class CarerHomeActivity extends BroadcastActivity {
                         }
                         break;
                     // Edit button
+
+                    case 1:
+                        intent = new Intent(getApplicationContext(), ChatActivity.class);
+                        intent.putExtra(ChatActivity.EXTRA_CURRENT_USER, user);
+                        intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER, getDependentAt(i));
+
+                        startActivity(intent);
+                        break;
+
                     case 2:
                         // Make a new intent to display the edit dependents activity
                         intent = new Intent(getApplicationContext(), EditDependentsActivity.class);
