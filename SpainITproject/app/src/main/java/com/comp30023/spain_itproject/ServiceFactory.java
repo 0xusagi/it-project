@@ -6,8 +6,21 @@ import com.comp30023.spain_itproject.firebase.realtime_database.FirebaseChatServ
 
 public class ServiceFactory {
 
-    public static ChatService createChatService(User currentUser, User chatPartner) {
+    private static ServiceFactory instance;
+    public static ServiceFactory getInstance() {
+        if (instance == null) {
+            instance = new ServiceFactory();
+        }
+        return instance;
+    }
+
+
+    public ChatService createChatService(User currentUser, User chatPartner) {
         return new FirebaseChatService(currentUser, chatPartner);
+    }
+
+    public NotificationSendingService notificationSendingService() {
+        return MyNotificationSendingService.getInstance();
     }
 
 }

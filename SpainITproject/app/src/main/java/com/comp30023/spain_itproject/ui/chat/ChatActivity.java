@@ -1,7 +1,9 @@
 package com.comp30023.spain_itproject.ui.chat;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.R;
@@ -68,7 +71,7 @@ public class ChatActivity extends BroadcastActivity {
         setSendMessageButtonListener();
 
         //Create the listener for the chat service
-        chatService = ServiceFactory.createChatService(currentUser, chatPartner);
+        chatService = ServiceFactory.getInstance().createChatService(currentUser, chatPartner);
 
         /*chatService.getMessageHistory().observe(this, new Observer<List<ChatMessage>>() {
             @Override
@@ -99,11 +102,43 @@ public class ChatActivity extends BroadcastActivity {
             @Override
             public void onClick(View v) {
 
+                //Get text and create ChatMessage instance
                 String text = inputText.getText().toString();
-                ChatMessage newMessage = new ChatMessage(currentUser.getId(), currentUser.getName(), chatPartner.getId(), text);
+                final ChatMessage newMessage = new ChatMessage(currentUser.getId(), currentUser.getName(), chatPartner.getId(), text);
 
-                chatService.sendMessage(newMessage);
-                inputText.getText().clear();
+                @SuppressLint("StaticFieldLeak")
+                AsyncTask task = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+
+                        try {
+
+                            //Send message
+                            chatService.sendMessage(newMessage);
+
+                            //If no error thrown, clear the text
+                            inputText.getText().clear();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        return null;
+                    }
+                };
+            }
+        });
+    }
+
+    /**
+     * Displays the message from the exception as a toast
+     * @param e The exception
+     */
+    private void displayExceptionToast(final Exception e) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

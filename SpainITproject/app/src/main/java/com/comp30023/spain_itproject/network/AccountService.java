@@ -138,4 +138,12 @@ public interface AccountService {
             @Path("id") String id,
             @Field(DataMessage.DATA_MESSAGE_BODY) String message
     );
+
+    @FormUrlEncoded
+    @PUT("users/{senderId}/sendMessage")
+    Call<ResponseBody> sendChat(
+            @Path("senderId") String senderId,
+            @Field("receiverId") String receivierId,
+            @Field ("message") String message
+    );
 }

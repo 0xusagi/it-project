@@ -1,13 +1,18 @@
 package com.comp30023.spain_itproject.firebase.realtime_database;
 
+import android.annotation.SuppressLint;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
+import android.os.AsyncTask;
 
 import com.comp30023.spain_itproject.ChatService;
+import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.network.NoConnectionException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -78,9 +83,13 @@ public class FirebaseChatService extends ChatService {
 
     /**
      * Sends the chat message
+     * Makes network call to send notification, cannot be executed on UI thread
      * @param message The message to be sent
      */
-    public void sendMessage(ChatMessage message) {
+    public void sendMessage(final ChatMessage message) throws Exception {
+
+        //Send the notification
+        ServiceFactory.getInstance().notificationSendingService().sendChat(message);
 
         //Adds the message as a child to the chat instance
         chatReference.push().setValue(message);

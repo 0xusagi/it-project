@@ -33,5 +33,5 @@ public abstract class ChatService {
      * Sends a message to the chat partner specified for this server
      * @param message The message to be sent
      */
-    public abstract void sendMessage(ChatMessage message);
+    public abstract void sendMessage(ChatMessage message) throws Exception;
 }
