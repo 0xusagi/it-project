@@ -261,7 +261,8 @@ public class VideoCallActivity extends BaseActivity {
         flipCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getSinchInterface().getVideoController().toggleCaptureDevicePosition();
+                VideoController vc = getSinchInterface().getVideoController();
+                vc.toggleCaptureDevicePosition();
             }
         });
     }
