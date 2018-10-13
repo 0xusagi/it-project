@@ -23,6 +23,8 @@ public class HelpDataMessage extends DataMessage {
     public void handle(Context context) {
 
         Intent intent = new Intent(context, DisplayHelpRequestActivity.class);
+        intent.putExtra(DisplayHelpRequestActivity.EXTRA_SENDER_NAME, getSenderName());
+        intent.putExtra(DisplayHelpRequestActivity.EXTRA_SENDER_ID, getSenderId());
         context.startActivity(intent);
 
     }

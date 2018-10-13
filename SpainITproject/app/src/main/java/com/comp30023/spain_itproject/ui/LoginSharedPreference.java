@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
  * Contains the current login status and information as saved in a SharedPreferences
  */
 public class LoginSharedPreference {
+
     // Instance of Shared preference
     private static SharedPreferences instance;
 

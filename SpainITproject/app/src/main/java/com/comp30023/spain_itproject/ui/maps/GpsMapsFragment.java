@@ -12,6 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.comp30023.spain_itproject.ServiceFactory;
+import com.comp30023.spain_itproject.domain.Position;
+import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -31,11 +35,10 @@ import java.util.List;
 /**
  * Extension of the SupportMapFagment with handling of device GPS permissions and device location pinpointing
  */
-public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker, OnMapReadyCallback {
+public class GpsMapsFragment extends MarkerMapsFragment {
 
     static public final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-
-    public GoogleMap map;
+    public static final String ARGUMENT_USER = "USER";
 
     // This is a google location, not our Location object.
     private Location currentLocation;
@@ -43,10 +46,10 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
     private LocationRequest mLocationRequest;
     private int locationCallbackCount = 0;
 
-    List<MarkerOptions> pendingMarkers;
-    List<Marker> markers;
+    private String userId;
 
-    GoogleMap.OnMarkerClickListener pendingListener;
+    private boolean locationUpdatesOn;
+    private boolean initial = true;
 
     public Location getCurrentLocation() {
         return currentLocation;
@@ -54,6 +57,9 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
 
     public void setCurrentLocation(Location currentLocation) {
         this.currentLocation = currentLocation;
+
+        Position position = new Position((float) currentLocation.getLatitude(), (float) currentLocation.getLongitude());
+        ServiceFactory.getInstance().realTimeSharingLocationService().updateLocation(userId, position);
     }
 
     public int getLocationCallbackCount() {
@@ -66,22 +72,39 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
 
     // This gets called periodically depending upon what's set in mLocationRequest.
     LocationCallback mLocationCallback;
-    private void onLocationResult1(LocationResult locationResult) {
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
 
         View view = super.onCreateView(layoutInflater, viewGroup, bundle);
 
+        Bundle arguments = getArguments();
+        userId = LoginSharedPreference.getId(getContext());
+
+        locationUpdatesOn = false;
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         mLocationCallback = new MyLocationCallback();
 
-        //Set the map
-        getMapAsync(this);
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!locationUpdatesOn) {
+            enableMyLocation();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (locationUpdatesOn) {
+            disableMyLocation();
+        }
     }
 
     public class MyLocationCallback extends LocationCallback {
@@ -105,6 +128,10 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
 
     private void enableMyLocation() {
 
+        if (map == null) {
+            return;
+        }
+
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(12000); // 20 second interval
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
@@ -114,6 +141,7 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
                 == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
             map.setMyLocationEnabled(true);
+            locationUpdatesOn = true;
         }
         else {
 
@@ -122,6 +150,12 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
+    }
+
+    private void disableMyLocation() {
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        locationUpdatesOn = false;
+        System.out.println("Location updates removed");
     }
 
     public void setLocationCallback(LocationCallback locationCallback) {
@@ -139,147 +173,12 @@ public class GpsMapsFragment extends SupportMapFragment implements DisplayMarker
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        map = googleMap;
-
-        //If pending markers or OnMarkerClickListener, set these
-        if (pendingMarkers != null && !pendingMarkers.isEmpty()) {
-
-            if (markers == null) {
-                markers = new ArrayList<Marker>();
-            }
-
-            for (MarkerOptions marker : pendingMarkers) {
-                markers.add(map.addMarker(marker));
-            }
-            pendingMarkers.clear();
-        }
-
-        if (pendingListener != null) {
-            map.setOnMarkerClickListener(pendingListener);
-        }
+        super.onMapReady(googleMap);
 
         enableMyLocation();
     }
 
     public GoogleMap getMap() {
         return map;
-    }
-
-
-    /**
-     * Add marker to the map
-     * @param title Title of the marker
-     * @param lat Latitude coordinate
-     * @param lng Longitude coordinate
-     */
-    @Override
-    public void addMarker(String title, float lat, float lng) {
-
-        //Initialise MarkerOptions instance
-        LatLng coordinates = new LatLng(lat, lng);
-        MarkerOptions marker = new MarkerOptions().position(coordinates).title(title);
-
-        //If map not set yet, add to pending markers
-        if (map == null) {
-
-            if (pendingMarkers == null) {
-                pendingMarkers = new ArrayList<MarkerOptions>();
-            }
-
-            pendingMarkers.add(marker);
-
-        } else {
-
-            if (markers == null) {
-                markers = new ArrayList<Marker>();
-            }
-
-            //Add marker to map and list for later access
-            markers.add(map.addMarker(marker));
-        }
-    }
-
-    /**
-     * Set the listener for when a marker is clicked
-     * @param listener The listener interface
-     */
-    @Override
-    public void setMarkerOnClickListeners(GoogleMap.OnMarkerClickListener listener) {
-
-        if (map != null) {
-            map.setOnMarkerClickListener(listener);
-
-        } else {
-
-            //If map is not yet set, store the listener
-            pendingListener = listener;
-
-        }
-    }
-
-    /**
-     * Remove all markers
-     */
-    @Override
-    public void clearMarkers() {
-
-        if (markers != null) {
-
-            //Remove all markers from map
-            for (Marker marker : markers) {
-                marker.remove();
-            }
-
-            markers.clear();
-        }
-
-        if (pendingMarkers != null) {
-            pendingMarkers.clear();
-        }
-    }
-
-    /**
-     * Remove all instances of a marker matching input string
-     * @param title The input string
-     */
-    @Override
-    public void removeMarkerByTitle(String title) {
-
-        //Check and remove matching existing markers
-        if (markers != null) {
-            for (int i = 0; i < markers.size(); i++) {
-
-                Marker marker = markers.get(i);
-
-                if (title.equals(marker.getTitle())) {
-
-                    //Remove marker from map
-                    marker.remove();
-
-                    //Remove marker from list
-                    markers.remove(marker);
-
-                    //Reiterate on this position in list
-                    i--;
-                }
-            }
-        }
-
-        //Check and remove matching pending markers
-        if (pendingMarkers != null) {
-            for (int i = 0; i < pendingMarkers.size(); i++) {
-
-                MarkerOptions marker = pendingMarkers.get(i);
-
-                if (title.equals(marker.getTitle())) {
-
-                    //Remove marker from list
-                    pendingMarkers.remove(marker);
-
-                    //Reiterate on this position in list
-                    i--;
-                }
-            }
-        }
     }
 }

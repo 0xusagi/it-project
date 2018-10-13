@@ -62,6 +62,7 @@ public class LocationsListFragment extends ListFragment<Location> {
 
                 Bundle arguments = new Bundle();
                 arguments.putSerializable(MapFragment.ARGUMENT_LOCATION, location);
+                arguments.putSerializable(NavigationMapsFragment.ARGUMENT_USER, user);
 
                 //Create new instance of the following class and pass the item
                 Fragment nextFragment = new NavigationMapsFragment();
