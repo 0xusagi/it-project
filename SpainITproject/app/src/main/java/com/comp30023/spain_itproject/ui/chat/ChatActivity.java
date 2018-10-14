@@ -16,20 +16,19 @@ import android.widget.Toast;
 import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.ServiceFactory;
-import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.ui.BroadcastActivity;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatActivity extends BroadcastActivity {
 
-    public static final String EXTRA_CURRENT_USER = "CURRENT";
-    public static final String EXTRA_CHAT_PARTNER_USER = "PARTNER";
+    public static final String EXTRA_CHAT_PARTNER_USER_ID = "PARTNER";
 
-    private User currentUser;
-    private User chatPartner;
+    private String currentUserId;
+    private String chatPartnerId;
 
     //The messages between the users
     private List<ChatMessage> messages;
@@ -50,14 +49,16 @@ public class ChatActivity extends BroadcastActivity {
 
         messages = new ArrayList<ChatMessage>();
 
+        currentUserId = LoginSharedPreference.getId(this);
+        boolean isDependent = LoginSharedPreference.getIsDependent(this);
+
         Intent arguments = getIntent();
-        currentUser = (User) arguments.getSerializableExtra(EXTRA_CURRENT_USER);
-        chatPartner = (User) arguments.getSerializableExtra(EXTRA_CHAT_PARTNER_USER);
+        chatPartnerId = arguments.getStringExtra(EXTRA_CHAT_PARTNER_USER_ID);
 
         messageRecycler = (RecyclerView) findViewById(R.id.recyclerview_message_list);
 
         //Set the adapter for the RecyclerView so that the messages can be displayed
-        messageListAdapter = new MessageListAdapter(this, messages, currentUser);
+        messageListAdapter = new MessageListAdapter(this, messages, currentUserId);
         messageRecycler.setAdapter(messageListAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -71,7 +72,7 @@ public class ChatActivity extends BroadcastActivity {
         setSendMessageButtonListener();
 
         //Create the listener for the chat service
-        chatService = ServiceFactory.getInstance().createChatService(currentUser, chatPartner);
+        chatService = ServiceFactory.getInstance().chatService(currentUserId, isDependent, chatPartnerId);
 
         /*chatService.getMessageHistory().observe(this, new Observer<List<ChatMessage>>() {
             @Override
@@ -104,7 +105,8 @@ public class ChatActivity extends BroadcastActivity {
 
                 //Get text and create ChatMessage instance
                 String text = inputText.getText().toString();
-                final ChatMessage newMessage = new ChatMessage(currentUser.getId(), currentUser.getName(), chatPartner.getId(), text);
+
+                final ChatMessage newMessage = new ChatMessage(currentUserId, null, chatPartnerId, text);
 
                 @SuppressLint("StaticFieldLeak")
                 AsyncTask task = new AsyncTask() {

@@ -25,12 +25,12 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private Context context;
     private List<ChatMessage> messages;
 
-    private User currentUser;
+    private String currentUserId;
 
-    public MessageListAdapter(Context context, List<ChatMessage> messages, User currentUser) {
+    public MessageListAdapter(Context context, List<ChatMessage> messages, String currentUserId) {
         this.context = context;
         this.messages = messages;
-        this.currentUser = currentUser;
+        this.currentUserId = currentUserId;
     }
 
     /**
@@ -51,7 +51,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         ChatMessage message = (ChatMessage) messages.get(position);
 
-        if (message.getSenderId().equals(currentUser.getId())) {
+        if (message.getSenderId().equals(currentUserId)) {
             return VIEW_TYPE_MESSAGE_SENT;
 
         } else {

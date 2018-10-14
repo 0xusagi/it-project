@@ -38,13 +38,13 @@ public class FirebaseChatService extends ChatService {
 
     /**
      * Creates the references and listeners to a chat room
-     * @param currentUser The currently logged in user
-     * @param chatPartner The user they are messaging
+     * @param currentUserId The currently logged in user
+     * @param chatPartnerId The user they are messaging
      */
-    public FirebaseChatService(User currentUser, User chatPartner) {
-        super(currentUser, chatPartner);
+    public FirebaseChatService(String currentUserId, boolean isDependent, String chatPartnerId) {
+        super(currentUserId, isDependent, chatPartnerId);
 
-        String referenceName = getChatReferenceName(currentUser, chatPartner.getId());
+        String referenceName = getChatReferenceName(currentUserId, isDependent, chatPartnerId);
 
         chatReference = baseReference.child(referenceName);
 
@@ -105,19 +105,19 @@ public class FirebaseChatService extends ChatService {
 
     /**
      * Determines the name for the chat instance between the two users
-     * @param currentUser The logged in user
+     * @param currentUserId The logged in user
      * @param partnerId The user they are chatting to
      * @return The name of the chat instance to listen to
      */
-    private static String getChatReferenceName(User currentUser, String partnerId) {
+    private static String getChatReferenceName(String currentUserId, boolean isDependent, String partnerId) {
 
         //Determine the reference from the agreed naming convention (DependentUser.id-CarerUser.id)
         String reference;
 
-        if (currentUser instanceof DependentUser) {
-            reference = currentUser.getId() + "-" + partnerId;
+        if (isDependent) {
+            reference = currentUserId + "-" + partnerId;
         } else {
-            reference = partnerId + "-" + currentUser.getId();
+            reference = partnerId + "-" + currentUserId;
         }
 
         return reference;

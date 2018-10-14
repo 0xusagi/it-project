@@ -141,11 +141,11 @@ public class DependentHomeActivity extends BroadcastActivity {
 
                 Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
-                if (!(currentFragment instanceof CarersListFragment)) {
-                    Fragment carersFragment = new CarersListFragment();
+                if (!(currentFragment instanceof CallsListFragment)) {
+                    Fragment carersFragment = new CallsListFragment();
 
                     Bundle arguments = new Bundle();
-                    arguments.putSerializable(CarersListFragment.ARGUMENT_USER, user);
+                    arguments.putSerializable(CallsListFragment.ARGUMENT_USER, user);
 
                     carersFragment.setArguments(arguments);
 
@@ -167,11 +167,11 @@ public class DependentHomeActivity extends BroadcastActivity {
 
                 Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
-                if (!(currentFragment instanceof CarersMessagesListFragment)) {
-                    Fragment carersFragment = new CarersMessagesListFragment();
+                if (!(currentFragment instanceof MessagesListFragment)) {
+                    Fragment carersFragment = new MessagesListFragment();
 
                     Bundle arguments = new Bundle();
-                    arguments.putSerializable(CarersMessagesListFragment.ARGUMENT_USER, user);
+                    arguments.putSerializable(MessagesListFragment.ARGUMENT_USER, user);
 
                     carersFragment.setArguments(arguments);
 

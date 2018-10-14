@@ -17,8 +17,8 @@ public class ServiceFactory {
     }
 
 
-    public ChatService createChatService(User currentUser, User chatPartner) {
-        return new FirebaseChatService(currentUser, chatPartner);
+    public ChatService chatService(String currentUserId, boolean isDependent, String chatPartnerId) {
+        return new FirebaseChatService(currentUserId, isDependent, chatPartnerId);
     }
 
     public NotificationSendingService notificationSendingService() {

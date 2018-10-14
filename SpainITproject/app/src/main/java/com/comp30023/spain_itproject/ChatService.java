@@ -10,16 +10,17 @@ import com.comp30023.spain_itproject.domain.User;
  */
 public abstract class ChatService {
 
-    private User currentUser;
-    private User chatPartner;
+    private String currentUserId;
+    private boolean isDependent;
+    private String chatPartnerId;
 
     /**
-     * @param currentUser The user that is currently logged in
-     * @param chatPartner The user that they are messaging
+     * @param currentUserId The user that is currently logged in
+     * @param chatPartnerId The user that they are messaging
      */
-    public ChatService(User currentUser, User chatPartner) {
-        this.currentUser = currentUser;
-        this.chatPartner = chatPartner;
+    public ChatService(String currentUserId, boolean isDependent, String chatPartnerId) {
+        this.currentUserId = currentUserId;
+        this.chatPartnerId = chatPartnerId;
     }
 
     /**
