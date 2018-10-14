@@ -30,7 +30,7 @@ public class DisplayHelpRequestActivity extends AppCompatActivity {
     private String senderId;
     private String senderName;
 
-    private User currentUser;
+    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,8 @@ public class DisplayHelpRequestActivity extends AppCompatActivity {
         arguments.putString(TrackerMapFragment.ARGUMENT_TRACK_USER_ID, senderId);
         arguments.putString(TrackerMapFragment.ARGYMENT_TRACK_USER_NAME, senderName);
         arguments.putString(TrackerMapFragment.ARGUMENT_CURRENT_USER, currentUserId);
+
+        fragment.setArguments(arguments);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

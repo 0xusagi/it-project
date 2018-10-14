@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarkerMapsFragment extends SupportMapFragment implements DisplayMarker, OnMapReadyCallback {
+public class MarkerMapsFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     public GoogleMap map;
 
@@ -75,7 +75,6 @@ public class MarkerMapsFragment extends SupportMapFragment implements DisplayMar
      * @param lat Latitude coordinate
      * @param lng Longitude coordinate
      */
-    @Override
     public void addMarker(String title, float lat, float lng) {
 
         //Initialise MarkerOptions instance
@@ -106,7 +105,6 @@ public class MarkerMapsFragment extends SupportMapFragment implements DisplayMar
      * Set the listener for when a marker is clicked
      * @param listener The listener interface
      */
-    @Override
     public void setMarkerOnClickListeners(GoogleMap.OnMarkerClickListener listener) {
 
         if (map != null) {
@@ -123,7 +121,6 @@ public class MarkerMapsFragment extends SupportMapFragment implements DisplayMar
     /**
      * Remove all markers
      */
-    @Override
     public void clearMarkers() {
 
         if (markers != null) {
@@ -145,7 +142,6 @@ public class MarkerMapsFragment extends SupportMapFragment implements DisplayMar
      * Remove all instances of a marker matching input string
      * @param title The input string
      */
-    @Override
     public void removeMarkerByTitle(String title) {
 
         //Check and remove matching existing markers

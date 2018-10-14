@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.domain.Position;
 
+/**
+ * A fragment that
+ */
 public class TrackerMapFragment extends MarkerMapsFragment {
 
     public static final String ARGUMENT_TRACK_USER_ID = "USER";
@@ -36,12 +39,13 @@ public class TrackerMapFragment extends MarkerMapsFragment {
 
         positionLiveData = ServiceFactory.getInstance().realTimeLocationSharingService().trackLocation(trackedUserId);
 
+        //Update the marker on the map when the position is updated
         positionLiveData.observe(this, new Observer<Position>() {
             @Override
             public void onChanged(@Nullable Position position) {
 
                 clearMarkers();
-                addMarker(trackedUserName, position.getLat(), position.getLng());
+                addMarker(trackedUserName + ", " + position.getTimeStamp(), position.getLat(), position.getLng());
             }
         });
 
