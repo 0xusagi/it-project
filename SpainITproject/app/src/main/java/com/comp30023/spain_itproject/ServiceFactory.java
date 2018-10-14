@@ -1,11 +1,11 @@
 package com.comp30023.spain_itproject;
 
-import com.comp30023.spain_itproject.ChatService;
-import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.firebase.realtime_database.FirebaseChatService;
 import com.comp30023.spain_itproject.firebase.realtime_database.FirebaseLocationSharingService;
-import com.comp30023.spain_itproject.firebase.realtime_database.FirebaseValueListenerLiveData;
 
+/**
+ * Allows access to the services used for the application
+ */
 public class ServiceFactory {
 
     private static ServiceFactory instance;
@@ -16,16 +16,27 @@ public class ServiceFactory {
         return instance;
     }
 
-
+    /**
+     * @param currentUserId The ID of the logged in user
+     * @param isDependent Whether the logged in user is dependent or not
+     * @param chatPartnerId The ID of the other user
+     * @return The instance of the chat service between the 2 users
+     */
     public ChatService chatService(String currentUserId, boolean isDependent, String chatPartnerId) {
         return new FirebaseChatService(currentUserId, isDependent, chatPartnerId);
     }
 
+    /**
+     * @return The selected notification sending service
+     */
     public NotificationSendingService notificationSendingService() {
         return MyNotificationSendingService.getInstance();
     }
 
-    public RealTimeSharingLocationService realTimeSharingLocationService() {
+    /**
+     * @return The selected real-time location sharing service
+     */
+    public RealTimeLocationSharingService realTimeLocationSharingService() {
         return FirebaseLocationSharingService.getInstance();
     }
 

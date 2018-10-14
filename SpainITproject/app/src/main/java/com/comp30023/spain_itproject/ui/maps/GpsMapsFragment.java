@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.domain.Position;
-import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -23,14 +22,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Extension of the SupportMapFagment with handling of device GPS permissions and device location pinpointing
@@ -59,7 +51,7 @@ public class GpsMapsFragment extends MarkerMapsFragment {
         this.currentLocation = currentLocation;
 
         Position position = new Position((float) currentLocation.getLatitude(), (float) currentLocation.getLongitude());
-        ServiceFactory.getInstance().realTimeSharingLocationService().updateLocation(userId, position);
+        ServiceFactory.getInstance().realTimeLocationSharingService().updateLocation(userId, position);
     }
 
     public int getLocationCallbackCount() {

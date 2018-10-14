@@ -16,7 +16,10 @@ public class ChatDataMessage extends DataMessage {
         super(senderId, senderName, messageBody);
     }
 
-    //TODO
+    /**
+     * Starts the chat room between the logged in user and the user that sent the message
+     * @param context The context of which activities can be started from
+     */
     @Override
     public void handle(Context context) {
 

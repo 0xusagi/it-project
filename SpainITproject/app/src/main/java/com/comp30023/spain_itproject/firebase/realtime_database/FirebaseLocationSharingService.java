@@ -4,15 +4,13 @@ import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 
-import com.comp30023.spain_itproject.RealTimeSharingLocationService;
-import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.RealTimeLocationSharingService;
 import com.comp30023.spain_itproject.domain.Position;
-import com.comp30023.spain_itproject.domain.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class FirebaseLocationSharingService extends RealTimeSharingLocationService {
+public class FirebaseLocationSharingService extends RealTimeLocationSharingService {
 
     private static FirebaseLocationSharingService instance;
     public static FirebaseLocationSharingService getInstance() {

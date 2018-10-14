@@ -16,6 +16,7 @@ public abstract class ChatService {
 
     /**
      * @param currentUserId The user that is currently logged in
+     * @param isDependent Whether the logged in user is a dependent
      * @param chatPartnerId The user that they are messaging
      */
     public ChatService(String currentUserId, boolean isDependent, String chatPartnerId) {

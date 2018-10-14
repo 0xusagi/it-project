@@ -34,7 +34,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
         trackedUserId = arguments.getString(ARGUMENT_TRACK_USER_ID);
         trackedUserName = arguments.getString(ARGYMENT_TRACK_USER_NAME);
 
-        positionLiveData = ServiceFactory.getInstance().realTimeSharingLocationService().trackLocation(trackedUserId);
+        positionLiveData = ServiceFactory.getInstance().realTimeLocationSharingService().trackLocation(trackedUserId);
 
         positionLiveData.observe(this, new Observer<Position>() {
             @Override
