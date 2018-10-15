@@ -45,7 +45,6 @@ public class ChatActivity extends BroadcastActivity {
     private MessageListAdapter messageListAdapter;
 
     private FragmentManager fragmentManager;
-    private Bundle fragArguments;
     private MessageInputFragment currentFragment;
 
     private Button sendMessageButton;
@@ -63,8 +62,8 @@ public class ChatActivity extends BroadcastActivity {
         currentUserId = LoginSharedPreference.getId(this);
         boolean isDependent = LoginSharedPreference.getIsDependent(this);
 
-        Intent arguments = getIntent();
-        chatPartnerId = arguments.getStringExtra(EXTRA_CHAT_PARTNER_USER_ID);
+        Intent intent = getIntent();
+        chatPartnerId = intent.getStringExtra(EXTRA_CHAT_PARTNER_USER_ID);
 
         messageRecycler = (RecyclerView) findViewById(R.id.recyclerview_message_list);
 
@@ -165,11 +164,9 @@ public class ChatActivity extends BroadcastActivity {
 
     private void changeFragment() {
 
-        if (fragArguments == null) {
-            fragArguments = new Bundle();
-            fragArguments.putString(MessageInputFragment.ARGUMENT_CURRENT_USER_ID, currentUserId);
-            fragArguments.putString(MessageInputFragment.ARGUMENT_CHAT_PARTNER_ID, chatPartnerId);
-        }
+        Bundle arguments = new Bundle();
+        arguments.putString(MessageInputFragment.ARGUMENT_CURRENT_USER_ID, currentUserId);
+        arguments.putString(MessageInputFragment.ARGUMENT_CHAT_PARTNER_ID, chatPartnerId);
 
         if (currentFragment == null) {
             currentFragment = new TextInputFragment();
@@ -182,7 +179,7 @@ public class ChatActivity extends BroadcastActivity {
             changeFragmentButton.setImageResource(R.drawable.ic_mic_black_24dp);
         }
 
-        currentFragment.setArguments(fragArguments);
+        currentFragment.setArguments(arguments);
 
         setFragment();
     }

@@ -22,10 +22,14 @@ public abstract class MessageInputFragment extends Fragment {
     @Override
     public abstract View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
 
-    public void getIdArguments() {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         Bundle arguments = getArguments();
-        currentUserId = arguments.getString(currentUserId);
-        chatPartnerId = arguments.getString(chatPartnerId);
+        currentUserId = arguments.getString(ARGUMENT_CURRENT_USER_ID);
+        chatPartnerId = arguments.getString(ARGUMENT_CHAT_PARTNER_ID);
+
     }
 
     public abstract void sendInput(ChatService chatService) throws Exception;

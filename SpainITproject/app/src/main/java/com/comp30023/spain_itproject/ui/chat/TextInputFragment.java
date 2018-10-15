@@ -24,8 +24,6 @@ public class TextInputFragment extends MessageInputFragment {
 
         inputText = (EditText) view.findViewById(R.id.textInput_editText);
 
-        getIdArguments();
-
         return view;
     }
 
@@ -38,6 +36,8 @@ public class TextInputFragment extends MessageInputFragment {
         if (text == null || text.isEmpty() || text.equals("")) {
             return;
         }
+
+        System.out.println("Current user id: " + getCurrentUserId());
 
         final ChatMessage newMessage = new ChatMessage(getCurrentUserId(), getChatPartnerId(), text, null);
 

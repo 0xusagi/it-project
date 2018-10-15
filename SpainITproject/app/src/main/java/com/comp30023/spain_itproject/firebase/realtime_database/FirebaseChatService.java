@@ -88,11 +88,11 @@ public class FirebaseChatService extends ChatService {
      */
     public void sendMessage(final ChatMessage message) throws Exception {
 
-        //Send the notification
-        ServiceFactory.getInstance().notificationSendingService().sendChat(message);
-
         //Adds the message as a child to the chat instance
         chatReference.push().setValue(message);
+
+        //Send the notification
+        ServiceFactory.getInstance().notificationSendingService().sendChat(message);
     }
 
     /**

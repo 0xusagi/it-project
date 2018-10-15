@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.ui.chat;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,8 +22,8 @@ public class ReceivedMessageHolder extends MessageHolder {
         nameText = (TextView) itemView.findViewById(R.id.text_message_name);
     }
 
-    void bind(ChatMessage message) {
-        super.bind(message);
+    void bind(Context context, ChatMessage message) {
+        super.bind(context, message);
         //nameText.setText(message.getSenderName());
     }
 }

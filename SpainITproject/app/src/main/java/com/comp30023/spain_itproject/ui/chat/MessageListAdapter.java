@@ -98,7 +98,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         //Get the message in the specified position
         ChatMessage message = (ChatMessage) messages.get(position);
 
-        ((MessageHolder) holder).bind(message);
+        ((MessageHolder) holder).bind(context, message);
     }
 }
 
