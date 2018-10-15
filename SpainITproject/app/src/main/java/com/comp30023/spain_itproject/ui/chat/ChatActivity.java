@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.ChatService;
@@ -27,6 +31,9 @@ public class ChatActivity extends BroadcastActivity {
 
     public static final String EXTRA_CHAT_PARTNER_USER_ID = "PARTNER";
 
+    public static final String TEXT_AUDIO_BUTTON_AUDIO = "Audio";
+    public static final String TEXT_AUDIO_BUTTON_TEXT = "Text";
+
     private String currentUserId;
     private String chatPartnerId;
 
@@ -37,8 +44,12 @@ public class ChatActivity extends BroadcastActivity {
     private RecyclerView messageRecycler;
     private MessageListAdapter messageListAdapter;
 
-    private EditText inputText;
+    private FragmentManager fragmentManager;
+    private Bundle fragArguments;
+    private MessageInputFragment currentFragment;
+
     private Button sendMessageButton;
+    private ImageButton changeFragmentButton;
 
     private ChatService chatService;
 
@@ -67,7 +78,11 @@ public class ChatActivity extends BroadcastActivity {
         layoutManager.setStackFromEnd(true);
         messageRecycler.setLayoutManager(layoutManager);
 
-        inputText = (EditText) findViewById(R.id.edittext_chatbox);
+        changeFragmentButton = (ImageButton) findViewById(R.id.chat_changeFragmentButton);
+        setChangeFragmentButtonListener();
+
+        changeFragment();
+
         sendMessageButton = (Button) findViewById(R.id.button_chatbox_send);
         setSendMessageButtonListener();
 
@@ -103,33 +118,25 @@ public class ChatActivity extends BroadcastActivity {
             @Override
             public void onClick(View v) {
 
-                //Get text and create ChatMessage instance
-                String text = inputText.getText().toString();
+                if (currentFragment != null) {
+                    @SuppressLint("StaticFieldLeak")
+                    AsyncTask task = new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
 
-                final ChatMessage newMessage = new ChatMessage(currentUserId, null, chatPartnerId, text);
+                            try {
 
-                @SuppressLint("StaticFieldLeak")
-                AsyncTask task = new AsyncTask() {
-                    @Override
-                    protected Object doInBackground(Object[] objects) {
+                                currentFragment.sendInput(chatService);
 
-                        try {
+                            } catch (Exception e) {
+                                displayExceptionToast(e);
+                            }
 
-                            //Send message
-                            chatService.sendMessage(newMessage);
-
-                            //If no error thrown, clear the text
-                            //inputText.getText().clear();
-                            inputText.setText("");
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            return null;
                         }
-
-                        return null;
-                    }
-                };
-                task.execute();
+                    };
+                    task.execute();
+                }
             }
         });
     }
@@ -145,5 +152,52 @@ public class ChatActivity extends BroadcastActivity {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void setChangeFragmentButtonListener() {
+        changeFragmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFragment();
+            }
+        });
+    }
+
+    private void changeFragment() {
+
+        if (fragArguments == null) {
+            fragArguments = new Bundle();
+            fragArguments.putString(MessageInputFragment.ARGUMENT_CURRENT_USER_ID, currentUserId);
+            fragArguments.putString(MessageInputFragment.ARGUMENT_CHAT_PARTNER_ID, chatPartnerId);
+        }
+
+        if (currentFragment == null) {
+            currentFragment = new TextInputFragment();
+            changeFragmentButton.setImageResource(R.drawable.ic_mic_black_24dp);
+        } else if (currentFragment instanceof TextInputFragment) {
+            currentFragment = new VoiceInputFragment();
+            changeFragmentButton.setImageResource(R.drawable.ic_keyboard_black_24dp);
+        } else {
+            currentFragment = new TextInputFragment();
+            changeFragmentButton.setImageResource(R.drawable.ic_mic_black_24dp);
+        }
+
+        currentFragment.setArguments(fragArguments);
+
+        setFragment();
+    }
+
+    private void setFragment() {
+
+        if (currentFragment != null) {
+
+            if (fragmentManager == null) {
+                fragmentManager = getSupportFragmentManager();
+            }
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.chat_inputFragment, currentFragment);
+            transaction.commit();
+        }
     }
 }

@@ -21,10 +21,6 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         this.message = message;
     }
 
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
     public void setSenderId(String senderId) {
         this.senderId = senderId;
     }
@@ -37,18 +33,22 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         this.timeStamp = timeStamp;
     }
 
+    public void setResourceLink(String resourceLink) {
+        this.resourceLink = resourceLink;
+    }
+
     private String message;
-    private String senderName;
     private String senderId;
     private String receiverId;
     private String timeStamp;
+    private String resourceLink;
 
-    public ChatMessage(String senderId, String senderName, String receiverId, String message) {
+    public ChatMessage(String senderId, String receiverId, String message, String resourceLink) {
 
         this.senderId = senderId;
         this.receiverId = receiverId;
-        this.senderName = senderName;
         this.message = message;
+        this.resourceLink = resourceLink;
 
         TimeZone tz = TimeZone.getDefault();
         DateFormat df = SimpleDateFormat.getDateTimeInstance();
@@ -68,16 +68,16 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         return receiverId;
     }
 
-    public String getSenderName() {
-        return senderName;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public String getTimeStamp() throws ParseException {
         return timeStamp;
+    }
+
+    public String getResourceLink() {
+        return resourceLink;
     }
 
     /**
