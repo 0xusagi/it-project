@@ -30,6 +30,8 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
 
     TextView messageText;
     TextView timeText;
+    LinearLayout layout;
+    ImageButton playButton;
 
     public MessageHolder(@NonNull View itemView) {
         super(itemView);
@@ -37,10 +39,11 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
         view = itemView;
         messageText = (TextView) itemView.findViewById(R.id.text_message_body);
         timeText = (TextView) itemView.findViewById(R.id.text_message_time);
-
+        layout = (LinearLayout) view.findViewById(R.id.text_message_layout);
+        playButton = (ImageButton) view.findViewById(R.id.text_play_button);
     }
 
-    void bind(final Context context, final ChatMessage message) {
+    void bind(final ChatMessage message) {
         messageText.setText(message.getMessage());
 
         try {
@@ -50,23 +53,14 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
         }
 
         if (message.getResourceLink() != null) {
-            LinearLayout layout = (LinearLayout) view.findViewById(R.id.text_message_layout);
-            layout.removeAllViews();
-            layout.addView(messageText);
 
-            ImageButton button = new ImageButton(context);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            button.setLayoutParams(params);
-            button.setImageResource(R.drawable.ic_play_arrow);
+            playButton.setVisibility(View.VISIBLE);
 
-
-            button.setOnClickListener(new View.OnClickListener() {
+            playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     final StorageReference storageRef = FirebaseStorageService.getStorage().getReference().child(message.getResourceLink());
-
-                    System.out.println("Storage reference: " + storageRef.getPath());
 
                     try {
                         final File localFile = File.createTempFile("recording", "3gp");
@@ -101,8 +95,8 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
                 }
             });
 
-
-            layout.addView(button);
+        } else {
+            playButton.setVisibility(View.GONE);
         }
     }
 }

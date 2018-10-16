@@ -22,8 +22,8 @@ public class ReceivedMessageHolder extends MessageHolder {
         nameText = (TextView) itemView.findViewById(R.id.text_message_name);
     }
 
-    void bind(Context context, ChatMessage message) {
-        super.bind(context, message);
+    void bind(ChatMessage message) {
+        super.bind(message);
         //nameText.setText(message.getSenderName());
     }
 }

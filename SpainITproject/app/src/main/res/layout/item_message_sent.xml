@@ -28,6 +28,13 @@
             android:maxWidth="240dp"
             android:textColor="#ffffff" />
 
+        <ImageButton
+            android:id="@+id/text_play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_play_arrow"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
 
