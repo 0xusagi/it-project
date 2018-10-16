@@ -2,7 +2,7 @@ package com.comp30023.spain_itproject.firebase.storage;
 
 import com.google.firebase.storage.FirebaseStorage;
 
-public class MyFirebaseStorage {
+public class FirebaseStorageService {
 
     private static FirebaseStorage storage;
 

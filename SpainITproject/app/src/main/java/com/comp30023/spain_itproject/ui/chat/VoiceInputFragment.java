@@ -15,18 +15,13 @@ import android.widget.LinearLayout;
 import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.ChatMessage;
-import com.comp30023.spain_itproject.firebase.storage.MyFirebaseStorage;
-import com.google.android.gms.common.util.IOUtils;
+import com.comp30023.spain_itproject.firebase.storage.FirebaseStorageService;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -231,12 +226,14 @@ public class VoiceInputFragment extends MessageInputFragment {
 
         if (file.exists()) {
 
+
+
             TimeZone tz = TimeZone.getDefault();
             DateFormat df = SimpleDateFormat.getDateTimeInstance();
             df.setTimeZone(tz);
             String timeStamp = df.format(new Date());
 
-            final StorageReference storageReference = MyFirebaseStorage.getStorage().getReference().child("audio_messages").child(getCurrentUserId()).child(timeStamp);
+            final StorageReference storageReference = FirebaseStorageService.getStorage().getReference().child("audio_messages").child(getCurrentUserId()).child(timeStamp);
 
             Uri uri = Uri.fromFile(file);
             UploadTask task = storageReference.putFile(uri);
@@ -248,10 +245,11 @@ public class VoiceInputFragment extends MessageInputFragment {
 
                     try {
                         chatService.sendMessage(newMessage);
-                        file.delete();
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    clearRecordingButton.callOnClick();
                 }
             });
 
