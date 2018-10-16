@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 
 import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.domain.Position;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * A fragment that
@@ -27,10 +32,14 @@ public class TrackerMapFragment extends MarkerMapsFragment {
 
     public LiveData<Position> positionLiveData;
 
+    private Marker marker;
+
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
 
         View view = super.onCreateView(layoutInflater, viewGroup, bundle);
+
+        marker = null;
 
         Bundle arguments = getArguments();
         currentUserId = arguments.getString(ARGUMENT_CURRENT_USER);
@@ -44,8 +53,26 @@ public class TrackerMapFragment extends MarkerMapsFragment {
             @Override
             public void onChanged(@Nullable Position position) {
 
-                clearMarkers();
-                addMarker(trackedUserName + ", " + position.getTimeStamp(), position.getLat(), position.getLng());
+                LatLng coordinates = new LatLng(position.getLat(), position.getLng());
+                String title = trackedUserName;
+
+                if (marker == null) {
+
+                    MarkerOptions markerOptions = new MarkerOptions().position(coordinates).title(title);
+
+                    GoogleMap map = getMap();
+                    if (map != null) {
+                        marker = map.addMarker(markerOptions);
+                        marker.setTitle(title);
+                        marker.showInfoWindow();
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 17));
+                    }
+                } else {
+                    marker.setPosition(coordinates);
+                }
+
+                /*clearMarkers();
+                addMarker(trackedUserName + ", " + position.getTimeStamp(), position.getLat(), position.getLng());*/
             }
         });
 
