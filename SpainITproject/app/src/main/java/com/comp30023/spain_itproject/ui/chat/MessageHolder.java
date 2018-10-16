@@ -52,6 +52,7 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
         if (message.getResourceLink() != null) {
             LinearLayout layout = (LinearLayout) view.findViewById(R.id.text_message_layout);
             layout.removeAllViews();
+            layout.addView(messageText);
 
             ImageButton button = new ImageButton(context);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

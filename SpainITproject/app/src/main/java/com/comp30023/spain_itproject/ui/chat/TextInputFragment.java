@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.ui.chat;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,15 +38,18 @@ public class TextInputFragment extends MessageInputFragment {
             return;
         }
 
-        System.out.println("Current user id: " + getCurrentUserId());
-
         final ChatMessage newMessage = new ChatMessage(getCurrentUserId(), getChatPartnerId(), text, null);
 
         //Send message
         chatService.sendMessage(newMessage);
 
-        //If no error thrown, clear the text
-        //inputText.getText().clear();
-        inputText.setText("");
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //If no error thrown, clear the text
+                //inputText.getText().clear();
+                inputText.setText("");
+            }
+        });
     }
 }
