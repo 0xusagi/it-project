@@ -3,10 +3,12 @@ package com.comp30023.spain_itproject.ui.carerhome;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.FrameLayout;
 
 import com.comp30023.spain_itproject.R;
 
@@ -34,6 +36,9 @@ public class CarerMapsActivity extends AppCompatActivity {
     private GpsMapsFragment fragment;
     private static String selectedDependentId;
     private PlaceAutocompleteFragment autocompleteFragment;
+
+    private FragmentManager fragmentManager;
+    private FrameLayout placeSelectedFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,19 @@ public class CarerMapsActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(final Place place) {
 
+
+                Fragment placeSelectedFragment = PlaceSelectedFragment();
+
+                Bundle arguments = new Bundle();
+                arguments.putSerializable(PlaceSelectedFragment.ARGUMENT_PLACE, place);
+                arguments.putSerializable(PlaceSelectedFragment.ARGUMENT_DEPENDENT, selectedDependentId);
+
+                placeSelectedFragment.setArguments(arguments);
+
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.add(R.id.carerMaps_placeSelectedFrame, placeSelectedFragment);
+                transaction.commit();
+
                 final LatLng placeLatLng = place.getLatLng();
 
                 fragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng,15));
@@ -79,7 +97,7 @@ public class CarerMapsActivity extends AppCompatActivity {
                         .position(placeLatLng)
                         .title(place.getName().toString()));
 
-                @SuppressLint("StaticFieldLeak")
+                /*@SuppressLint("StaticFieldLeak")
                 AsyncTask task = new AsyncTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
@@ -110,7 +128,7 @@ public class CarerMapsActivity extends AppCompatActivity {
                     }
 
                 };
-                task.execute();
+                task.execute();*/
 
             }
 
