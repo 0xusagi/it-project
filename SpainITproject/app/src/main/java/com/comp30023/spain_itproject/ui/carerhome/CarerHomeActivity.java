@@ -74,6 +74,8 @@ public class CarerHomeActivity extends BroadcastActivity {
 
         setupAddDependentButton();
 
+        setupRefreshButton();
+
         setupSettingsButton(this);
     }
 
@@ -120,6 +122,8 @@ public class CarerHomeActivity extends BroadcastActivity {
             @Override
             public void onClick(View view) {
                 LoginHandler.getInstance().logout(context);
+                // Stop the sinch client
+                getSinchInterface().stopClient();
                 finish();
             }
         });
