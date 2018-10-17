@@ -1,10 +1,12 @@
 package com.comp30023.spain_itproject.firebase.realtime_database;
 
+import android.annotation.SuppressLint;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 
 import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.ServiceFactory;
@@ -143,15 +145,27 @@ public class FirebaseChatService extends ChatService {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                //Send message to the chat partner so that they can access the file
-                try {
-                    sendMessage(message, storageReference.getPath());
 
-                } catch (Exception e) {
+                @SuppressLint("StaticFieldLeak")
+                AsyncTask task = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
 
-                    //TODO
-                    e.printStackTrace();
-                }
+                        //Send message to the chat partner so that they can access the file
+                        try {
+                            sendMessage(message, storageReference.getPath());
+
+                        } catch (Exception e) {
+
+                            //TODO
+                            e.printStackTrace();
+                        }
+
+                        return null;
+                    }
+                };
+
+                task.execute();
             }
         });
     }

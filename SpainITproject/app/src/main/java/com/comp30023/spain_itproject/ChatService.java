@@ -40,7 +40,7 @@ public abstract class ChatService {
     }
 
     /**
-     * Returns the most recently message
+     * Returns the most recent message
      * Utilises LiveData in order to pass ownership of the data
      * @return The LiveData of the most recent ChatMessage
      */
