@@ -23,7 +23,7 @@ public class ServiceFactory {
      * @return The instance of the chat service between the 2 users
      */
     public ChatService chatService(String currentUserId, boolean isDependent, String chatPartnerId) {
-        return new FirebaseChatService(currentUserId, isDependent, chatPartnerId);
+        return new FirebaseChatService(currentUserId, chatPartnerId);
     }
 
     /**

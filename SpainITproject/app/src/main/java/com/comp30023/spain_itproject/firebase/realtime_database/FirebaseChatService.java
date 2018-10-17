@@ -41,10 +41,10 @@ public class FirebaseChatService extends ChatService {
      * @param currentUserId The currently logged in user
      * @param chatPartnerId The user they are messaging
      */
-    public FirebaseChatService(String currentUserId, boolean isDependent, String chatPartnerId) {
-        super(currentUserId, isDependent, chatPartnerId);
+    public FirebaseChatService(String currentUserId, String chatPartnerId) {
+        super(currentUserId, chatPartnerId);
 
-        String referenceName = getChatReferenceName(currentUserId, isDependent, chatPartnerId);
+        String referenceName = getChatReferenceName(currentUserId, chatPartnerId);
 
         chatReference = baseReference.child(referenceName);
 
@@ -109,12 +109,12 @@ public class FirebaseChatService extends ChatService {
      * @param partnerId The user they are chatting to
      * @return The name of the chat instance to listen to
      */
-    private static String getChatReferenceName(String currentUserId, boolean isDependent, String partnerId) {
+    private static String getChatReferenceName(String currentUserId, String partnerId) {
 
         //Determine the reference from the agreed naming convention (DependentUser.id-CarerUser.id)
         String reference;
 
-        if (isDependent) {
+        if (currentUserId.compareTo(partnerId) < 0) {
             reference = currentUserId + "-" + partnerId;
         } else {
             reference = partnerId + "-" + currentUserId;
