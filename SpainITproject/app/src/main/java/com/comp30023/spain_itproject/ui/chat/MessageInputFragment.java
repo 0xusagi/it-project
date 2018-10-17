@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.comp30023.spain_itproject.ChatService;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.network.NoConnectionException;
 
 /**
  * Fragment for message input to send to another user
@@ -22,8 +24,10 @@ public abstract class MessageInputFragment extends Fragment {
     /**
      * Send the current input to the chat partner via the ChatService
      * @param chatService The service that sends the message
-     * @throws Exception Thrown if there is a connection issue
+     * @throws BadRequestException Thrown if either user does not exist on the database
+     * @throws NoConnectionException Thrown if there is a connection issue
+     * @throws NoInputException Thrown if there is no input entered yet
      */
-    public abstract void sendInput(ChatService chatService) throws Exception;
+    public abstract void sendInput(ChatService chatService) throws NoInputException, BadRequestException, NoConnectionException;
 
 }

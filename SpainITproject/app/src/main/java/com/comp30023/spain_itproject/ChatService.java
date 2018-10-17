@@ -4,6 +4,8 @@ import android.arch.lifecycle.LiveData;
 
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.network.NoConnectionException;
 
 import java.io.File;
 
@@ -50,7 +52,7 @@ public abstract class ChatService {
      * Sends a message to the chat partner specified for this server
      * @param message The message to be sent
      */
-    public abstract void sendMessage(String message) throws Exception;
+    public abstract void sendMessage(String message) throws BadRequestException, NoConnectionException;
 
     /**
      * Send a message with a reference to an audio file
@@ -58,7 +60,7 @@ public abstract class ChatService {
      * @param file The audio file that is being shared
      * @throws Exception Thrown when there is a connection issue
      */
-    public abstract void sendAudioMessage(String message, File file) throws Exception;
+    public abstract void sendAudioMessage(String message, File file);
 
     /**
      * Play the audio file found at the resource link

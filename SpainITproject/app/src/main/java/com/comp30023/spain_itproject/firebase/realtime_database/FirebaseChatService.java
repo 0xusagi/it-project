@@ -12,6 +12,8 @@ import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.Clock;
 import com.comp30023.spain_itproject.domain.ChatMessage;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.network.NoConnectionException;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -95,7 +97,7 @@ public class FirebaseChatService extends ChatService {
      * Makes network call to send notification, cannot be executed on UI thread
      * @param message The message to be sent
      */
-    public void sendMessage(final String message) throws Exception {
+    public void sendMessage(final String message) throws BadRequestException, NoConnectionException {
 
         ChatMessage chatMessage = new ChatMessage(getCurrentUserId(), getCurrentUserName(), getChatPartnerId(), message, null);
 
@@ -112,7 +114,7 @@ public class FirebaseChatService extends ChatService {
      * @param audioResourceLink The path to the audio file
      * @throws Exception Thrown when there is a connection issue
      */
-    private void sendMessage(String message, String audioResourceLink) throws Exception {
+    private void sendMessage(String message, String audioResourceLink) throws BadRequestException, NoConnectionException {
 
         ChatMessage chatMessage = new ChatMessage(getCurrentUserId(), getCurrentUserName(), getChatPartnerId(), message, audioResourceLink);
 
@@ -154,10 +156,7 @@ public class FirebaseChatService extends ChatService {
                         //Send message to the chat partner so that they can access the file
                         try {
                             sendMessage(message, storageReference.getPath());
-
                         } catch (Exception e) {
-
-                            //TODO
                             e.printStackTrace();
                         }
 

@@ -17,6 +17,7 @@ import com.comp30023.spain_itproject.VoiceRecorder;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * Records audio input to send as message
@@ -238,10 +239,10 @@ public class VoiceInputFragment extends MessageInputFragment {
     /**
      * Check that there is a recording waiting to be sent, and then send
      * @param chatService The ChatService used to send the recording
-     * @throws Exception Thrown if there is a connection issue
+     * @throws NoInputException Thrown if there is no input entered yet
      */
     @Override
-    public void sendInput(final ChatService chatService) throws Exception {
+    public void sendInput(final ChatService chatService) throws NoInputException {
 
         switch (currentState) {
 
@@ -266,12 +267,13 @@ public class VoiceInputFragment extends MessageInputFragment {
                         }
                     });
 
+                } else {
+                    throw new NoInputException();
                 }
                 break;
 
             default:
                 break;
-
         }
     }
 }

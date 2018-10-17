@@ -10,6 +10,8 @@ import android.widget.EditText;
 
 import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.network.NoConnectionException;
 
 /**
  * Records text input to send as message
@@ -32,16 +34,18 @@ public class TextInputFragment extends MessageInputFragment {
     /**
      * Sends the text in the input field as a message
      * @param chatService The ChatService that the message is sent by
-     * @throws Exception Thrown if there is a connection issue
+     * @throws NoConnectionException Thrown if there is a connection issue
+     * @throws BadRequestException Thrown if either user does not exist on the database
+     * @throws NoInputException Thrown if there is no input entered yet
      */
     @Override
-    public void sendInput(ChatService chatService) throws Exception {
+    public void sendInput(ChatService chatService) throws NoInputException, BadRequestException, NoConnectionException {
 
         //Get text and create ChatMessage instance
         String text = inputText.getText().toString();
 
         if (text == null || text.isEmpty() || text.equals("")) {
-            return;
+            throw new NoInputException();
         }
 
         //Send message
