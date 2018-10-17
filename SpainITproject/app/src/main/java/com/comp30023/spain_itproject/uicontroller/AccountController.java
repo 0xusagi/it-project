@@ -150,6 +150,16 @@ public class AccountController {
         return executeCallReturnResponse(call);
     }
 
+    public Location deleteLocation(String id)
+            throws BadRequestException, NoConnectionException {
+        checkService();
+
+        // Contact the server to delete the carer
+        Call<Location> call = service.deleteLocation(id);
+
+        return executeCallReturnResponse(call);
+    }
+
     /**
      * Get a CarerUser from the server
      * @param id The ID of the user being requested

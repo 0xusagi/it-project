@@ -8,6 +8,11 @@ import java.io.Serializable;
 
 public class Location implements Serializable, DisplayName {
 
+
+    // Mongo id.
+    @SerializedName("_id")
+    private String _id;
+
     @SerializedName("googleId")
     private String googleId;
 
@@ -38,4 +43,9 @@ public class Location implements Serializable, DisplayName {
     public double getLatitude() {
         return latitude;
     }
+
+    public String get_id() {
+        return _id;
+    }
+
 }

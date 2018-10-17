@@ -64,6 +64,11 @@ public interface AccountService {
             @Path("id") String id
     );
 
+    @DELETE("/locations/{id}")
+    Call<Location> deleteLocation(
+            @Path("id") String id
+    );
+
     // Get a UserModel which will be a name corresponding to the phone number of a dependent user
     @GET("/dependent/name/{mobile}")
     Call<UserModel> getDependentNameFromPhoneNumber(

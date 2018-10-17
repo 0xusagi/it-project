@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.ui.carerhome;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -108,7 +109,7 @@ public class EditDependentsActivity extends AppCompatActivity {
         if (isSetOnClick) {
             locationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                public void onItemClick(AdapterView<?> adapterView, View view, final int locationIndex, long l) {
                     // TODO change add the edit function
                     String[] options = {"Delete", "Edit"};
 
@@ -118,17 +119,23 @@ public class EditDependentsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // the user clicked on options[which]
-                            switch(which) {
-                                // Delete option
-                                case 2:     Intent intent = new Intent(EditDependentsActivity.this, CarerMapsActivity.class);
-                                            intent.putExtra(CarerMapsActivity.EXTRA_DEPENDENT, dependent);
-                                            startActivity(intent);
-                                            break;
 
-                                // Default (no click)
-                                default:
-                                    break;
-                            }
+                            @SuppressLint("StaticFieldLeak")
+                            AsyncTask task = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+
+                                    try {
+                                        dependent.deleteLocation(locations.get(locationIndex));
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    return null;
+                                }
+                            };
+                            task.execute();
                         }
                     });
                     builder.show();

@@ -159,4 +159,10 @@ public class DependentUser extends User {
 
         locations.add(location);
     }
+
+    public void deleteLocation(Location location) throws Exception{
+        AccountController.getInstance().deleteLocation(location.get_id());
+
+        locationObjects.remove(location);
+    }
 }
