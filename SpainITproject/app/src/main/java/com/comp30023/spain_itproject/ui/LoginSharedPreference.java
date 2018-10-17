@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
  * Contains the current login status and information as saved in a SharedPreferences
  */
 public class LoginSharedPreference {
+
     // Instance of Shared preference
     private static SharedPreferences instance;
 
@@ -18,7 +19,8 @@ public class LoginSharedPreference {
         PHONE_NUMBER,
         PIN,
         IS_DEPENDENT,
-        TOKEN
+        TOKEN,
+        NAME
     }
 
     /**
@@ -128,5 +130,18 @@ public class LoginSharedPreference {
     public static String getToken(Context context) {
         checkInstance(context);
         return instance.getString(Pref.TOKEN.name(), "");
+    }
+
+    public static void setName(Context context, String name) {
+        checkInstance(context);
+
+        SharedPreferences.Editor editor = instance.edit();
+        editor.putString(Pref.NAME.name(), name);
+        editor.commit();
+    }
+
+    public static String getName(Context context) {
+        checkInstance(context);
+        return instance.getString(Pref.NAME.name(), "");
     }
 }

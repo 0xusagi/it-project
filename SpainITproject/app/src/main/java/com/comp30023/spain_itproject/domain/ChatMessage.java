@@ -2,15 +2,13 @@ package com.comp30023.spain_itproject.domain;
 
 import android.support.annotation.NonNull;
 
+import com.comp30023.spain_itproject.Clock;
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * A class to represent a chat message sent amongst two users
@@ -19,10 +17,6 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
     }
 
     public void setSenderId(String senderId) {
@@ -37,23 +31,35 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         this.timeStamp = timeStamp;
     }
 
+    public void setAudioResourceLink(String audioResourceLink) {
+        this.audioResourceLink = audioResourceLink;
+    }
+
     private String message;
-    private String senderName;
     private String senderId;
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    private String senderName;
     private String receiverId;
     private String timeStamp;
+    private String audioResourceLink;
 
-    public ChatMessage(String senderId, String senderName, String receiverId, String message) {
+    public ChatMessage(String senderId, String senderName, String receiverId, String message, String audioResourceLink) {
 
         this.senderId = senderId;
-        this.receiverId = receiverId;
         this.senderName = senderName;
+        this.receiverId = receiverId;
         this.message = message;
+        this.audioResourceLink = audioResourceLink;
 
-        TimeZone tz = TimeZone.getDefault();
-        DateFormat df = SimpleDateFormat.getDateTimeInstance();
-        df.setTimeZone(tz);
-        this.timeStamp = df.format(new Date());
+        timeStamp = Clock.getCurrentLocalTimeStamp();
     }
 
     public ChatMessage(){
@@ -68,16 +74,16 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         return receiverId;
     }
 
-    public String getSenderName() {
-        return senderName;
-    }
-
     public String getMessage() {
         return message;
     }
 
-    public String getTimeStamp() throws ParseException {
+    public String getTimeStamp() {
         return timeStamp;
+    }
+
+    public String getAudioResourceLink() {
+        return audioResourceLink;
     }
 
     /**

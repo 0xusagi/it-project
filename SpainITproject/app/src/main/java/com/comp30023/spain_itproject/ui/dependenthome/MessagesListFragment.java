@@ -20,11 +20,11 @@ import java.util.List;
 /**
  *
  */
-public class CarersMessagesListFragment extends ListFragment<CarerUser> {
+public class MessagesListFragment extends ListFragment<CarerUser> {
 
     public static final String ARGUMENT_USER = "USER";
 
-    public static final String TITLE = "Carers";
+    public static final String TITLE = "Messages";
 
     private DependentUser user;
 
@@ -80,8 +80,7 @@ public class CarersMessagesListFragment extends ListFragment<CarerUser> {
                 CarerUser carer = (CarerUser) itemButton.getItem();
 
                 Intent intent = new Intent(getContext(), ChatActivity.class);
-                intent.putExtra(ChatActivity.EXTRA_CURRENT_USER, user);
-                intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER, carer);
+                intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER_ID, carer.getId());
 
                 startActivity(intent);
 

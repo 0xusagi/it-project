@@ -33,6 +33,7 @@ public class FirebaseChildListenerLiveData extends LiveData<DataSnapshot> implem
     protected void onActive() {
         super.onActive();
         dbReference.addChildEventListener(this);
+        System.out.println("Attached child listener to: " + dbReference);
     }
 
     /**
@@ -42,6 +43,7 @@ public class FirebaseChildListenerLiveData extends LiveData<DataSnapshot> implem
     protected void onInactive() {
         super.onInactive();
         dbReference.removeEventListener(this);
+        System.out.println("Detached child listener to: " + dbReference);
     }
 
     /**

@@ -26,11 +26,11 @@ import java.util.List;
 /**
  *
  */
-public class CarersListFragment extends ListFragment<CarerUser> {
+public class CallsListFragment extends ListFragment<CarerUser> {
 
     public static final String ARGUMENT_USER = "USER";
 
-    public static final String TITLE = "Carers";
+    public static final String TITLE = "Calls";
 
     private DependentUser user;
 

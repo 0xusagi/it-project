@@ -1,8 +1,7 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.external_services;
 
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.network.AccountService;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.NoConnectionException;
@@ -28,6 +27,13 @@ public class MyNotificationSendingService extends NotificationSendingService {
         }
     }
 
+    /**
+     * Send a help message to all associated carers
+     * @param requester The dependent making the request
+     * @param message The text body of the message
+     * @throws BadRequestException Thrown if the dependent is not registered
+     * @throws NoConnectionException Thrown if there is an issue while connecting to the server
+     */
     @Override
     public void sendHelp(DependentUser requester, String message)
             throws BadRequestException, NoConnectionException {

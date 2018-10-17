@@ -8,7 +8,7 @@ import android.view.View;
  */
 public class SentMessageHolder extends MessageHolder {
 
-    public SentMessageHolder(@NonNull View itemView) {
-        super(itemView);
+    public SentMessageHolder(@NonNull View itemView, String currentUserId, String chatPartnerId) {
+        super(itemView, currentUserId, chatPartnerId);
     }
 }

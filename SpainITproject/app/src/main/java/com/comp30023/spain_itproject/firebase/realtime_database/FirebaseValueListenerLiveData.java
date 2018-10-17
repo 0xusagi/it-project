@@ -29,6 +29,7 @@ public class FirebaseValueListenerLiveData extends LiveData<DataSnapshot> implem
     protected void onActive() {
         super.onActive();
         dbReference.addValueEventListener(this);
+        System.out.println("Attached value listener to: " + dbReference);
     }
 
     /**
@@ -38,6 +39,7 @@ public class FirebaseValueListenerLiveData extends LiveData<DataSnapshot> implem
     protected void onInactive() {
         super.onInactive();
         dbReference.removeEventListener(this);
+        System.out.println("Detached value listener from: " + dbReference);
     }
 
     /**
