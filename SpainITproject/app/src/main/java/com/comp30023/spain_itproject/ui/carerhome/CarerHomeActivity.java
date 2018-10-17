@@ -140,6 +140,9 @@ public class CarerHomeActivity extends BroadcastActivity {
 
         @Override
         protected void onPostExecute(List<DependentUser> dependents) {
+
+            LoginSharedPreference.setName(getApplicationContext(), user.getName());
+
             // If the carer User is null, then there is an error
             if (dependents == null) {
                 // Make a toast for the error
@@ -253,8 +256,7 @@ public class CarerHomeActivity extends BroadcastActivity {
 
                     case 1:
                         intent = new Intent(getApplicationContext(), ChatActivity.class);
-                        intent.putExtra(ChatActivity.EXTRA_CURRENT_USER, user);
-                        intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER, getDependentAt(i));
+                        intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER_ID, getDependentAt(i).getId());
 
                         startActivity(intent);
                         break;
