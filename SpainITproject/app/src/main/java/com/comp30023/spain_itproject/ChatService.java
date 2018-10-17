@@ -12,17 +12,31 @@ import java.io.File;
  */
 public abstract class ChatService {
 
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public String getCurrentUserName() {
+        return currentUserName;
+    }
+
+    public String getChatPartnerId() {
+        return chatPartnerId;
+    }
+
     private String currentUserId;
-    private boolean isDependent;
+    private String currentUserName;
     private String chatPartnerId;
 
     /**
      * @param currentUserId The user that is currently logged in
+     * @param currentUserName The name of the user that is currently logged in
      * @param chatPartnerId The user that they are messaging
      */
-    public ChatService(String currentUserId, String chatPartnerId) {
+    public ChatService(String currentUserId, String currentUserName, String chatPartnerId) {
         this.currentUserId = currentUserId;
         this.chatPartnerId = chatPartnerId;
+        this.currentUserName = currentUserName;
     }
 
     /**
@@ -38,7 +52,17 @@ public abstract class ChatService {
      */
     public abstract void sendMessage(String message) throws Exception;
 
+    /**
+     * Send a message with a reference to an audio file
+     * @param message The text body of the message
+     * @param file The audio file that is being shared
+     * @throws Exception Thrown when there is a connection issue
+     */
     public abstract void sendAudioMessage(String message, File file) throws Exception;
 
+    /**
+     * Play the audio file found at the resource link
+     * @param resourceLink The path to the audio file
+     */
     public abstract void playAudioMessage(String resourceLink);
 }

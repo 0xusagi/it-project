@@ -10,12 +10,12 @@ import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.Clock;
 import com.comp30023.spain_itproject.domain.ChatMessage;
-import com.comp30023.spain_itproject.firebase.storage.FirebaseStorageService;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -40,21 +40,16 @@ public class FirebaseChatService extends ChatService {
 
     //private LiveData<List<ChatMessage>> pastMessages;
 
-    private String currentUserId;
-    private String chatPartnerId;
-
     private String chatReferenceName;
 
     /**
      * Creates the references and listeners to a chat room
      * @param currentUserId The currently logged in user
+     * @param currentUserName The name of the currently logged in user
      * @param chatPartnerId The user they are messaging
      */
-    public FirebaseChatService(String currentUserId, String chatPartnerId) {
-        super(currentUserId, chatPartnerId);
-
-        this.chatPartnerId = chatPartnerId;
-        this.currentUserId = currentUserId;
+    public FirebaseChatService(String currentUserId, String currentUserName, String chatPartnerId) {
+        super(currentUserId, currentUserName, chatPartnerId);
 
         chatReferenceName = getChatReferenceName(currentUserId, chatPartnerId);
 
@@ -100,7 +95,7 @@ public class FirebaseChatService extends ChatService {
      */
     public void sendMessage(final String message) throws Exception {
 
-        ChatMessage chatMessage = new ChatMessage(currentUserId, chatPartnerId, message, null);
+        ChatMessage chatMessage = new ChatMessage(getCurrentUserId(), getCurrentUserName(), getChatPartnerId(), message, null);
 
         //Adds the message as a child to the chat instance
         chatReference.push().setValue(chatMessage);
@@ -109,8 +104,15 @@ public class FirebaseChatService extends ChatService {
         ServiceFactory.getInstance().notificationSendingService().sendChat(chatMessage);
     }
 
-    private void sendMessage(String message, String resoureLink) throws Exception {
-        ChatMessage chatMessage = new ChatMessage(currentUserId, chatPartnerId, message, resoureLink);
+    /**
+     * Send a message that contains a link to an audio file
+     * @param message The text body of the message
+     * @param audioResourceLink The path to the audio file
+     * @throws Exception Thrown when there is a connection issue
+     */
+    private void sendMessage(String message, String audioResourceLink) throws Exception {
+
+        ChatMessage chatMessage = new ChatMessage(getCurrentUserId(), getCurrentUserName(), getChatPartnerId(), message, audioResourceLink);
 
         //Adds the message as a child to the chat instance
         chatReference.push().setValue(chatMessage);
@@ -119,20 +121,29 @@ public class FirebaseChatService extends ChatService {
         ServiceFactory.getInstance().notificationSendingService().sendChat(chatMessage);
     }
 
+    /**
+     * Stores the file in FirebaseStorage and then sends the chat partner a message about it
+     * @param message The text body of the message the message to be sent
+     * @param file The audio file to share
+     */
     @Override
     public void sendAudioMessage(final String message, File file) {
 
         String timeStamp = Clock.getCurrentLocalTimeStamp();
 
-        final StorageReference storageReference = FirebaseStorageService.getStorage().getReference().child("audio_messages").child(chatReferenceName).child(timeStamp);
+        //Get the reference to where the file will be stored
+        final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("audio_messages").child(chatReferenceName).child(timeStamp);
 
         Uri uri = Uri.fromFile(file);
 
+        //Upload the file
         UploadTask task = storageReference.putFile(uri);
+
         task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
+                //Send message to the chat partner so that they can access the file
                 try {
                     sendMessage(message, storageReference.getPath());
 
@@ -153,42 +164,56 @@ public class FirebaseChatService extends ChatService {
         return latestMessage;
     }
 
+    /**
+     * Play the audio message that is found at the resource link
+     * @param resourceLink The path to the audio file in storage
+     */
     @Override
     public void playAudioMessage(String resourceLink) {
 
-        final StorageReference storageRef = FirebaseStorageService.getStorage().getReference().child(resourceLink);
+        //Get the reference to the file
+        final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child(resourceLink);
 
         try {
+
+            //Create a temporary file to store the download to
             final File localFile = File.createTempFile("recording", "3gp");
+
+            //Download the file and play
             storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-                    // Local temp file has been created
-
-                    final MediaPlayer player = new MediaPlayer();
-                    try {
-                        player.setDataSource(localFile.getPath());
-                        player.prepare();
-                        player.start();
-                        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-                                player.reset();
-                                player.release();
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
+                    playAudio(localFile.getPath());
                 }
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * Play the audio file over the default speaker
+     * @param path The path to the file
+     */
+    private void playAudio(String path) {
 
+        final MediaPlayer player = new MediaPlayer();
+        try {
+            player.setDataSource(path);
+            player.prepare();
+            player.start();
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+
+                    //When finished playing, release the asset
+                    player.reset();
+                    player.release();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -28,6 +28,13 @@ public class MyNotificationSendingService extends NotificationSendingService {
         }
     }
 
+    /**
+     * Send a help message to all associated carers
+     * @param requester The dependent making the request
+     * @param message The text body of the message
+     * @throws BadRequestException Thrown if the dependent is not registered
+     * @throws NoConnectionException Thrown if there is an issue while connecting to the server
+     */
     @Override
     public void sendHelp(DependentUser requester, String message)
             throws BadRequestException, NoConnectionException {

@@ -2,7 +2,6 @@ package com.comp30023.spain_itproject.ui.chat;
 
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,19 +13,14 @@ import android.widget.LinearLayout;
 
 import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.ChatMessage;
-import com.comp30023.spain_itproject.firebase.storage.FirebaseStorageService;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.comp30023.spain_itproject.VoiceRecorder;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
+/**
+ * Records audio input to send as message
+ */
 public class VoiceInputFragment extends MessageInputFragment {
 
     private enum State {
@@ -34,10 +28,12 @@ public class VoiceInputFragment extends MessageInputFragment {
         RECORDING,
         RECORDED,
         PLAYINGBACK,
-        SENDING
+        SENDING,
+        SENT
     }
 
-    public static final String AUDIO_MESSAGE = "Audio message";
+    public static final String AUDIO_MESSAGE = "Voice message";
+    public static final String OUTPUT_FILE_NAME = "/tempRecording.3gp";
 
     private LinearLayout buttonsLayout;
 
@@ -47,7 +43,7 @@ public class VoiceInputFragment extends MessageInputFragment {
     private ImageButton stopPlaybackButton;
     private ImageButton clearRecordingButton;
 
-    private MediaRecorder recorder;
+    private VoiceRecorder voiceRecorder;
     private MediaPlayer player;
 
     private String outputPath;
@@ -62,13 +58,15 @@ public class VoiceInputFragment extends MessageInputFragment {
 
         buttonsLayout = (LinearLayout) view.findViewById(R.id.voiceInput_buttonsLayout);
 
+        //LayoutParams are same for each new button (evenly share the entire panel)
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
 
+        //Send the output to the cache
+        outputPath = getActivity().getCacheDir().getAbsolutePath() + OUTPUT_FILE_NAME;
         currentState = State.WAITING;
 
-        outputPath = getActivity().getCacheDir().getAbsolutePath() + "/tempRecording.3gp";
-
         setRecorder();
+        player = new MediaPlayer();
 
         recordButton = new ImageButton(getContext());
         recordButton.setImageResource(R.drawable.ic_fiber_manual_record);
@@ -77,7 +75,7 @@ public class VoiceInputFragment extends MessageInputFragment {
             @Override
             public void onClick(View v) {
 
-                recorder.start();
+                voiceRecorder.start();
 
                 buttonsLayout.removeAllViews();
                 buttonsLayout.addView(stopRecordButton);
@@ -93,10 +91,9 @@ public class VoiceInputFragment extends MessageInputFragment {
             @Override
             public void onClick(View v) {
 
-                recorder.stop();
+                voiceRecorder.stop();
                 currentState = State.RECORDED;
 
-                player = new MediaPlayer();
                 try {
                     player.setDataSource(outputPath);
                     player.prepare();
@@ -116,6 +113,7 @@ public class VoiceInputFragment extends MessageInputFragment {
         playbackRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 buttonsLayout.removeAllViews();
                 buttonsLayout.addView(stopPlaybackButton);
 
@@ -137,6 +135,7 @@ public class VoiceInputFragment extends MessageInputFragment {
         stopPlaybackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 buttonsLayout.removeAllViews();
                 buttonsLayout.addView(playbackRecordingButton);
                 buttonsLayout.addView(clearRecordingButton);
@@ -158,19 +157,23 @@ public class VoiceInputFragment extends MessageInputFragment {
         clearRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonsLayout.removeAllViews();
-                buttonsLayout.addView(recordButton);
 
-                currentState = State.WAITING;
+                if (currentState != State.SENDING) {
 
-                File file = new File(outputPath);
-                if (file.exists()) {
-                    file.delete();
+                    buttonsLayout.removeAllViews();
+                    buttonsLayout.addView(recordButton);
+
+                    currentState = State.WAITING;
+
+                    File file = new File(outputPath);
+                    if (file.exists()) {
+                        file.delete();
+                    }
+
+                    voiceRecorder.reset();
+                    player.reset();
+                    setRecorder();
                 }
-
-                recorder.reset();
-                player.reset();
-                setRecorder();
             }
         });
 
@@ -181,10 +184,12 @@ public class VoiceInputFragment extends MessageInputFragment {
     public void onResume() {
         super.onResume();
 
+        //Reset so that in WAITING state
         buttonsLayout.removeAllViews();
         buttonsLayout.addView(recordButton);
+        currentState = State.WAITING;
 
-        if (recorder == null) {
+        if (voiceRecorder == null) {
             setRecorder();
         }
     }
@@ -193,49 +198,48 @@ public class VoiceInputFragment extends MessageInputFragment {
     public void onPause() {
         super.onPause();
 
-        switch (currentState) {
-            case RECORDING:
-                recorder.stop();
-                break;
-
-            default:
-                break;
+        if (currentState == State.RECORDING) {
+            voiceRecorder.stop();
         }
 
-        if (recorder != null) {
-            recorder.release();
-            recorder = null;
+        //Release the recorder
+        if (voiceRecorder != null) {
+            voiceRecorder.release();
+            voiceRecorder = null;
         }
 
+        //Release the player
         if (player != null) {
             player.release();
             player = null;
         }
 
+        //Delete the temporary output file
         File file = new File(outputPath);
         if (file.exists()) {
             file.delete();
         }
     }
 
+    //prepare the recorder
     private void setRecorder() {
 
-        if (recorder == null) {
-            recorder = new MediaRecorder();
+        if (voiceRecorder == null) {
+            voiceRecorder = new VoiceRecorder(outputPath);
         }
 
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setOutputFile(outputPath);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
         try {
-            recorder.prepare();
+            voiceRecorder.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Check that there is a recording waiting to be sent, and then send
+     * @param chatService The ChatService used to send the recording
+     * @throws Exception Thrown if there is a connection issue
+     */
     @Override
     public void sendInput(final ChatService chatService) throws Exception {
 
@@ -244,11 +248,17 @@ public class VoiceInputFragment extends MessageInputFragment {
             case RECORDED:
 
                 final File file = new File(outputPath);
+
+                //Ensure that there is a file containing the recording
                 if (file.exists()) {
 
+                    //Send the recording
                     currentState = State.SENDING;
                     chatService.sendAudioMessage(AUDIO_MESSAGE, file);
 
+                    currentState = State.SENT;
+
+                    //Clear the temp recording as it has been sent
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -263,6 +273,5 @@ public class VoiceInputFragment extends MessageInputFragment {
                 break;
 
         }
-
     }
 }

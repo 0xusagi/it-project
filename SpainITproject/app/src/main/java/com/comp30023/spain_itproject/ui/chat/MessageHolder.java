@@ -1,7 +1,7 @@
 package com.comp30023.spain_itproject.ui.chat;
 
-import android.content.Context;
-import android.media.MediaPlayer;
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,14 +12,6 @@ import android.widget.TextView;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.domain.ChatMessage;
-import com.comp30023.spain_itproject.firebase.storage.FirebaseStorageService;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.StorageReference;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
 
 /**
  * A view holder for messages that display the same attributes
@@ -29,13 +21,13 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
 
     private View view;
 
-    TextView messageText;
-    TextView timeText;
-    LinearLayout layout;
-    ImageButton playButton;
+    private TextView messageText;
+    private TextView timeText;
+    private LinearLayout layout;
+    private ImageButton playButton;
 
-    String currentUserId;
-    String chatPartnerId;
+    private String currentUserId;
+    private String chatPartnerId;
 
     public MessageHolder(@NonNull View itemView, String currentUserId, String chatPartnerId) {
         super(itemView);
@@ -55,7 +47,7 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
         messageText.setText(message.getMessage());
         timeText.setText(message.getTimeStamp());
 
-        if (message.getResourceLink() != null) {
+        if (message.getAudioResourceLink() != null) {
 
             playButton.setVisibility(View.VISIBLE);
 
@@ -63,7 +55,17 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
 
-                    ServiceFactory.getInstance().chatService(currentUserId, chatPartnerId).playAudioMessage(message.getResourceLink());
+                    @SuppressLint("StaticFieldLeak")
+                    AsyncTask task = new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+
+                            ServiceFactory.getInstance().chatService(currentUserId, null, chatPartnerId).playAudioMessage(message.getAudioResourceLink());
+
+                            return null;
+                        }
+                    };
+                    task.execute();
 
                 }
             });

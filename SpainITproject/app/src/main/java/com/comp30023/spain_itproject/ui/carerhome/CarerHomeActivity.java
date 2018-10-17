@@ -140,6 +140,9 @@ public class CarerHomeActivity extends BroadcastActivity {
 
         @Override
         protected void onPostExecute(List<DependentUser> dependents) {
+
+            LoginSharedPreference.setName(getApplicationContext(), user.getName());
+
             // If the carer User is null, then there is an error
             if (dependents == null) {
                 // Make a toast for the error

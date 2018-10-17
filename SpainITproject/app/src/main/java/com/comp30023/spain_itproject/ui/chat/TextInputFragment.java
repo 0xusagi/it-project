@@ -1,6 +1,5 @@
 package com.comp30023.spain_itproject.ui.chat;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,8 +10,10 @@ import android.widget.EditText;
 
 import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.ChatMessage;
 
+/**
+ * Records text input to send as message
+ */
 public class TextInputFragment extends MessageInputFragment {
 
     private EditText inputText;
@@ -28,6 +29,11 @@ public class TextInputFragment extends MessageInputFragment {
         return view;
     }
 
+    /**
+     * Sends the text in the input field as a message
+     * @param chatService The ChatService that the message is sent by
+     * @throws Exception Thrown if there is a connection issue
+     */
     @Override
     public void sendInput(ChatService chatService) throws Exception {
 
@@ -45,7 +51,6 @@ public class TextInputFragment extends MessageInputFragment {
             @Override
             public void run() {
                 //If no error thrown, clear the text
-                //inputText.getText().clear();
                 inputText.setText("");
             }
         });

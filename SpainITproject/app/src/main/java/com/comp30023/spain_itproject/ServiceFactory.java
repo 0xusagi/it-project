@@ -18,11 +18,12 @@ public class ServiceFactory {
 
     /**
      * @param currentUserId The ID of the logged in user
+     * @param currentUserName The name of the logged in user
      * @param chatPartnerId The ID of the other user
      * @return The instance of the chat service between the 2 users
      */
-    public ChatService chatService(String currentUserId, String chatPartnerId) {
-        return new FirebaseChatService(currentUserId, chatPartnerId);
+    public ChatService chatService(String currentUserId, String currentUserName, String chatPartnerId) {
+        return new FirebaseChatService(currentUserId, currentUserName, chatPartnerId);
     }
 
     /**

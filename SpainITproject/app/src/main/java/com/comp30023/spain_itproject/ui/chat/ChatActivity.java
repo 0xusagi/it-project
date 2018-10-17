@@ -35,6 +35,7 @@ public class ChatActivity extends BroadcastActivity {
     public static final String TEXT_AUDIO_BUTTON_TEXT = "Text";
 
     private String currentUserId;
+    private String currentUserName;
     private String chatPartnerId;
 
     //The messages between the users
@@ -60,6 +61,7 @@ public class ChatActivity extends BroadcastActivity {
         messages = new ArrayList<ChatMessage>();
 
         currentUserId = LoginSharedPreference.getId(this);
+        currentUserName = LoginSharedPreference.getName(this);
 
         Intent intent = getIntent();
         chatPartnerId = intent.getStringExtra(EXTRA_CHAT_PARTNER_USER_ID);
@@ -85,7 +87,7 @@ public class ChatActivity extends BroadcastActivity {
         setSendMessageButtonListener();
 
         //Create the listener for the chat service
-        chatService = ServiceFactory.getInstance().chatService(currentUserId, chatPartnerId);
+        chatService = ServiceFactory.getInstance().chatService(currentUserId, currentUserName, chatPartnerId);
 
         /*chatService.getMessageHistory().observe(this, new Observer<List<ChatMessage>>() {
             @Override
@@ -117,13 +119,13 @@ public class ChatActivity extends BroadcastActivity {
             public void onClick(View v) {
 
                 if (currentFragment != null) {
+
                     @SuppressLint("StaticFieldLeak")
                     AsyncTask task = new AsyncTask() {
                         @Override
                         protected Object doInBackground(Object[] objects) {
 
                             try {
-
                                 currentFragment.sendInput(chatService);
 
                             } catch (Exception e) {
@@ -163,10 +165,6 @@ public class ChatActivity extends BroadcastActivity {
 
     private void changeFragment() {
 
-        Bundle arguments = new Bundle();
-        arguments.putString(MessageInputFragment.ARGUMENT_CURRENT_USER_ID, currentUserId);
-        arguments.putString(MessageInputFragment.ARGUMENT_CHAT_PARTNER_ID, chatPartnerId);
-
         if (currentFragment == null) {
             currentFragment = new TextInputFragment();
             changeFragmentButton.setImageResource(R.drawable.ic_mic_black_24dp);
@@ -177,8 +175,6 @@ public class ChatActivity extends BroadcastActivity {
             currentFragment = new TextInputFragment();
             changeFragmentButton.setImageResource(R.drawable.ic_mic_black_24dp);
         }
-
-        currentFragment.setArguments(arguments);
 
         setFragment();
     }

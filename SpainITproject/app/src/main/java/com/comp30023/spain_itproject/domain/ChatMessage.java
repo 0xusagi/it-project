@@ -31,22 +31,33 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         this.timeStamp = timeStamp;
     }
 
-    public void setResourceLink(String resourceLink) {
-        this.resourceLink = resourceLink;
+    public void setAudioResourceLink(String audioResourceLink) {
+        this.audioResourceLink = audioResourceLink;
     }
 
     private String message;
     private String senderId;
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    private String senderName;
     private String receiverId;
     private String timeStamp;
-    private String resourceLink;
+    private String audioResourceLink;
 
-    public ChatMessage(String senderId, String receiverId, String message, String resourceLink) {
+    public ChatMessage(String senderId, String senderName, String receiverId, String message, String audioResourceLink) {
 
         this.senderId = senderId;
+        this.senderName = senderName;
         this.receiverId = receiverId;
         this.message = message;
-        this.resourceLink = resourceLink;
+        this.audioResourceLink = audioResourceLink;
 
         timeStamp = Clock.getCurrentLocalTimeStamp();
     }
@@ -71,8 +82,8 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         return timeStamp;
     }
 
-    public String getResourceLink() {
-        return resourceLink;
+    public String getAudioResourceLink() {
+        return audioResourceLink;
     }
 
     /**

@@ -236,6 +236,8 @@ public class DependentHomeActivity extends BroadcastActivity {
 
             if (user != null) {
 
+                LoginSharedPreference.setName(getApplicationContext(), user.getName());
+
                 try {
 
                     Fragment fragment;
