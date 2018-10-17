@@ -1,11 +1,15 @@
 package com.comp30023.spain_itproject.ui.chat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +33,8 @@ public class ChatActivity extends BroadcastActivity {
 
     public static final String EXTRA_CHAT_PARTNER_USER_ID = "PARTNER";
 
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+
     public static final String TEXT_AUDIO_BUTTON_AUDIO = "Audio";
     public static final String TEXT_AUDIO_BUTTON_TEXT = "Text";
 
@@ -50,6 +56,8 @@ public class ChatActivity extends BroadcastActivity {
     private ImageButton changeFragmentButton;
 
     private ChatService chatService;
+
+    private boolean permissionToRecordAccepted = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -166,15 +174,36 @@ public class ChatActivity extends BroadcastActivity {
         if (currentFragment == null) {
             currentFragment = new TextInputFragment();
             changeFragmentButton.setImageResource(R.drawable.ic_mic_black_24dp);
+
         } else if (currentFragment instanceof TextInputFragment) {
-            currentFragment = new VoiceInputFragment();
-            changeFragmentButton.setImageResource(R.drawable.ic_keyboard_black_24dp);
+
+            if (permissionToRecordAccepted) {
+                currentFragment = new VoiceInputFragment();
+                changeFragmentButton.setImageResource(R.drawable.ic_keyboard_black_24dp);
+            } else {
+                String [] permissions = {Manifest.permission.RECORD_AUDIO};
+                ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+            }
         } else {
             currentFragment = new TextInputFragment();
             changeFragmentButton.setImageResource(R.drawable.ic_mic_black_24dp);
         }
 
         setFragment();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case REQUEST_RECORD_AUDIO_PERMISSION:
+                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                changeFragment();
+                break;
+        }
+        if (!permissionToRecordAccepted ) finish();
     }
 
     private void setFragment() {
