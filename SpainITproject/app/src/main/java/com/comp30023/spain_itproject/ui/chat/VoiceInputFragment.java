@@ -1,7 +1,6 @@
 package com.comp30023.spain_itproject.ui.chat;
 
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,13 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.comp30023.spain_itproject.ChatService;
+import com.comp30023.spain_itproject.external_services.ChatService;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.VoiceRecorder;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 
 /**
  * Records audio input to send as message

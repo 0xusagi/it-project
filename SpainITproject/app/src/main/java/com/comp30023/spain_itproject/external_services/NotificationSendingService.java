@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.external_services;
 
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.domain.DependentUser;

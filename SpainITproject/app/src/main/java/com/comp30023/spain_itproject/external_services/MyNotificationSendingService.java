@@ -1,8 +1,7 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.external_services;
 
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.network.AccountService;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.NoConnectionException;

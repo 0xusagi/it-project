@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.comp30023.spain_itproject.ChatService;
+import com.comp30023.spain_itproject.external_services.ChatService;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.NoConnectionException;

@@ -12,14 +12,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.comp30023.spain_itproject.ChatService;
+import com.comp30023.spain_itproject.external_services.ChatService;
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.ServiceFactory;
+import com.comp30023.spain_itproject.external_services.ServiceFactory;
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.ui.BroadcastActivity;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;

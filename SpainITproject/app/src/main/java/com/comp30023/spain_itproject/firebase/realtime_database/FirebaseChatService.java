@@ -8,8 +8,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import com.comp30023.spain_itproject.ChatService;
-import com.comp30023.spain_itproject.ServiceFactory;
+import com.comp30023.spain_itproject.external_services.ChatService;
+import com.comp30023.spain_itproject.external_services.ServiceFactory;
 import com.comp30023.spain_itproject.Clock;
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.network.BadRequestException;

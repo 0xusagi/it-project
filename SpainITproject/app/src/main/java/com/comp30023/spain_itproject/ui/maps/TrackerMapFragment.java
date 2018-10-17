@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.comp30023.spain_itproject.ServiceFactory;
+import com.comp30023.spain_itproject.external_services.ServiceFactory;
 import com.comp30023.spain_itproject.domain.Position;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

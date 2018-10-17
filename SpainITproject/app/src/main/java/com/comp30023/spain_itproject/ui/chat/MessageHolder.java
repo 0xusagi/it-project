@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.ServiceFactory;
+import com.comp30023.spain_itproject.external_services.ServiceFactory;
 import com.comp30023.spain_itproject.domain.ChatMessage;
 
 /**

@@ -9,12 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.ServiceFactory;
+import com.comp30023.spain_itproject.external_services.ServiceFactory;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.NoConnectionException;
 import com.comp30023.spain_itproject.ui.DimBackgroundPopupWindow;
-import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 /**
  * The PopupWindow to display when a user presses the help button

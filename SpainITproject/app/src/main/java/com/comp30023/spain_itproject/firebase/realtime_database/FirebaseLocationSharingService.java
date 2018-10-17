@@ -4,7 +4,7 @@ import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 
-import com.comp30023.spain_itproject.RealTimeLocationSharingService;
+import com.comp30023.spain_itproject.external_services.RealTimeLocationSharingService;
 import com.comp30023.spain_itproject.domain.Position;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
