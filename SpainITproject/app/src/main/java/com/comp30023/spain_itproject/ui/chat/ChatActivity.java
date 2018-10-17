@@ -35,9 +35,6 @@ public class ChatActivity extends BroadcastActivity {
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
-    public static final String TEXT_AUDIO_BUTTON_AUDIO = "Audio";
-    public static final String TEXT_AUDIO_BUTTON_TEXT = "Text";
-
     private String currentUserId;
     private String currentUserName;
     private String chatPartnerId;
@@ -193,6 +190,13 @@ public class ChatActivity extends BroadcastActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        finish();
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -203,7 +207,6 @@ public class ChatActivity extends BroadcastActivity {
                 changeFragment();
                 break;
         }
-        if (!permissionToRecordAccepted ) finish();
     }
 
     private void setFragment() {
