@@ -104,14 +104,14 @@ public class AccountController {
      * @throws BadRequestException If the request could not be completed because of invalid input
      * @throws NoConnectionException If the request could not be completed due to a connection issue
      */
-    public void addLocationToDependent(String dependentId, String googleId, double latitude, double longitude, String displayName)
+    public Location addLocationToDependent(String dependentId, String googleId, double latitude, double longitude, String displayName)
             throws Exception {
         checkService();
 
         //Create the call to the server
-        Call<ResponseBody> call = service.addLocationToDependent(dependentId, googleId, latitude, longitude, displayName);
+        Call<Location> call = service.addLocationToDependent(dependentId, googleId, latitude, longitude, displayName);
 
-        executeCallNoResponse(call);
+        return executeCallReturnResponse(call);
     }
 
     /**

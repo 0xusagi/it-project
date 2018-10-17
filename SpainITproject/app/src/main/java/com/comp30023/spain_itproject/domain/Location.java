@@ -23,6 +23,10 @@ public class Location implements Serializable, DisplayName {
     public Location(String googleId, double latitude, double longitude, String displayName) {
     }
 
+    public String getGoogleId() {
+        return googleId;
+    }
+
     public String getDisplayName() {
         return displayName;
     }

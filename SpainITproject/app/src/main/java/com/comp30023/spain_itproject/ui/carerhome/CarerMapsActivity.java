@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.comp30023.spain_itproject.R;
 
+import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.ui.maps.GpsMapsFragment;
 import com.comp30023.spain_itproject.ui.maps.MarkerMapsFragment;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
@@ -33,13 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class CarerMapsActivity extends AppCompatActivity {
 
-    public static String getSelectedDependent() {
-        return selectedDependentId;
-    }
-
-    public static void setSelectedDependent(String selectedDependentId) {
-        CarerMapsActivity.selectedDependentId = selectedDependentId;
-    }
+    public static final String EXTRA_DEPENDENT = "Dependent";
 
     private boolean displayingPlace;
     private String placeId;
@@ -47,8 +42,9 @@ public class CarerMapsActivity extends AppCompatActivity {
     private double placeLng;
 
     private MarkerMapsFragment fragment;
-    private static String selectedDependentId;
     private PlaceAutocompleteFragment autocompleteFragment;
+
+    private DependentUser dependent;
 
     private FragmentManager fragmentManager;
     private FrameLayout placeSelectedFrame;
@@ -67,6 +63,8 @@ public class CarerMapsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_maps);
 
         displayingPlace = false;
+
+        dependent = (DependentUser) getIntent().getSerializableExtra(EXTRA_DEPENDENT);
 
         enterNameText = (TextView) findViewById(R.id.placeSelected_textView);
         placeSelectedFrame = (FrameLayout) findViewById(R.id.carerMapsActivity_mapFrame);
@@ -91,10 +89,9 @@ public class CarerMapsActivity extends AppCompatActivity {
                         @Override
                         protected Object doInBackground(Object[] objects) {
 
-                            AccountController accountController = AccountController.getInstance();
                             try {
 
-                                accountController.addLocationToDependent(selectedDependentId, placeId, placeLat, placeLng, name);
+                                dependent.addLocation(placeId, name, placeLat, placeLng);
 
                                 runOnUiThread(new Runnable() {
                                     @Override
