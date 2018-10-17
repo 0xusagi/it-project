@@ -51,13 +51,9 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
     }
 
     void bind(final ChatMessage message) {
-        messageText.setText(message.getMessage());
 
-        try {
-            timeText.setText(message.getTimeStamp());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        messageText.setText(message.getMessage());
+        timeText.setText(message.getTimeStamp());
 
         if (message.getResourceLink() != null) {
 

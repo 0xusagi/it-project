@@ -2,15 +2,13 @@ package com.comp30023.spain_itproject.domain;
 
 import android.support.annotation.NonNull;
 
+import com.comp30023.spain_itproject.Clock;
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * A class to represent a chat message sent amongst two users
@@ -50,10 +48,7 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         this.message = message;
         this.resourceLink = resourceLink;
 
-        TimeZone tz = TimeZone.getDefault();
-        DateFormat df = SimpleDateFormat.getDateTimeInstance();
-        df.setTimeZone(tz);
-        this.timeStamp = df.format(new Date());
+        timeStamp = Clock.getCurrentLocalTimeStamp();
     }
 
     public ChatMessage(){
@@ -72,7 +67,7 @@ public class ChatMessage implements Serializable, Comparable<ChatMessage> {
         return message;
     }
 
-    public String getTimeStamp() throws ParseException {
+    public String getTimeStamp() {
         return timeStamp;
     }
 

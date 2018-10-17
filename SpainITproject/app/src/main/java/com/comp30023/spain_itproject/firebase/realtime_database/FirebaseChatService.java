@@ -1,21 +1,16 @@
 package com.comp30023.spain_itproject.firebase.realtime_database;
 
-import android.annotation.SuppressLint;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import com.comp30023.spain_itproject.ChatService;
 import com.comp30023.spain_itproject.ServiceFactory;
+import com.comp30023.spain_itproject.Clock;
 import com.comp30023.spain_itproject.domain.ChatMessage;
-import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.firebase.storage.FirebaseStorageService;
-import com.comp30023.spain_itproject.network.BadRequestException;
-import com.comp30023.spain_itproject.network.NoConnectionException;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -26,10 +21,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * A chat service utilising Firebase's RealTimeDatabase
@@ -52,6 +43,7 @@ public class FirebaseChatService extends ChatService {
     private String currentUserId;
     private String chatPartnerId;
 
+    private String chatReferenceName;
 
     /**
      * Creates the references and listeners to a chat room
@@ -64,9 +56,9 @@ public class FirebaseChatService extends ChatService {
         this.chatPartnerId = chatPartnerId;
         this.currentUserId = currentUserId;
 
-        String referenceName = getChatReferenceName(currentUserId, chatPartnerId);
+        chatReferenceName = getChatReferenceName(currentUserId, chatPartnerId);
 
-        chatReference = baseReference.child(referenceName);
+        chatReference = baseReference.child(chatReferenceName);
 
         //Set the listener for incoming children (messages) of the chatReference
         LiveData<DataSnapshot> latestMessageSnapshot = new FirebaseChildListenerLiveData(chatReference);
@@ -130,12 +122,9 @@ public class FirebaseChatService extends ChatService {
     @Override
     public void sendAudioMessage(final String message, File file) {
 
-        TimeZone tz = TimeZone.getDefault();
-        DateFormat df = SimpleDateFormat.getDateTimeInstance();
-        df.setTimeZone(tz);
-        String timeStamp = df.format(new Date());
+        String timeStamp = Clock.getCurrentLocalTimeStamp();
 
-        final StorageReference storageReference = FirebaseStorageService.getStorage().getReference().child("audio_messages").child(currentUserId).child(timeStamp);
+        final StorageReference storageReference = FirebaseStorageService.getStorage().getReference().child("audio_messages").child(chatReferenceName).child(timeStamp);
 
         Uri uri = Uri.fromFile(file);
 
