@@ -23,6 +23,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class CarerMapsActivity extends AppCompatActivity {
 
+    private GpsMapsFragment fragment;
+    private static String selectedDependentId;
+    private PlaceAutocompleteFragment autocompleteFragment;
+
     public static String getSelectedDependent() {
         return selectedDependentId;
     }
@@ -30,10 +34,6 @@ public class CarerMapsActivity extends AppCompatActivity {
     public static void setSelectedDependent(String selectedDependentId) {
         CarerMapsActivity.selectedDependentId = selectedDependentId;
     }
-
-    private GpsMapsFragment fragment;
-    private static String selectedDependentId;
-    private PlaceAutocompleteFragment autocompleteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

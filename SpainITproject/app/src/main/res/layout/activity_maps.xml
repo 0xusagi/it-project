@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.carerhome.CarerMapsActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/carerMaps_placeSelectedFrame">
+
+    </FrameLayout>
+
     <fragment android:id="@+id/place_autocomplete_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
