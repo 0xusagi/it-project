@@ -90,9 +90,7 @@ public class AccountController {
 
         UserModel response = executeCallReturnResponse(call);
 
-        String userType = response.getUserType();
-        boolean isDependent = userType.equals(AccountService.USERTYPE_DEPENDENT);
-
+        boolean isDependent = AccountService.USERTYPE_DEPENDENT.equals(response.getUserType());
         String userId = response.getId();
 
         Pair<String, Boolean> pair = new Pair<String, Boolean>(userId, isDependent);
@@ -103,17 +101,15 @@ public class AccountController {
     //CONFIRM
     /**
      * Add a location to a dependent's account
-     * @param dependent The dependent receiving the location
-     * @param location The location to be added
      * @throws BadRequestException If the request could not be completed because of invalid input
      * @throws NoConnectionException If the request could not be completed due to a connection issue
      */
-    public void addLocationToDependent(DependentUser dependent, Location location)
-            throws BadRequestException, NoConnectionException {
+    public void addLocationToDependent(String dependentId, String googleId, double latitude, double longitude, String displayName)
+            throws Exception {
         checkService();
 
         //Create the call to the server
-        Call<ResponseBody> call = service.addLocationToDependent(dependent.getId(), location);
+        Call<ResponseBody> call = service.addLocationToDependent(dependentId, googleId, latitude, longitude, displayName);
 
         executeCallNoResponse(call);
     }
@@ -132,7 +128,9 @@ public class AccountController {
         // Contact the server to request the list of dependents for a carer
         Call<CarerUser> call = service.getCarer(id);
 
-        return executeCallReturnResponse(call);
+        CarerUser user = executeCallReturnResponse(call);
+
+        return user;
     }
 
     /**
@@ -166,7 +164,9 @@ public class AccountController {
         // Contact the server to request the list of dependents for a carer
         Call<DependentUser> call = service.getDependent(id);
 
-        return executeCallReturnResponse(call);
+        DependentUser user = executeCallReturnResponse(call);
+
+        return user;
     }
 
     public DependentUser deleteDependent(String id)
@@ -377,15 +377,5 @@ public class AccountController {
             // TODO If this update fails, should the app close or log out?
             e.printStackTrace();
         }
-    }
-
-    public void sendHelpRequest(DependentUser requester, String message)
-            throws BadRequestException, NoConnectionException {
-
-        checkService();
-
-        Call<ResponseBody> call = service.requestHelp(requester.getId(), message);
-
-        executeCallNoResponse(call);
     }
 }

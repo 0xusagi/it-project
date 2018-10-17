@@ -1,21 +1,21 @@
 package com.comp30023.spain_itproject.ui.carerhome;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.CarerUser;
-import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
-import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 import java.util.ArrayList;
@@ -34,6 +34,8 @@ public class EditDependentsActivity extends AppCompatActivity {
     private ListView locationsList;
     private ArrayAdapter<String> arrayAdapter;
 
+    private Button addLocationButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,20 @@ public class EditDependentsActivity extends AppCompatActivity {
 
         // Display the locations list on the screen
         displayLocationsList();
+
+        final Context context = this;
+
+        addLocationButton = (Button) findViewById(R.id.editDependents_addLocationsButton);
+        addLocationButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, CarerMapsActivity.class);
+                CarerMapsActivity.setSelectedDependent(dependentID);
+                startActivity(intent);
+            }
+
+        });
     }
 
     public void displayLocationsList() {
@@ -94,9 +110,10 @@ public class EditDependentsActivity extends AppCompatActivity {
                             // the user clicked on options[which]
                             switch(which) {
                                 // Delete option
-                                case 0:
-
-                                    break;
+                                case 2:     Intent intent = new Intent(EditDependentsActivity.this, CarerMapsActivity.class);
+                                            CarerMapsActivity.setSelectedDependent(dependentID);
+                                            startActivity(intent);
+                                            break;
 
                                 // Default (no click)
                                 default:

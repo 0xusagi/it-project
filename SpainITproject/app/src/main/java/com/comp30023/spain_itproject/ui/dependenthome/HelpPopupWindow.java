@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.external_services.ServiceFactory;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.NoConnectionException;
 import com.comp30023.spain_itproject.ui.DimBackgroundPopupWindow;
-import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 /**
  * The PopupWindow to display when a user presses the help button
@@ -69,7 +69,7 @@ public class HelpPopupWindow extends DimBackgroundPopupWindow {
             protected Object doInBackground(Object[] objects) {
 
                 try {
-                    AccountController.getInstance().sendHelpRequest(user, message);
+                    ServiceFactory.getInstance().notificationSendingService().sendHelp(user, message);
                 } catch (BadRequestException e) {
                     e.printStackTrace();
                 } catch (NoConnectionException e) {

@@ -171,6 +171,7 @@ public class IncomingVideoCallActivity extends BaseActivity {
      * Get the name of the caller task
      */
     private class GetCallerNameTask extends AsyncTask<Void, Void, String> {
+        private final String SERVER_ERROR_MSG = "Caller name cannot be obtained";
         private Exception exception;
 
         @Override
@@ -201,7 +202,7 @@ public class IncomingVideoCallActivity extends BaseActivity {
         protected void onPostExecute(String name) {
             // Check if the user is obtained
             if (name == null) {
-                callerName.setText("Caller name cannot be obtained");
+                callerName.setText(SERVER_ERROR_MSG);
             }
 
             // Display the name on the screen

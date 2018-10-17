@@ -13,11 +13,10 @@ import android.view.ViewGroup;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
-import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
+import com.comp30023.spain_itproject.ui.maps.NavigationMapsFragment;
 import com.comp30023.spain_itproject.ui.views.ItemButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,9 +62,11 @@ public class LocationsListFragment extends ListFragment<Location> {
 
                 Bundle arguments = new Bundle();
                 arguments.putSerializable(MapFragment.ARGUMENT_LOCATION, location);
+                arguments.putSerializable(NavigationMapsFragment.ARGUMENT_USER, user);
 
                 //Create new instance of the following class and pass the item
-                Fragment nextFragment = new MapFragment();
+                Fragment nextFragment = new NavigationMapsFragment();
+                nextFragment.setArguments(arguments);
 
                 nextFragment.setArguments(arguments);
 

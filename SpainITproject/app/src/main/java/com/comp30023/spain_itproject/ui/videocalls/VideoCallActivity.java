@@ -1,8 +1,10 @@
 package com.comp30023.spain_itproject.ui.videocalls;
 
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,10 @@ import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
+import com.comp30023.spain_itproject.domain.CarerUser;
+import com.comp30023.spain_itproject.domain.DependentUser;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
+import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
@@ -124,6 +130,7 @@ public class VideoCallActivity extends BaseActivity {
                         audioController.enableSpeaker();
 
                         // Start the timer
+                        new GetCallerNameTask().execute(call.getRemoteUserId());
                         startTime = System.currentTimeMillis();
                         timerHandler.postDelayed(timerRunnable, 0);
                     }
@@ -167,7 +174,8 @@ public class VideoCallActivity extends BaseActivity {
         // Update the interface
         Call call = getSinchInterface().getCall(callId);
         if (call != null) {
-            callerName.setText(call.getRemoteUserId());
+            // Set the name of the person who is calling
+
             if (call.getState() == CallState.ESTABLISHED) {
                 setupVideoViews();
             }
@@ -243,6 +251,7 @@ public class VideoCallActivity extends BaseActivity {
             return;
         }
 
+        // Remove the views
         VideoController vc = getSinchInterface().getVideoController();
         if (vc != null) {
             LinearLayout view = findViewById(R.id.videoCall_remoteVideo);
@@ -265,5 +274,49 @@ public class VideoCallActivity extends BaseActivity {
                 vc.toggleCaptureDevicePosition();
             }
         });
+    }
+
+    /**
+     * Task to get the caller name to displpay on the activity from the server
+     */
+    private class GetCallerNameTask extends AsyncTask<String, Void, String> {
+        private final String SERVER_ERROR_MSG = "Error occured when getting caller's name";
+        Exception exception;
+
+        @Override
+        protected String doInBackground(String... strings) {
+            // First argument is the remote user Id
+            String callerId = strings[0];
+
+            // Get the name from the server
+            // If current user is dependent then get carer
+            if (LoginSharedPreference.getIsDependent(VideoCallActivity.this)) {
+                try {
+                    CarerUser caller = AccountController.getInstance().getCarer(callerId);
+                    return caller.getName();
+                } catch (Exception e) {
+                    exception = e;
+                }
+            }
+            // Else get dependent
+            else {
+                try {
+                    DependentUser caller = AccountController.getInstance().getDependent(callerId);
+                    return caller.getName();
+                } catch (Exception e) {
+                    exception = e;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String name) {
+            if (name == null) {
+                Toast.makeText(VideoCallActivity.this, SERVER_ERROR_MSG, Toast.LENGTH_LONG).show();
+                return;
+            }
+            callerName.setText(name);
+        }
     }
 }

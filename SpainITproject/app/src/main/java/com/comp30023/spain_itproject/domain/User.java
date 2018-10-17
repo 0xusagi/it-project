@@ -2,7 +2,10 @@ package com.comp30023.spain_itproject.domain;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 public abstract class User implements DisplayName {
 
@@ -43,8 +46,7 @@ public abstract class User implements DisplayName {
         return mobile.equals(other.mobile) && password.equals(other.password);
     }
 
-    @Override
     public String getDisplayName() {
-        return name;
+        return getName();
     }
 }
