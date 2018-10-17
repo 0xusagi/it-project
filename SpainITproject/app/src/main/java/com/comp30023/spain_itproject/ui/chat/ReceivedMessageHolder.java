@@ -16,8 +16,8 @@ public class ReceivedMessageHolder extends MessageHolder {
 
     TextView nameText;
 
-    public ReceivedMessageHolder(@NonNull View itemView) {
-        super(itemView);
+    public ReceivedMessageHolder(@NonNull View itemView, String currentUserId, String chatPartnerId) {
+        super(itemView, currentUserId, chatPartnerId);
 
         nameText = (TextView) itemView.findViewById(R.id.text_message_name);
     }

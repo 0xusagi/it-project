@@ -60,7 +60,6 @@ public class ChatActivity extends BroadcastActivity {
         messages = new ArrayList<ChatMessage>();
 
         currentUserId = LoginSharedPreference.getId(this);
-        boolean isDependent = LoginSharedPreference.getIsDependent(this);
 
         Intent intent = getIntent();
         chatPartnerId = intent.getStringExtra(EXTRA_CHAT_PARTNER_USER_ID);
@@ -68,7 +67,7 @@ public class ChatActivity extends BroadcastActivity {
         messageRecycler = (RecyclerView) findViewById(R.id.recyclerview_message_list);
 
         //Set the adapter for the RecyclerView so that the messages can be displayed
-        messageListAdapter = new MessageListAdapter(this, messages, currentUserId);
+        messageListAdapter = new MessageListAdapter(this, messages, currentUserId, chatPartnerId);
         messageRecycler.setAdapter(messageListAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -86,7 +85,7 @@ public class ChatActivity extends BroadcastActivity {
         setSendMessageButtonListener();
 
         //Create the listener for the chat service
-        chatService = ServiceFactory.getInstance().chatService(currentUserId, isDependent, chatPartnerId);
+        chatService = ServiceFactory.getInstance().chatService(currentUserId, chatPartnerId);
 
         /*chatService.getMessageHistory().observe(this, new Observer<List<ChatMessage>>() {
             @Override

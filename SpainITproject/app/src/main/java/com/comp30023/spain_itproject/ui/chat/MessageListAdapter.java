@@ -26,11 +26,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private List<ChatMessage> messages;
 
     private String currentUserId;
+    private String chatPartnerId;
 
-    public MessageListAdapter(Context context, List<ChatMessage> messages, String currentUserId) {
+    public MessageListAdapter(Context context, List<ChatMessage> messages, String currentUserId, String chatPartnerId) {
         this.context = context;
         this.messages = messages;
         this.currentUserId = currentUserId;
+        this.chatPartnerId = chatPartnerId;
     }
 
     /**
@@ -74,14 +76,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case VIEW_TYPE_MESSAGE_SENT:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_sent, parent, false);
-                viewHolder = new SentMessageHolder(view);
+                viewHolder = new SentMessageHolder(view, currentUserId, chatPartnerId);
                 break;
 
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_received, parent, false);
-                viewHolder = new ReceivedMessageHolder(view);
+                viewHolder = new ReceivedMessageHolder(view, currentUserId, chatPartnerId);
                 break;
-
         }
 
         return viewHolder;

@@ -38,10 +38,8 @@ public class TextInputFragment extends MessageInputFragment {
             return;
         }
 
-        final ChatMessage newMessage = new ChatMessage(getCurrentUserId(), getChatPartnerId(), text, null);
-
         //Send message
-        chatService.sendMessage(newMessage);
+        chatService.sendMessage(text);
 
         getActivity().runOnUiThread(new Runnable() {
             @Override

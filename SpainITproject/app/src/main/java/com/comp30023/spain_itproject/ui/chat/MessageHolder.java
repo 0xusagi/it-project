@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.firebase.storage.FirebaseStorageService;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,8 +34,14 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
     LinearLayout layout;
     ImageButton playButton;
 
-    public MessageHolder(@NonNull View itemView) {
+    String currentUserId;
+    String chatPartnerId;
+
+    public MessageHolder(@NonNull View itemView, String currentUserId, String chatPartnerId) {
         super(itemView);
+
+        this.currentUserId = currentUserId;
+        this.chatPartnerId = chatPartnerId;
 
         view = itemView;
         messageText = (TextView) itemView.findViewById(R.id.text_message_body);
@@ -60,37 +67,7 @@ public abstract class MessageHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
 
-                    final StorageReference storageRef = FirebaseStorageService.getStorage().getReference().child(message.getResourceLink());
-
-                    try {
-                        final File localFile = File.createTempFile("recording", "3gp");
-                        storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                // Local temp file has been created
-                                System.out.println("Get file success");
-
-                                final MediaPlayer player = new MediaPlayer();
-                                try {
-                                    player.setDataSource(localFile.getPath());
-                                    player.prepare();
-                                    player.start();
-                                    player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                        @Override
-                                        public void onCompletion(MediaPlayer mp) {
-                                            player.reset();
-                                            player.release();
-                                        }
-                                    });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    ServiceFactory.getInstance().chatService(currentUserId, chatPartnerId).playAudioMessage(message.getResourceLink());
 
                 }
             });

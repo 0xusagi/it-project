@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.comp30023.spain_itproject.ChatService;
@@ -11,11 +13,23 @@ import com.comp30023.spain_itproject.ServiceFactory;
 import com.comp30023.spain_itproject.domain.ChatMessage;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.firebase.storage.FirebaseStorageService;
 import com.comp30023.spain_itproject.network.BadRequestException;
 import com.comp30023.spain_itproject.network.NoConnectionException;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * A chat service utilising Firebase's RealTimeDatabase
@@ -35,6 +49,9 @@ public class FirebaseChatService extends ChatService {
 
     //private LiveData<List<ChatMessage>> pastMessages;
 
+    private String currentUserId;
+    private String chatPartnerId;
+
 
     /**
      * Creates the references and listeners to a chat room
@@ -43,6 +60,9 @@ public class FirebaseChatService extends ChatService {
      */
     public FirebaseChatService(String currentUserId, String chatPartnerId) {
         super(currentUserId, chatPartnerId);
+
+        this.chatPartnerId = chatPartnerId;
+        this.currentUserId = currentUserId;
 
         String referenceName = getChatReferenceName(currentUserId, chatPartnerId);
 
@@ -86,13 +106,54 @@ public class FirebaseChatService extends ChatService {
      * Makes network call to send notification, cannot be executed on UI thread
      * @param message The message to be sent
      */
-    public void sendMessage(final ChatMessage message) throws Exception {
+    public void sendMessage(final String message) throws Exception {
+
+        ChatMessage chatMessage = new ChatMessage(currentUserId, chatPartnerId, message, null);
 
         //Adds the message as a child to the chat instance
-        chatReference.push().setValue(message);
+        chatReference.push().setValue(chatMessage);
 
         //Send the notification
-        ServiceFactory.getInstance().notificationSendingService().sendChat(message);
+        ServiceFactory.getInstance().notificationSendingService().sendChat(chatMessage);
+    }
+
+    private void sendMessage(String message, String resoureLink) throws Exception {
+        ChatMessage chatMessage = new ChatMessage(currentUserId, chatPartnerId, message, resoureLink);
+
+        //Adds the message as a child to the chat instance
+        chatReference.push().setValue(chatMessage);
+
+        //Send the notification
+        ServiceFactory.getInstance().notificationSendingService().sendChat(chatMessage);
+    }
+
+    @Override
+    public void sendAudioMessage(final String message, File file) {
+
+        TimeZone tz = TimeZone.getDefault();
+        DateFormat df = SimpleDateFormat.getDateTimeInstance();
+        df.setTimeZone(tz);
+        String timeStamp = df.format(new Date());
+
+        final StorageReference storageReference = FirebaseStorageService.getStorage().getReference().child("audio_messages").child(currentUserId).child(timeStamp);
+
+        Uri uri = Uri.fromFile(file);
+
+        UploadTask task = storageReference.putFile(uri);
+        task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                try {
+                    sendMessage(message, storageReference.getPath());
+
+                } catch (Exception e) {
+
+                    //TODO
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
@@ -103,6 +164,44 @@ public class FirebaseChatService extends ChatService {
         return latestMessage;
     }
 
+    @Override
+    public void playAudioMessage(String resourceLink) {
+
+        final StorageReference storageRef = FirebaseStorageService.getStorage().getReference().child(resourceLink);
+
+        try {
+            final File localFile = File.createTempFile("recording", "3gp");
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                    // Local temp file has been created
+
+                    final MediaPlayer player = new MediaPlayer();
+                    try {
+                        player.setDataSource(localFile.getPath());
+                        player.prepare();
+                        player.start();
+                        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                player.reset();
+                                player.release();
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     /**
      * Determines the name for the chat instance between the two users
      * @param currentUserId The logged in user
@@ -111,7 +210,7 @@ public class FirebaseChatService extends ChatService {
      */
     private static String getChatReferenceName(String currentUserId, String partnerId) {
 
-        //Determine the reference from the agreed naming convention (DependentUser.id-CarerUser.id)
+        //Determine the reference of the chat instance
         String reference;
 
         if (currentUserId.compareTo(partnerId) < 0) {
@@ -122,5 +221,4 @@ public class FirebaseChatService extends ChatService {
 
         return reference;
     }
-
 }

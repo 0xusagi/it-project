@@ -237,40 +237,25 @@ public class VoiceInputFragment extends MessageInputFragment {
     }
 
     @Override
-    public void sendInput(final ChatService chatService) {
+    public void sendInput(final ChatService chatService) throws Exception {
 
         switch (currentState) {
 
             case RECORDED:
 
                 final File file = new File(outputPath);
-
                 if (file.exists()) {
 
-                    TimeZone tz = TimeZone.getDefault();
-                    DateFormat df = SimpleDateFormat.getDateTimeInstance();
-                    df.setTimeZone(tz);
-                    String timeStamp = df.format(new Date());
+                    currentState = State.SENDING;
+                    chatService.sendAudioMessage(AUDIO_MESSAGE, file);
 
-                    final StorageReference storageReference = FirebaseStorageService.getStorage().getReference().child("audio_messages").child(getCurrentUserId()).child(timeStamp);
-
-                    Uri uri = Uri.fromFile(file);
-                    UploadTask task = storageReference.putFile(uri);
-                    task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    getActivity().runOnUiThread(new Runnable() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            ChatMessage newMessage = new ChatMessage(getCurrentUserId(), getChatPartnerId(), AUDIO_MESSAGE, storageReference.getPath());
-
-                            try {
-                                chatService.sendMessage(newMessage);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                        public void run() {
                             clearRecordingButton.callOnClick();
                         }
                     });
+
                 }
                 break;
 

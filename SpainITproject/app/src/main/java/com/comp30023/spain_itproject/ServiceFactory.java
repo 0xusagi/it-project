@@ -18,11 +18,10 @@ public class ServiceFactory {
 
     /**
      * @param currentUserId The ID of the logged in user
-     * @param isDependent Whether the logged in user is dependent or not
      * @param chatPartnerId The ID of the other user
      * @return The instance of the chat service between the 2 users
      */
-    public ChatService chatService(String currentUserId, boolean isDependent, String chatPartnerId) {
+    public ChatService chatService(String currentUserId, String chatPartnerId) {
         return new FirebaseChatService(currentUserId, chatPartnerId);
     }
 
