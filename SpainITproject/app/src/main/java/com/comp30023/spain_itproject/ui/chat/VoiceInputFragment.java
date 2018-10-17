@@ -29,8 +29,13 @@ import java.util.TimeZone;
 
 public class VoiceInputFragment extends MessageInputFragment {
 
-    //TODO
-    //private final String OUTPUT_FILE_PATH = getActivity().getFilesDir().getPath();
+    private enum State {
+        WAITING,
+        RECORDING,
+        RECORDED,
+        PLAYINGBACK,
+        SENDING
+    }
 
     public static final String AUDIO_MESSAGE = "Audio message";
 
@@ -44,9 +49,10 @@ public class VoiceInputFragment extends MessageInputFragment {
 
     private MediaRecorder recorder;
     private MediaPlayer player;
-    private boolean isRecording;
 
     private String outputPath;
+
+    private State currentState;
 
     @Nullable
     @Override
@@ -58,7 +64,7 @@ public class VoiceInputFragment extends MessageInputFragment {
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
 
-        isRecording = false;
+        currentState = State.WAITING;
 
         outputPath = getActivity().getCacheDir().getAbsolutePath() + "/tempRecording.3gp";
 
@@ -72,11 +78,11 @@ public class VoiceInputFragment extends MessageInputFragment {
             public void onClick(View v) {
 
                 recorder.start();
-                isRecording = true;
 
                 buttonsLayout.removeAllViews();
                 buttonsLayout.addView(stopRecordButton);
-                isRecording = true;
+
+                currentState = State.RECORDING;
             }
         });
 
@@ -88,7 +94,7 @@ public class VoiceInputFragment extends MessageInputFragment {
             public void onClick(View v) {
 
                 recorder.stop();
-                isRecording = false;
+                currentState = State.RECORDED;
 
                 player = new MediaPlayer();
                 try {
@@ -113,6 +119,8 @@ public class VoiceInputFragment extends MessageInputFragment {
                 buttonsLayout.removeAllViews();
                 buttonsLayout.addView(stopPlaybackButton);
 
+                currentState = State.PLAYINGBACK;
+
                 player.start();
                 player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
@@ -133,6 +141,8 @@ public class VoiceInputFragment extends MessageInputFragment {
                 buttonsLayout.addView(playbackRecordingButton);
                 buttonsLayout.addView(clearRecordingButton);
 
+                currentState = State.RECORDED;
+
                 player.stop();
                 try {
                     player.prepare();
@@ -150,6 +160,13 @@ public class VoiceInputFragment extends MessageInputFragment {
             public void onClick(View v) {
                 buttonsLayout.removeAllViews();
                 buttonsLayout.addView(recordButton);
+
+                currentState = State.WAITING;
+
+                File file = new File(outputPath);
+                if (file.exists()) {
+                    file.delete();
+                }
 
                 recorder.reset();
                 player.reset();
@@ -176,9 +193,13 @@ public class VoiceInputFragment extends MessageInputFragment {
     public void onPause() {
         super.onPause();
 
-        if (isRecording) {
-            recorder.stop();
-            isRecording = false;
+        switch (currentState) {
+            case RECORDING:
+                recorder.stop();
+                break;
+
+            default:
+                break;
         }
 
         if (recorder != null) {
@@ -218,41 +239,45 @@ public class VoiceInputFragment extends MessageInputFragment {
     @Override
     public void sendInput(final ChatService chatService) {
 
-        if (isRecording) {
-            return;
-        }
+        switch (currentState) {
 
-        final File file = new File(outputPath);
+            case RECORDED:
 
-        if (file.exists()) {
+                final File file = new File(outputPath);
 
+                if (file.exists()) {
 
+                    TimeZone tz = TimeZone.getDefault();
+                    DateFormat df = SimpleDateFormat.getDateTimeInstance();
+                    df.setTimeZone(tz);
+                    String timeStamp = df.format(new Date());
 
-            TimeZone tz = TimeZone.getDefault();
-            DateFormat df = SimpleDateFormat.getDateTimeInstance();
-            df.setTimeZone(tz);
-            String timeStamp = df.format(new Date());
+                    final StorageReference storageReference = FirebaseStorageService.getStorage().getReference().child("audio_messages").child(getCurrentUserId()).child(timeStamp);
 
-            final StorageReference storageReference = FirebaseStorageService.getStorage().getReference().child("audio_messages").child(getCurrentUserId()).child(timeStamp);
+                    Uri uri = Uri.fromFile(file);
+                    UploadTask task = storageReference.putFile(uri);
+                    task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-            Uri uri = Uri.fromFile(file);
-            UploadTask task = storageReference.putFile(uri);
-            task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ChatMessage newMessage = new ChatMessage(getCurrentUserId(), getChatPartnerId(), AUDIO_MESSAGE, storageReference.getPath());
 
-                    ChatMessage newMessage = new ChatMessage(getCurrentUserId(), getChatPartnerId(), AUDIO_MESSAGE, storageReference.getPath());
+                            try {
+                                chatService.sendMessage(newMessage);
 
-                    try {
-                        chatService.sendMessage(newMessage);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    clearRecordingButton.callOnClick();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            clearRecordingButton.callOnClick();
+                        }
+                    });
                 }
-            });
+                break;
+
+            default:
+                break;
 
         }
+
     }
 }
