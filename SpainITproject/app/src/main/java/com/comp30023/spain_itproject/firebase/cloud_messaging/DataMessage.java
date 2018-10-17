@@ -18,7 +18,7 @@ public abstract class DataMessage implements Serializable {
     public static final String DATA_MESAGE_TYPE = "type";
     public static final String DATA_MESSAGE_TIME = "time";
 
-    public static final String MESSAGE_TYPE_CHAT = "chat";
+    public static final String MESSAGE_TYPE_CHAT = "message";
     public static final String MESSAGE_TYPE_HELP = "help";
 
 

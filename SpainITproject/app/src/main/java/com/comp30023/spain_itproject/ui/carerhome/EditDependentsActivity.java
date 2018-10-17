@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
@@ -22,10 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EditDependentsActivity extends AppCompatActivity {
+
     public final String NO_LOCATIONS_MSG = "This dependent currently has no locations. Please add some for them";
+
+    public static final String EXTRA_DEPENDENT = "Dependent";
 
     // Dependent's locations which contains all the fields
     private List<Location> locations;
+
+    private DependentUser dependent;
 
     // Current dependent id obtained from previosu activity
     private String dependentID;
@@ -41,8 +47,10 @@ public class EditDependentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dependents);
 
+        dependent = (DependentUser) getIntent().getSerializableExtra(EXTRA_DEPENDENT);
+
         // Get the id of the dependent that needs to be edited which is passed through the intent
-        dependentID = getIntent().getStringExtra("DependentID");
+        dependentID = dependent.getId();
 
         // Display the locations list on the screen
         displayLocationsList();
@@ -55,7 +63,9 @@ public class EditDependentsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, CarerMapsActivity.class);
-                CarerMapsActivity.setSelectedDependent(dependentID);
+
+                intent.putExtra(CarerMapsActivity.EXTRA_DEPENDENT, dependent);
+
                 startActivity(intent);
             }
 
@@ -111,7 +121,7 @@ public class EditDependentsActivity extends AppCompatActivity {
                             switch(which) {
                                 // Delete option
                                 case 2:     Intent intent = new Intent(EditDependentsActivity.this, CarerMapsActivity.class);
-                                            CarerMapsActivity.setSelectedDependent(dependentID);
+                                            intent.putExtra(CarerMapsActivity.EXTRA_DEPENDENT, dependent);
                                             startActivity(intent);
                                             break;
 
@@ -137,7 +147,7 @@ public class EditDependentsActivity extends AppCompatActivity {
         @Override
         protected List<Location> doInBackground(Void... voids) {
             try {
-                return AccountController.getInstance().getDependent(dependentID).getLocations();
+                return dependent.getLocations();
             } catch (Exception e) {
                 exception = e;
             }
