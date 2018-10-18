@@ -146,7 +146,7 @@ public class VideoCallActivity extends BaseActivity {
                         endCall();
 
                         // Make a toast with the call details
-                        Toast.makeText(VideoCallActivity.this, "Ended call: " + call.getDetails().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VideoCallActivity.this, "Call Ended", Toast.LENGTH_SHORT).show();
                     }
 
 
