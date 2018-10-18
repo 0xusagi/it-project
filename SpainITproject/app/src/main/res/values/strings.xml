@@ -16,8 +16,8 @@
         Please try again</string>
 
     <string name="welcome_message">Welcome</string>
-    <string name="login_txt">Login to existing account</string>
-    <string name="create_account">Create a new account</string>
+    <string name="login_txt">Log In</string>
+    <string name="create_account">Create Account</string>
     <string name="fill_out_details">Please fill in the details below</string>
     <string name="enter_name">Name:</string>
     <string name="enter_phone_number">Phone Number:</string>
