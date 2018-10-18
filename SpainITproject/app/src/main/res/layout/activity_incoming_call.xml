@@ -6,37 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".ui.calls.IncomingCallActivity">
 
+    <TextView
+        android:id="@+id/incomingVideoCall_title"
+        android:layout_width="202dp"
+        android:layout_height="54dp"
+        android:layout_weight="0.5"
+        android:text="Incoming Call"
+        android:textSize="32dp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="7dp" />
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="385dp"
+        android:layout_height="500dp"
         android:orientation="vertical"
-        android:weightSum="3">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/incomingVideoCall_callerName"
-            android:textSize="20dp"
-            android:layout_weight ="0.5"/>
+        android:weightSum="3"
+        tools:layout_editor_absoluteY="61dp">
 
         <TextView
+            android:id="@+id/incomingVideoCall_callerName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25dp" />
+
+        <TextView
             android:id="@+id/incomingVideoCall_callType"
-            android:textSize="20dp"
-            android:layout_weight="0.5"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25dp" />
 
         <Button
             android:id="@+id/incomingVideoCall_accept"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Accept"/>
+            android:textSize="18dp"
+            android:text="Accept" />
+
         <Button
             android:id="@+id/incomingVideoCall_decline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Decline"/>
+            android:textSize="18dp"
+            android:text="Decline" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
