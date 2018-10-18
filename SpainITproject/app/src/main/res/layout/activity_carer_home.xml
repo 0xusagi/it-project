@@ -9,11 +9,14 @@
 
     <TextView
         android:id="@+id/carerHome_screenName"
-        android:layout_width="225dp"
+        android:layout_width="200dp"
         android:layout_height="52dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/dependents_list_name"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="36dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/carerHome_refreshButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,21 +24,24 @@
 
     <ImageButton
         android:id="@+id/carerHome_refreshButton"
-        android:layout_width="62dp"
-        android:layout_height="57dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
         android:src="@drawable/ic_refresh_icon"
+        app:layout_constraintBottom_toTopOf="@+id/carerHome_dependentsList"
         app:layout_constraintEnd_toStartOf="@+id/carerHome_settingsButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/carerHome_screenName"
-        app:layout_constraintTop_toTopOf="@+id/carerHome_screenName" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+    <Button
         android:id="@+id/carerHome_settingsButton"
-        android:layout_width="58dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ic_settings_icon"
+        android:text="Sign Out"
         app:layout_constraintBottom_toTopOf="@+id/carerHome_dependentsList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -44,12 +50,12 @@
 
     <ListView
         android:id="@+id/carerHome_dependentsList"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/carerHome_addDependentButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,13 +64,15 @@
 
     <Button
         android:id="@+id/carerHome_addDependentButton"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/addDependentButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carerHome_dependentsList" />
 </android.support.constraint.ConstraintLayout>
