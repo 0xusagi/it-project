@@ -9,16 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.AsyncTask;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 import android.widget.PopupWindow;
@@ -104,15 +100,12 @@ public class DependentHomeActivity extends BroadcastActivity {
         callsButton = (Button) findViewById(R.id.callButton);
         setCallsButtonListener(this);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
         signOutButton = findViewById(R.id.tempSignOutButton);
         setSignOutButtonListener(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionbar.setTitle("");
         actionbar.setSubtitle("");
 
@@ -167,19 +160,6 @@ public class DependentHomeActivity extends BroadcastActivity {
         });
     }
 
-    /**
-     * Respond to the menu button press
-     * @param item
-     * @return
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     //Sets the listener for when the callsButton is pressed
     private void setCallsButtonListener(final Context context) {
@@ -244,6 +224,8 @@ public class DependentHomeActivity extends BroadcastActivity {
             public void onClick(View v) {
 
                 LoginHandler.getInstance().logout(context);
+                // Stop the sinch client
+                getSinchInterface().stopClient();
                 finish();
             }
         });
