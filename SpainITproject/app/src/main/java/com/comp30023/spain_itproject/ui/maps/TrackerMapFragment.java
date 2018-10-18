@@ -82,7 +82,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
 
         positionLiveData = ServiceFactory.getInstance().realTimeLocationSharingService().trackLocation(trackedUserId);
 
-        mGeoDataClient = Places.getGeoDataClient(getActivity(), null);
+        mGeoDataClient = Places.getGeoDataClient(getActivity());
 
         //Update the marker on the map when the position is updated
         positionLiveData.observe(this, new Observer<Position>() {
@@ -107,19 +107,24 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                     marker.setPosition(coordinates);
                 }
 
+// If dependent is on route, render the route on the carer's screen.
                 if (position.getDestinationID() != null) {
+                    // Get the Google Place using GoogleID.
                     mGeoDataClient.getPlaceById(position.getDestinationID()).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
                         @Override
                         public void onComplete(@NonNull Task<PlaceBufferResponse> task) {
                             if (task.isSuccessful()) {
                                 PlaceBufferResponse places = task.getResult();
-                                Place dependentDestination = places.get(0);
+                                final Place dependentDestination = places.get(0);
 
                                 Log.i(TAG, "Place found: " + dependentDestination.getName());
 
+                                final LatLng destinationLatLng = dependentDestination.getLatLng();
+                                final String destinationName = dependentDestination.getName().toString();
+// Draw the route.
                                 GoogleDirection.withServerKey(getString(R.string.serverKey))
                                         .from(coordinates)
-                                        .to(dependentDestination.getLatLng())
+                                        .to(destinationLatLng)
                                         .transportMode(TransportMode.WALKING)
                                         .execute(new DirectionCallback() {
                                             @Override
@@ -136,13 +141,19 @@ public class TrackerMapFragment extends MarkerMapsFragment {
 
                                                     Activity activity = getActivity();
                                                     if (activity != null) {
-                                                        Toast.makeText(activity, "Distance = " + distance + ". This will take approx. " + duration, Toast.LENGTH_LONG).show();
 
                                                         ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
                                                         PolylineOptions polylineOptions = DirectionConverter.createPolyline(activity, directionPositionList, 5, Color.RED);
+
                                                         GoogleMap map = getMap();
                                                         if (map != null) {
                                                             map.addPolyline(polylineOptions);
+// Add a marker for the dependent's destination.
+                                                            map.addMarker(new MarkerOptions()
+                                                                    .position(destinationLatLng)
+                                                                    .title(destinationName))
+                                                                    .showInfoWindow();
+
                                                         }
                                                     }
 
@@ -156,6 +167,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                                             }
                                         });
                                 places.release();
+
                             } else {
                                 Log.e(TAG, "Place not found.");
                             }
