@@ -52,6 +52,7 @@ public class LoginHandler {
         Boolean isDependent = response.second;
 
         LoginSharedPreference.setLogIn(context, phoneNumber, pin, isDependent, userId, token);
+
         displayHomeScreen(context);
     }
 

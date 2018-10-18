@@ -63,9 +63,11 @@
     <string name="editDependents_Title">Locations</string>
     <string name="editDependents_addLocationsButton">Add A Location</string>
 
+    <!-- Video calling activity -->
+    <string name="videoCall_HangupButton">End Call</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_basic">BasicActivity</string>
     <string name="button">Button</string>
-    >>>>>>> master
 </resources>

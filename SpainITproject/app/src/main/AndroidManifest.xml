@@ -17,9 +17,18 @@
     <!-- Calling permissions -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <!-- Sinch video calling -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera2" />
+    <uses-feature android:name="android.hardware.camera2.autofocus" />
+
     <!-- For audio message recording -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -29,12 +38,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <service android:name=".firebase.cloud_messaging.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".calls.videoCalls.sinch.SinchClientService" />
 
         <activity android:name=".ui.StartActivity">
             <intent-filter>
@@ -72,12 +85,15 @@
         <activity android:name=".ui.carerhome.CarerHomeActivity" />
         <activity android:name=".ui.carerhome.AddDependentActivity" />
         <activity android:name=".ui.carerhome.EditDependentsActivity" />
+        <activity android:name=".ui.calls.VideoCallActivity" />
+        <activity android:name=".ui.calls.IncomingCallActivity" />
         <activity android:name=".ui.carerhome.DisplayHelpRequestActivity" />
         <activity android:name=".ui.chat.ChatActivity" />
         <activity
             android:name=".ui.BasicActivity"
             android:label="@string/title_activity_basic"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".ui.calls.VoiceCallActivity"></activity>
     </application>
 
 </manifest>
