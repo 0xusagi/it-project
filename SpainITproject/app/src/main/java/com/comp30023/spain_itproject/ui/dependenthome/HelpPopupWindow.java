@@ -23,7 +23,6 @@ public class HelpPopupWindow extends DimBackgroundPopupWindow {
     private DependentUser user;
 
     private Button closeButton;
-
     private Button helpOption1Button;
 
     public HelpPopupWindow(Context context, DependentUser user, ViewGroup root) {
@@ -31,23 +30,33 @@ public class HelpPopupWindow extends DimBackgroundPopupWindow {
 
         this.user = user;
 
-        closeButton = (Button) getContentView().findViewById(R.id.help_close_button);
+        setCloseButton();
+
+        helpOption1Button = (Button) getContentView().findViewById(R.id.help_generalHelp);
+        helpOption1Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendHelpRequest("1");
+                dismiss();
+            }
+        });
+    }
+
+    private void setCloseButton() {
+        closeButton = (Button) getContentView().findViewById(R.id.help_close);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
+    }
 
-        helpOption1Button = (Button) getContentView().findViewById(R.id.help_button_1);
-        helpOption1Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendHelpRequestActivity("1");
-                dismiss();
-            }
-        });
+    private void setGeneralHelp() {
 
+    }
+
+    private void setRequestLocation() {
     }
 
     /**
@@ -61,7 +70,7 @@ public class HelpPopupWindow extends DimBackgroundPopupWindow {
     }
 
 
-    private void sendHelpRequestActivity(final String message) {
+    private void sendHelpRequest(final String message) {
 
         @SuppressLint("StaticFieldLeak")
         AsyncTask task = new AsyncTask() {
@@ -70,6 +79,7 @@ public class HelpPopupWindow extends DimBackgroundPopupWindow {
 
                 try {
                     ServiceFactory.getInstance().notificationSendingService().sendHelp(user, message);
+                    System.out.println("Notification sent");
                 } catch (BadRequestException e) {
                     e.printStackTrace();
                 } catch (NoConnectionException e) {
@@ -79,11 +89,7 @@ public class HelpPopupWindow extends DimBackgroundPopupWindow {
                 return null;
             }
         };
-
         task.execute();
-
     }
-
-
 
 }

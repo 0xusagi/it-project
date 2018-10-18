@@ -32,7 +32,7 @@
     <string name="title_activity_dependent_home">DependentHomeActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="help">Get Help</string>
+    <string name="help">HELP</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -61,7 +61,7 @@
 
     <!-- Editing Dependents activity -->
     <string name="editDependents_Title">Locations</string>
-    <string name="editDependents_addLocationsButton">Add Locations</string>
+    <string name="editDependents_addLocationsButton">Add A Location</string>
 
     <!-- Video calling activity -->
     <string name="videoCall_HangupButton">End Call</string>
@@ -69,4 +69,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_basic">BasicActivity</string>
+    <string name="button">Button</string>
 </resources>

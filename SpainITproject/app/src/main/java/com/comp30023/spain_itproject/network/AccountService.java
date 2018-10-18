@@ -64,6 +64,11 @@ public interface AccountService {
             @Path("id") String id
     );
 
+    @DELETE("/locations/{id}")
+    Call<Location> deleteLocation(
+            @Path("id") String id
+    );
+
     // Get a UserModel which will be a name corresponding to the phone number of a dependent user
     @GET("/dependent/name/{mobile}")
     Call<UserModel> getDependentNameFromPhoneNumber(
@@ -73,7 +78,7 @@ public interface AccountService {
 
     @FormUrlEncoded
     @POST("/dependent/{id}/addLocation")
-    Call<ResponseBody> addLocationToDependent(
+    Call<Location> addLocationToDependent(
                             @Path("id") String dependentId,
                             @Field("googleId") String googleId,
                             @Field("lat") double latitude,

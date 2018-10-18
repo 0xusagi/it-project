@@ -58,7 +58,7 @@ public class CarerHomeActivity extends BroadcastActivity {
     private ArrayAdapter<String> arrayAdapter;
 
     // Settings button
-    private ImageButton settingsButton;
+    private Button settingsButton;
 
     // Add Dependent button
     private Button addDependentsButton;
@@ -280,7 +280,7 @@ public class CarerHomeActivity extends BroadcastActivity {
                         // Make a new intent to display the edit dependents activity
                         intent = new Intent(getApplicationContext(), EditDependentsActivity.class);
                         // Pass through the dependent id so that can edit easily
-                        intent.putExtra("DependentID", dependentSelected.getId());
+                        intent.putExtra(EditDependentsActivity.EXTRA_DEPENDENT, getDependentAt(i));
                         startActivity(intent);
                         break;
 

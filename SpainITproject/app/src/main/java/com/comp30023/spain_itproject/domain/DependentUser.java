@@ -40,10 +40,8 @@ public class DependentUser extends User {
     public List<Location> getLocations() throws Exception {
 
         //If locations have yet to be retrieved from server, retrieve them
-        if (locationIds != null && !locationIds.isEmpty()) {
-            locationObjects = AccountController.getInstance().getLocationsOfDependent(this);
-            locationIds.clear();
-        }
+        locationObjects = AccountController.getInstance().getLocationsOfDependent(this);
+        locationIds.clear();
 
         if (locationObjects == null) {
             locationObjects = new ArrayList<Location>();
@@ -117,25 +115,6 @@ public class DependentUser extends User {
     }
 
     /**
-     * Adds a location to a Dependent's list locally and externally
-     * @throws Exception Thrown if there is an error when communicating with the server
-     */
-    public void addLocation(String googleId, double latitude, double longitude, String displayName) throws Exception {
-
-        //Add location to dependent on the database
-        //Throws exception if error occurs
-        //If this statement not completed, does not add the location locally
-        AccountController.getInstance().addLocationToDependent(this.getId(), googleId, latitude, longitude, displayName);
-
-        //Add location to dependent locally so consistent
-        if (locationObjects == null) {
-            locationObjects = new ArrayList<Location>();
-        }
-        Location location = new Location(googleId, latitude, longitude, displayName);
-        locationObjects.add(location);
-    }
-
-    /**
      * Responds to the request of a CarerUser to be one of their dependents
      * @param carer The CarerUser that has made the request
      * @param accept The response to the request
@@ -155,8 +134,6 @@ public class DependentUser extends User {
             }
             getCarers().add(carer);
         }
-
-
     }
 
     /**
@@ -164,5 +141,26 @@ public class DependentUser extends User {
      */
     public boolean hasPendingCarers() {
         return !pendingCarerIds.isEmpty() || ((pendingCarerObjects != null) && !pendingCarerObjects.isEmpty());
+    }
+
+    public void addLocation(String id, String name, double lat, double lng) throws Exception {
+
+        List<Location> locations = getLocations();
+
+        for (Location existingLocation : locations) {
+            if (existingLocation.getGoogleId().equals(id)) {
+                return;
+            }
+        }
+
+        Location location = AccountController.getInstance().addLocationToDependent(getId(), id, lat, lng, name);
+
+        locations.add(location);
+    }
+
+    public void deleteLocation(Location location) throws Exception{
+        AccountController.getInstance().deleteLocation(location.get_id());
+
+        locationObjects.remove(location);
     }
 }
