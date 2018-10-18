@@ -57,7 +57,6 @@ public class HelpPopupWindow extends DimBackgroundPopupWindow {
     }
 
     private void setRequestLocation() {
-
     }
 
     /**

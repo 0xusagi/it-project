@@ -40,10 +40,8 @@ public class DependentUser extends User {
     public List<Location> getLocations() throws Exception {
 
         //If locations have yet to be retrieved from server, retrieve them
-        if (locationIds != null && !locationIds.isEmpty()) {
-            locationObjects = AccountController.getInstance().getLocationsOfDependent(this);
-            locationIds.clear();
-        }
+        locationObjects = AccountController.getInstance().getLocationsOfDependent(this);
+        locationIds.clear();
 
         if (locationObjects == null) {
             locationObjects = new ArrayList<Location>();
