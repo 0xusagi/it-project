@@ -95,7 +95,7 @@ public class AddDependentActivity extends AppCompatActivity {
         dependentInfoDialogBuilder.setTitle("Add Dependent");
 
         // Set the message to be displayed
-        String message = "Is " + dependentName + " waiting for you to be their carer?";
+        String message = "Do you want to add " + dependentName + " as a friend?";
         dependentInfoDialogBuilder.setMessage(message);
 
         // Set the clickable button "Yes"
