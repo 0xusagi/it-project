@@ -109,7 +109,7 @@ public class EditDependentsActivity extends AppCompatActivity {
         if (isSetOnClick) {
             locationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, final int locationIndex, long l) {
+                public void onItemClick(final AdapterView<?> adapterView, View view, final int locationIndex, long l) {
                     // TODO change add the edit function
                     String[] options = {"Delete"};
 
@@ -127,7 +127,19 @@ public class EditDependentsActivity extends AppCompatActivity {
                                 protected Object doInBackground(Object[] objects) {
 
                                     try {
+
                                         dependent.deleteLocation(locations.get(locationIndex));
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                arrayAdapter.clear();
+
+                                                storeLocations(locations);
+                                                setupList();
+                                            }
+                                        });
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -142,6 +154,19 @@ public class EditDependentsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        System.out.println("On resume called");
+
+        if (arrayAdapter != null) {
+            System.out.println("Clearing array adapter");
+            arrayAdapter.clear();
+        }
+        displayLocationsList();
     }
 
     /**
@@ -167,6 +192,7 @@ public class EditDependentsActivity extends AppCompatActivity {
             if (locations == null) {
                 Toast.makeText(EditDependentsActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
             } else {
+
                 storeLocations(locations);
                 setupList();
             }

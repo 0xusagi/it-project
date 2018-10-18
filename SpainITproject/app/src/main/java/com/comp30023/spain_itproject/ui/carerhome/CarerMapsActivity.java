@@ -65,6 +65,7 @@ public class CarerMapsActivity extends AppCompatActivity {
         displayingPlace = false;
 
         dependent = (DependentUser) getIntent().getSerializableExtra(EXTRA_DEPENDENT);
+        System.out.println("Dependent reference maps activity: " + dependent);
 
         enterNameText = (TextView) findViewById(R.id.placeSelected_textView);
         placeSelectedFrame = (FrameLayout) findViewById(R.id.carerMapsActivity_mapFrame);
