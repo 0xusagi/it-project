@@ -33,7 +33,7 @@ public class IncomingVideoCallActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_incoming_video_call);
+        setContentView(R.layout.activity_incoming_call);
 
         // Get the call id
         callId = getIntent().getStringExtra(SinchClientService.CALL_ID);
