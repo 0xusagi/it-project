@@ -20,12 +20,16 @@ import com.sinch.android.rtc.video.VideoCallListener;
 
 import java.util.List;
 
-public class IncomingVideoCallActivity extends BaseActivity {
+/**
+ * New activity when an incomingi internet or voice call is happening
+ */
+public class IncomingCallActivity extends BaseActivity {
     private String callId;
     private String callerUserId;
 
     // Views
     private TextView callerName;
+    private TextView callType;
 
     private Button acceptButton;
     private Button declineButton;
@@ -45,6 +49,9 @@ public class IncomingVideoCallActivity extends BaseActivity {
         callerName = findViewById(R.id.incomingVideoCall_callerName);
         setupCallerName();
 
+        // Setup the call type
+        callType = findViewById(R.id.incomingVideoCall_callType);
+
         // Setup the buttons
         setupAcceptButton();
         setupDeclineButton();
@@ -57,9 +64,10 @@ public class IncomingVideoCallActivity extends BaseActivity {
             call.addCallListener(new SinchCallListener());
             TextView remoteUser = findViewById(R.id.incomingVideoCall_callerName);
             remoteUser.setText(call.getRemoteUserId());
+            setupCallType(call.getDetails().isVideoOffered());
 
         } else {
-            Log.e(IncomingVideoCallActivity.class.getSimpleName(), "Started with invalid callId, aborting");
+            Log.e(IncomingCallActivity.class.getSimpleName(), "Started with invalid callId, aborting");
             finish();
         }
     }
@@ -120,6 +128,9 @@ public class IncomingVideoCallActivity extends BaseActivity {
         finish();
     }
 
+    /**
+     * Listen to an incoming call
+     */
     private class SinchCallListener implements VideoCallListener {
 
         @Override
@@ -154,7 +165,7 @@ public class IncomingVideoCallActivity extends BaseActivity {
         @Override
         public void onCallEnded(Call call) {
             CallEndCause cause = call.getDetails().getEndCause();
-            Log.d(IncomingVideoCallActivity.class.getSimpleName(), "Call ended: " + cause.toString());
+            Log.d(IncomingCallActivity.class.getSimpleName(), "Call ended: " + cause.toString());
             finish();
         }
 
@@ -176,7 +187,7 @@ public class IncomingVideoCallActivity extends BaseActivity {
             User user;
             // Check if dependent or carer's phone
             // If dependent
-            if (LoginSharedPreference.getIsDependent(IncomingVideoCallActivity.this)) {
+            if (LoginSharedPreference.getIsDependent(IncomingCallActivity.this)) {
                 try {
                     user = AccountController.getInstance().getCarer(callerUserId);
                     return user.getName();
@@ -200,6 +211,7 @@ public class IncomingVideoCallActivity extends BaseActivity {
             // Check if the user is obtained
             if (name == null) {
                 callerName.setText(SERVER_ERROR_MSG);
+                return;
             }
 
             // Display the name on the screen
@@ -207,7 +219,23 @@ public class IncomingVideoCallActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Setup the caller name to be displayed
+     */
     private void setupCallerName() {
         new GetCallerNameTask().execute();
+    }
+
+    /**
+     * Setup the type of call which is incoming
+     * @param isVideo
+     */
+    private void setupCallType(boolean isVideo) {
+        if (isVideo) {
+            callType.setText("Incoming Video Call...");
+        }
+        else {
+            callType.setText("Incoming Voice Call...");
+        }
     }
 }

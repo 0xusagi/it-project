@@ -43,6 +43,8 @@ import java.util.List;
  * various different activities in order to observe or contact the dependent
  */
 public class CarerHomeActivity extends BroadcastActivity {
+    // String Constants
+    private final String NO_DEPENDENTS_MSG = "You currently have no dependents :(";
 
 
     // The list of dependents of the carer which contains all information about the dependents
@@ -198,13 +200,12 @@ public class CarerHomeActivity extends BroadcastActivity {
 
         // Get the dependents
         if (dependents == null) {
-            System.out.println("NULL");
             finish();
         }
 
         // Handle where carer has no dependents
         if (dependents.size() == 0) {
-            dependentNames.add("You currently have no dependents :(");
+            dependentNames.add(NO_DEPENDENTS_MSG);
             isSetOnClick = false;
         }
         // Carer has dependents
@@ -238,7 +239,7 @@ public class CarerHomeActivity extends BroadcastActivity {
      * @param i
      */
     private void setupAlertDialog(final int i) {
-        String[] options = {"Call", "Message", "Edit", "Video Call", "Internet Call"};
+        String[] options = {"Call", "Message", "Locations", "Video Call", "Internet Call"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
         builder.setTitle("Choose");
@@ -247,10 +248,11 @@ public class CarerHomeActivity extends BroadcastActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // the user clicked on options[which]
                 Intent intent;
+                dependentSelected = getDependentAt(i);
                 switch (which) {
                     case 0:
                         // Get the phone number of the dependent
-                        String phoneNumber = getDependentAt(i).getPhoneNumber();
+                        String phoneNumber = dependentSelected.getPhoneNumber();
 
                         // Make a new calling intent
                         intent = new Intent(Intent.ACTION_CALL);
@@ -269,7 +271,7 @@ public class CarerHomeActivity extends BroadcastActivity {
 
                     case 1:
                         intent = new Intent(getApplicationContext(), ChatActivity.class);
-                        intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER_ID, getDependentAt(i).getId());
+                        intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER_ID, dependentSelected.getId());
 
                         startActivity(intent);
                         break;
@@ -278,17 +280,15 @@ public class CarerHomeActivity extends BroadcastActivity {
                         // Make a new intent to display the edit dependents activity
                         intent = new Intent(getApplicationContext(), EditDependentsActivity.class);
                         // Pass through the dependent id so that can edit easily
-                        intent.putExtra("DependentID", getDependentAt(i).getId());
+                        intent.putExtra("DependentID", dependentSelected.getId());
                         startActivity(intent);
                         break;
 
                     case 3:
-                        dependentSelected = getDependentAt(i);
                         startCall(true);
                         break;
 
                     case 4:
-                        dependentSelected = getDependentAt(i);
                         startCall(false);
 
                     // Default case

@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
-import com.comp30023.spain_itproject.ui.calls.IncomingVideoCallActivity;
+import com.comp30023.spain_itproject.ui.calls.IncomingCallActivity;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.ClientRegistration;
 import com.sinch.android.rtc.Sinch;
@@ -118,7 +118,7 @@ public class SinchClientService extends Service {
 
             @Override
             public void onRegistrationCredentialsRequired(SinchClient sinchClient, ClientRegistration clientRegistration) {
-
+                // Not required
             }
 
             @Override
@@ -151,7 +151,7 @@ public class SinchClientService extends Service {
         client.getCallClient().addCallClientListener(new CallClientListener() {
             @Override
             public void onIncomingCall(CallClient callClient, Call call) {
-                Intent intent = new Intent(SinchClientService.this, IncomingVideoCallActivity.class);
+                Intent intent = new Intent(SinchClientService.this, IncomingCallActivity.class);
                 intent.putExtra(CALL_ID, call.getCallId());
                 intent.putExtra(CALLER_USER_ID, call.getRemoteUserId());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -174,6 +174,10 @@ public class SinchClientService extends Service {
         return serviceInterface;
     }
 
+    /**
+     * Interface class to provide functionality and access to the sinch client through other
+     * activities
+     */
     public class SinchServiceInterface extends Binder {
 
         /**

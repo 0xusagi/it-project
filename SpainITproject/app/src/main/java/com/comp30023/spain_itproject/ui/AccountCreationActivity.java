@@ -88,6 +88,10 @@ public class AccountCreationActivity extends BaseActivity {
         setCancelButtonListener(this);
     }
 
+    /**
+     * Disable the register button if the sinch client is not available yet so that the user
+     * is able to register to the sinch client and will not cause any complications later
+     */
     @Override
     public void onServiceConnected() {
         registerButton.setEnabled(true);

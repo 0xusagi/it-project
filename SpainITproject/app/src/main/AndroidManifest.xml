@@ -86,7 +86,7 @@
         <activity android:name=".ui.carerhome.AddDependentActivity" />
         <activity android:name=".ui.carerhome.EditDependentsActivity" />
         <activity android:name=".ui.calls.VideoCallActivity" />
-        <activity android:name=".ui.calls.IncomingVideoCallActivity" />
+        <activity android:name=".ui.calls.IncomingCallActivity" />
         <activity android:name=".ui.carerhome.DisplayHelpRequestActivity" />
         <activity android:name=".ui.chat.ChatActivity" />
         <activity
