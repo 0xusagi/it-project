@@ -58,6 +58,7 @@ public class DisplayHelpRequestActivity extends AppCompatActivity {
         setCallButton();
         setMessageButton();
         setTitleText();
+        setTimeText();
         observeTime();
     }
 
@@ -130,6 +131,7 @@ public class DisplayHelpRequestActivity extends AppCompatActivity {
 
                     //Set the time text to the last updated time
                     timeText.setText(position.getTimeStamp());
+
                 }
             }
         };
