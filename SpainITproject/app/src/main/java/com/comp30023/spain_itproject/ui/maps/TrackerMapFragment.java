@@ -1,5 +1,6 @@
 package com.comp30023.spain_itproject.ui.maps;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.os.Bundle;
@@ -16,6 +17,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A fragment that
  */
@@ -30,7 +34,9 @@ public class TrackerMapFragment extends MarkerMapsFragment {
     private String trackedUserId;
     private String trackedUserName;
 
-    public LiveData<Position> positionLiveData;
+    private LiveData<Position> positionLiveData;
+
+    private Map<LifecycleOwner, Observer<Position>> pendingObservers;
 
     private Marker marker;
 
@@ -76,6 +82,30 @@ public class TrackerMapFragment extends MarkerMapsFragment {
             }
         });
 
+        if (pendingObservers != null && !pendingObservers.isEmpty()) {
+            for (LifecycleOwner owner : pendingObservers.keySet()) {
+
+                addPositionListener(owner, pendingObservers.get(owner));
+            }
+            pendingObservers.clear();
+            pendingObservers = null;
+        }
+
         return view;
+    }
+
+    public void addPositionListener(LifecycleOwner owner, Observer<Position> observer) {
+
+        if (positionLiveData == null) {
+
+            if (pendingObservers == null) {
+                pendingObservers = new HashMap<LifecycleOwner, Observer<Position>>();
+            }
+
+            pendingObservers.put(owner, observer);
+
+        } else {
+            positionLiveData.observe(owner, observer);
+        }
     }
 }
