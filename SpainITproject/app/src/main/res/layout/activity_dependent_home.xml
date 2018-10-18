@@ -60,12 +60,15 @@
 
         <Button
             android:id="@+id/helpButton"
+            style="@android:style/Widget.Button"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@android:color/holo_red_light"
             android:text="@string/help"
+            android:textSize="36dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="w,1:5"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,31 +79,6 @@
     </android.support.constraint.ConstraintLayout>
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true">
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/signOutButton"
-                android:text="Sign Out"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:gravity="center" />
-
-        </android.support.constraint.ConstraintLayout>
-
-    </android.support.design.widget.NavigationView>
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
