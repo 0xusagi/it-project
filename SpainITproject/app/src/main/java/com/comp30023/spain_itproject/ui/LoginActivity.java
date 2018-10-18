@@ -15,11 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.comp30023.spain_itproject.NetworkActivity;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends NetworkActivity {
 
     public static final int PIN_LENGTH = 4;
 
@@ -92,9 +93,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Asynchronous task for logging in
                 @SuppressLint("StaticFieldLeak")
-                AsyncTask task = new AsyncTask() {
+                NetworkTask task = new NetworkTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
+                        super.doInBackground(objects);
+
                         try {
                             LoginHandler.getInstance().login(context, phoneNumber, pin);
 
@@ -102,6 +105,11 @@ public class LoginActivity extends AppCompatActivity {
                             displayErrorMessage(e.getMessage());
                         }
                         return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
                     }
                 };
 

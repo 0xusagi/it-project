@@ -21,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.NetworkActivity;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
  * Activity that opens when a DependentUser is logged in
  * Manages the fragments of the
  */
-public class DependentHomeActivity extends BroadcastActivity {
+public class DependentHomeActivity extends NetworkActivity {
 
     public static final String LIST_NAME_LOCATION = "Locations";
     public static final String LIST_NAME_CARERS = "Carers";
@@ -69,8 +70,6 @@ public class DependentHomeActivity extends BroadcastActivity {
 
     private boolean responding;
 
-    private ProgressBar spinner;
-
     /**
      * References the objects to the corresponding views
      * Sets up and displays the layout
@@ -87,9 +86,6 @@ public class DependentHomeActivity extends BroadcastActivity {
         fragmentManager = getSupportFragmentManager();
 
         responding = false;
-
-        spinner = (ProgressBar) findViewById(R.id.progressBar) ;
-        spinner.setVisibility(View.GONE);
 
         //Retrieve the logged in account from the server
         new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
@@ -129,9 +125,10 @@ public class DependentHomeActivity extends BroadcastActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 @SuppressLint("StaticFieldLeak")
-                                AsyncTask task = new AsyncTask() {
+                                NetworkTask task = new NetworkTask() {
                                     @Override
                                     protected Object doInBackground(Object[] objects) {
+                                        super.doInBackground(objects);
 
                                         try {
                                             ServiceFactory.getInstance().notificationSendingService().sendHelp(user, null);
@@ -230,10 +227,11 @@ public class DependentHomeActivity extends BroadcastActivity {
     }
 
     //Downloads the logged in DependentUser from the database
-    private class DownloadDependentTask extends AsyncTask<String, Void, DependentUser> {
+    private class DownloadDependentTask extends NetworkTask<String, Void, DependentUser> {
 
         @Override
         protected DependentUser doInBackground(String... strings) {
+            super.doInBackground(strings);
 
             responding = true;
 
@@ -297,21 +295,6 @@ public class DependentHomeActivity extends BroadcastActivity {
                 responding = false;
             }
         }
-    }
-
-    /**
-     * Sets wehether the refresh button should be displayed
-     * @param display
-     */
-    private void displaySpinner(final boolean display) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                int spinnerVisibility = display ? View.VISIBLE : View.GONE;
-                spinner.setVisibility(spinnerVisibility);
-            }
-        });
     }
 
     private void displayErrorToast(final Exception e) {

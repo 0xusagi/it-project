@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.comp30023.spain_itproject.NetworkActivity;
 import com.comp30023.spain_itproject.R;
 
 import com.comp30023.spain_itproject.domain.DependentUser;
@@ -32,7 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class CarerMapsActivity extends AppCompatActivity {
+public class CarerMapsActivity extends NetworkActivity {
 
     public static final String EXTRA_DEPENDENT = "Dependent";
 
@@ -86,9 +87,10 @@ public class CarerMapsActivity extends AppCompatActivity {
                     final String name = inputText.getText().toString();
 
                     @SuppressLint("StaticFieldLeak")
-                    AsyncTask task = new AsyncTask() {
+                    NetworkTask task = new NetworkTask() {
                         @Override
                         protected Object doInBackground(Object[] objects) {
+                            super.doInBackground(objects);
 
                             try {
 
@@ -106,6 +108,11 @@ public class CarerMapsActivity extends AppCompatActivity {
                             }
 
                             return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            super.onPostExecute(o);
                         }
                     };
                     task.execute();

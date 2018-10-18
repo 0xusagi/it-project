@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.NetworkFragment;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
@@ -21,7 +22,7 @@ import com.comp30023.spain_itproject.domain.User;
 /**
  * Fragment in which a dependent can respond to a request
  */
-public class ResponseFragment extends Fragment {
+public class ResponseFragment extends NetworkFragment {
 
     public static final String ARGUMENT_USER = "USER";
     public static final String ARGUMENT_REQUESTING_USER = "REQUSER";
@@ -82,11 +83,12 @@ public class ResponseFragment extends Fragment {
     }
 
     //Sends the response to the server and locally adjusts the lists of pending and confirmed carers
-    private class RespondTask extends AsyncTask<Boolean, Void, Void> {
+    private class RespondTask extends NetworkTask<Boolean, Void, Void> {
 
         @Override
         //First argument is whether the request is being accepted
         protected Void doInBackground(Boolean... booleans) {
+            super.doInBackground(booleans);
 
             boolean response = booleans[0];
 

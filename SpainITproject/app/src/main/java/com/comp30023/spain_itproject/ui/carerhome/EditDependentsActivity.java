@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.NetworkActivity;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
@@ -23,7 +24,7 @@ import com.comp30023.spain_itproject.uicontroller.AccountController;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditDependentsActivity extends AppCompatActivity {
+public class EditDependentsActivity extends NetworkActivity {
 
     public final String NO_LOCATIONS_MSG = "This dependent currently has no locations. Please add some for them";
 
@@ -121,10 +122,11 @@ public class EditDependentsActivity extends AppCompatActivity {
                             // the user clicked on options[which]
 
                             @SuppressLint("StaticFieldLeak")
-                            AsyncTask task = new AsyncTask() {
+                            NetworkTask task = new NetworkTask() {
 
                                 @Override
                                 protected Object doInBackground(Object[] objects) {
+                                    super.doInBackground(objects);
 
                                     try {
 
@@ -145,6 +147,11 @@ public class EditDependentsActivity extends AppCompatActivity {
                                     }
 
                                     return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+                                    super.onPostExecute(o);
                                 }
                             };
                             task.execute();
@@ -173,11 +180,12 @@ public class EditDependentsActivity extends AppCompatActivity {
      * Asynchronous task to get the dependent that is selected by the carer to edit
      * Then this task sets up the list to display the locations of the dependent
      */
-    private class SetupLocationsListTask extends AsyncTask<Void, Void, List<Location>> {
+    private class SetupLocationsListTask extends NetworkTask<Void, Void, List<Location>> {
         Exception exception;
 
         @Override
         protected List<Location> doInBackground(Void... voids) {
+            super.doInBackground(voids);
             try {
                 return dependent.getLocations();
             } catch (Exception e) {
@@ -188,6 +196,7 @@ public class EditDependentsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<Location> locations) {
+            super.onPostExecute(locations);
             // Check if the dependent user has been successfully obtained
             if (locations == null) {
                 Toast.makeText(EditDependentsActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();

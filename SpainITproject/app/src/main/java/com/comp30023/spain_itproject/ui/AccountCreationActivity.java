@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Network;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,13 +15,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.comp30023.spain_itproject.NetworkActivity;
 import com.comp30023.spain_itproject.R;
 
 /**
  * Activity for uses to create/register an account
  * When an account is registered, logs in the account and launches the corresponding HomeActivity (either CarerHomeActivity or DependentHomeActivity)
  */
-public class AccountCreationActivity extends AppCompatActivity {
+public class AccountCreationActivity extends NetworkActivity {
 
     public static final int PIN_LENGTH = 4;
 
@@ -132,9 +134,10 @@ public class AccountCreationActivity extends AppCompatActivity {
 
                 //Logs in on new thread asynchronously
                 @SuppressLint("StaticFieldLeak")
-                AsyncTask task = new AsyncTask() {
+                NetworkTask task = new NetworkTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
+                        super.doInBackground(objects);
                         try {
                             LoginHandler.getInstance().register(context, name, phoneNumber, pin, confirmPin, isDependent);
                         } catch (Exception e) {
@@ -143,6 +146,11 @@ public class AccountCreationActivity extends AppCompatActivity {
                             return null;
                         }
                         return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
                     }
                 };
 
