@@ -35,14 +35,25 @@ public class Position {
     private float lng;
     private String timeStamp;
 
+    public String getDestinationID() {
+        return destinationID;
+    }
+
+    public void setDestinationID(String destinationID) {
+        this.destinationID = destinationID;
+    }
+
+    private String destinationID;
+
     public Position() {
 
     }
 
-    public Position(float lat, float lng) {
+    public Position(float lat, float lng, String destinationID) {
 
         this.lat = lat;
         this.lng = lng;
+        this.destinationID = destinationID;
 
         TimeZone tz = TimeZone.getDefault();
         DateFormat df = SimpleDateFormat.getDateTimeInstance();

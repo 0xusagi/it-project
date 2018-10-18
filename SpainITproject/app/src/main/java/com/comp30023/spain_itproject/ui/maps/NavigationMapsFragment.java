@@ -10,13 +10,18 @@ import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Info;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.domain.Position;
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.external_services.ServiceFactory;
+import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.ui.maps.GpsMapsFragment;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.model.LatLng;
@@ -28,18 +33,27 @@ public class NavigationMapsFragment extends GpsMapsFragment {
 
     public static final String ARGUMENT_LOCATION = "LOCATION";
 
-    private final String serverKey = "AIzaSyAuz2NzVF-uJS1ztPEHjSw1Xq22wVRVOCM";
-
-    private Location location;
+    private Location destination;
     private boolean first;
+    private String userId;
+
+
+    @Override
+    public void setCurrentLocation(android.location.Location currentLocation) {
+        super.setCurrentLocation(currentLocation);
+
+        Position position = new Position((float) currentLocation.getLatitude(), (float) currentLocation.getLongitude(), destination.getGoogleId());
+        ServiceFactory.getInstance().realTimeLocationSharingService().updateLocation(userId, position);
+    }
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View view = super.onCreateView(layoutInflater, viewGroup, bundle);
 
         Bundle arguments = getArguments();
+        userId = LoginSharedPreference.getId(getContext());
 
-        location = (Location) arguments.getSerializable(ARGUMENT_LOCATION);
+        destination = (Location) arguments.getSerializable(ARGUMENT_LOCATION);
 
         setLocationCallback(new NavigationMapsLocationCallback());
         first = true;
@@ -48,20 +62,18 @@ public class NavigationMapsFragment extends GpsMapsFragment {
     }
 
     // This can easily take a location, for now it's hard-coded in.
-    public void setDestination(Location location) {
+    public void setDestination(LatLng origin, Location location) {
 
-         double longitude = getCurrentLocation().getLongitude();
-         double latitude = getCurrentLocation().getLatitude();
-         LatLng origin = new LatLng(latitude, longitude);
          // This is some random spot near Melbourne Uni I picked for testing.
 
         Double destinationLat = location.getLatitude();
         Double destinationLon = location.getLongitude();
 
         LatLng destination = new LatLng(destinationLat, destinationLon);
-        GoogleDirection.withServerKey(serverKey)
+        GoogleDirection.withServerKey(getString(R.string.serverKey))
          .from(origin)
          .to(destination)
+                .transportMode(TransportMode.WALKING)
          .execute(new DirectionCallback() {
                 @Override
                 public void onDirectionSuccess(Direction direction, String rawBody) {
@@ -101,8 +113,12 @@ public class NavigationMapsFragment extends GpsMapsFragment {
             super.onLocationResult(locationResult);
 
 
+            double longitude = getCurrentLocation().getLongitude();
+            double latitude = getCurrentLocation().getLatitude();
+            LatLng origin = new LatLng(latitude, longitude);
+
             if (first) {
-                setDestination(location);
+                setDestination(origin, destination);
                 first = false;
             }
         }

@@ -38,8 +38,6 @@ public class GpsMapsFragment extends MarkerMapsFragment {
     private LocationRequest mLocationRequest;
     private int locationCallbackCount = 0;
 
-    private String userId;
-
     private boolean locationUpdatesOn;
     private boolean initial = true;
 
@@ -49,9 +47,6 @@ public class GpsMapsFragment extends MarkerMapsFragment {
 
     public void setCurrentLocation(Location currentLocation) {
         this.currentLocation = currentLocation;
-
-        Position position = new Position((float) currentLocation.getLatitude(), (float) currentLocation.getLongitude());
-        ServiceFactory.getInstance().realTimeLocationSharingService().updateLocation(userId, position);
     }
 
     public int getLocationCallbackCount() {
@@ -71,7 +66,6 @@ public class GpsMapsFragment extends MarkerMapsFragment {
         View view = super.onCreateView(layoutInflater, viewGroup, bundle);
 
         Bundle arguments = getArguments();
-        userId = LoginSharedPreference.getId(getContext());
 
         locationUpdatesOn = false;
 
