@@ -107,7 +107,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                     marker.setPosition(coordinates);
                 }
 
-// If dependent is on route, render the route on the carer's screen.
+                // If dependent is on a route, render the route on the carer's screen.
                 if (position.getDestinationID() != null) {
                     // Get the Google Place using GoogleID.
                     mGeoDataClient.getPlaceById(position.getDestinationID()).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
@@ -121,7 +121,8 @@ public class TrackerMapFragment extends MarkerMapsFragment {
 
                                 final LatLng destinationLatLng = dependentDestination.getLatLng();
                                 final String destinationName = dependentDestination.getName().toString();
-// Draw the route.
+
+                                // Draw the route.
                                 GoogleDirection.withServerKey(getString(R.string.serverKey))
                                         .from(coordinates)
                                         .to(destinationLatLng)
@@ -148,7 +149,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                                                         GoogleMap map = getMap();
                                                         if (map != null) {
                                                             map.addPolyline(polylineOptions);
-// Add a marker for the dependent's destination.
+                                                            // Add a marker for the dependent's destination.
                                                             map.addMarker(new MarkerOptions()
                                                                     .position(destinationLatLng)
                                                                     .title(destinationName))
@@ -177,7 +178,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
 
                 /*clearMarkers();
                 addMarker(trackedUserName + ", " + position.getTimeStamp(), position.getLat(), position.getLng());*/
-            }
+        }
         });
 
         if (pendingObservers != null && !pendingObservers.isEmpty()) {
