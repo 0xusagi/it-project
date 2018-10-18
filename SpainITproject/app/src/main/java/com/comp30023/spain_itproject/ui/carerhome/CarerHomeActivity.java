@@ -47,7 +47,7 @@ public class CarerHomeActivity extends BroadcastActivity {
     private ArrayAdapter<String> arrayAdapter;
 
     // Settings button
-    private ImageButton settingsButton;
+    private Button settingsButton;
 
     // Add Dependent button
     private Button addDependentsButton;

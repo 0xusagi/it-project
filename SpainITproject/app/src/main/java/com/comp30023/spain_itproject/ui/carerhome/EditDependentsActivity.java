@@ -111,7 +111,7 @@ public class EditDependentsActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(final AdapterView<?> adapterView, View view, final int locationIndex, long l) {
                     // TODO change add the edit function
-                    String[] options = {"Delete", "Edit"};
+                    String[] options = {"Delete"};
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditDependentsActivity.this);
                     builder.setTitle("Options");
