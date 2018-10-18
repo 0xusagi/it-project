@@ -177,6 +177,7 @@ public class ChatActivity extends BroadcastActivity {
             if (permissionToRecordAccepted) {
                 currentFragment = new VoiceInputFragment();
                 changeFragmentButton.setImageResource(R.drawable.ic_keyboard_black_24dp);
+
             } else {
                 String [] permissions = {Manifest.permission.RECORD_AUDIO};
                 ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);

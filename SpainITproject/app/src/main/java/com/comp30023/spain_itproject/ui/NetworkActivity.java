@@ -11,11 +11,12 @@ import android.widget.ProgressBar;
 
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.ui.BroadcastActivity;
+import com.comp30023.spain_itproject.ui.calls.BaseActivity;
 
 /**
  * Base Activity to enable spinning on a network call
  */
-public class NetworkActivity extends BroadcastActivity {
+public class NetworkActivity extends BaseActivity {
 
     private ProgressBar spinner;
 
