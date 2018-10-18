@@ -4,21 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import com.comp30023.spain_itproject.NetworkActivity;
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.User;
-import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 public class LoginActivity extends NetworkActivity {
 

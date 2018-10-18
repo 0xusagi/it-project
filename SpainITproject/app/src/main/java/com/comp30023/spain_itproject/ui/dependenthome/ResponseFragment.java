@@ -1,23 +1,18 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.comp30023.spain_itproject.NetworkFragment;
+import com.comp30023.spain_itproject.ui.NetworkFragment;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.domain.User;
 
 /**
  * Fragment in which a dependent can respond to a request

@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject;
+package com.comp30023.spain_itproject.ui;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -9,8 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.ui.BroadcastActivity;
 
+/**
+ * Base Activity to enable spinning on a network call
+ */
 public class NetworkActivity extends BroadcastActivity {
 
     private ProgressBar spinner;
@@ -23,6 +27,12 @@ public class NetworkActivity extends BroadcastActivity {
         spinner.setVisibility(View.GONE);
     }
 
+    /**
+     * Extension of AsyncTask that handles displaying the spinner
+     * @param <U>
+     * @param <V>
+     * @param <W>
+     */
     public abstract class NetworkTask<U, V, W> extends AsyncTask<U, V, W> {
 
         @Override
@@ -46,8 +56,9 @@ public class NetworkActivity extends BroadcastActivity {
         }
     }
 
-
-
+    /**
+     * @param display Boolean value whether to display the spinner
+     */
     public void displaySpinner(boolean display) {
 
         int visibility = display ? View.VISIBLE : View.GONE;

@@ -1,34 +1,29 @@
 package com.comp30023.spain_itproject.ui.carerhome;
 
 import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.comp30023.spain_itproject.NetworkActivity;
+import com.comp30023.spain_itproject.ui.NetworkActivity;
 import com.comp30023.spain_itproject.R;
 
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.ui.maps.GpsMapsFragment;
 import com.comp30023.spain_itproject.ui.maps.MarkerMapsFragment;
-import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
