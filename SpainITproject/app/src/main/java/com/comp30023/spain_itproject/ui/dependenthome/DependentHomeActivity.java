@@ -56,6 +56,7 @@ public class DependentHomeActivity extends NetworkActivity {
 
     private Button messagesButton;
     private Button callsButton;
+    private Button locationsButton;
     private Button helpButton;
     private Button signOutButton;
 
@@ -92,6 +93,9 @@ public class DependentHomeActivity extends NetworkActivity {
 
         callsButton = (Button) findViewById(R.id.callButton);
         setCallsButtonListener(this);
+
+        locationsButton = (Button) findViewById(R.id.locationsButton);
+        setLocationsButtonListener();
 
         signOutButton = findViewById(R.id.tempSignOutButton);
         setSignOutButtonListener(this);
@@ -174,8 +178,11 @@ public class DependentHomeActivity extends NetworkActivity {
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
 
                     transaction.replace(R.id.fragment_container, carersFragment);
-                    transaction.addToBackStack(null);
                     transaction.commit();
+
+                    messagesButton.setVisibility(View.VISIBLE);
+                    callsButton.setVisibility(View.GONE);
+                    locationsButton.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -200,8 +207,38 @@ public class DependentHomeActivity extends NetworkActivity {
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
 
                     transaction.replace(R.id.fragment_container, carersFragment);
-                    transaction.addToBackStack(null);
                     transaction.commit();
+
+                    messagesButton.setVisibility(View.GONE);
+                    callsButton.setVisibility(View.VISIBLE);
+                    locationsButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void setLocationsButtonListener() {
+        locationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+                if (!(currentFragment instanceof LocationsListFragment)) {
+                    Fragment carersFragment = new LocationsListFragment();
+
+                    Bundle arguments = new Bundle();
+                    arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
+
+                    carersFragment.setArguments(arguments);
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                    transaction.replace(R.id.fragment_container, carersFragment);
+                    transaction.commit();
+
+                    messagesButton.setVisibility(View.VISIBLE);
+                    callsButton.setVisibility(View.VISIBLE);
+                    locationsButton.setVisibility(View.GONE);
                 }
             }
         });
