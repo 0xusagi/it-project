@@ -41,9 +41,10 @@ public class MessagesListFragment extends ListFragment<CarerUser> {
         user = (DependentUser) arguments.getSerializable(ARGUMENT_USER);
 
         @SuppressLint("StaticFieldLeak")
-        AsyncTask task = new AsyncTask() {
+        NetworkTask task = new NetworkTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
+                super.doInBackground(objects);
 
                 try {
                     carers = user.getCarers();

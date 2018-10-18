@@ -5,9 +5,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.speech.tts.Voice;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
@@ -19,14 +19,18 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.ui.NetworkActivity;
+import com.comp30023.spain_itproject.ui.calls.VoiceCallActivity;
 import com.comp30023.spain_itproject.ui.chat.ChatActivity;
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.ui.BroadcastActivity;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
+import com.comp30023.spain_itproject.ui.calls.VideoCallActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
+import com.sinch.android.rtc.calling.Call;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +41,16 @@ import java.util.List;
  * Contains a list of dependents, upon clicking the dependents, allowing the carer to perform
  * various different activities in order to observe or contact the dependent
  */
-public class CarerHomeActivity extends BroadcastActivity {
+public class CarerHomeActivity extends NetworkActivity {
+    // String Constants
+    private final String NO_DEPENDENTS_MSG = "You currently have no dependents :(";
 
     // The list of dependents of the carer which contains all information about the dependents
     // to be used when the carer wants to edit the dependent
     private List<DependentUser> dependents;
+
+    private DependentUser dependentSelected;
+
     // Dependents list
     private ListView dependentsList;
     private ArrayAdapter<String> arrayAdapter;
@@ -67,6 +76,8 @@ public class CarerHomeActivity extends BroadcastActivity {
         displayDependentsList();
 
         setupAddDependentButton();
+
+        setupRefreshButton();
 
         setupSettingsButton(this);
     }
@@ -114,6 +125,8 @@ public class CarerHomeActivity extends BroadcastActivity {
             @Override
             public void onClick(View view) {
                 LoginHandler.getInstance().logout(context);
+                // Stop the sinch client
+                getSinchInterface().stopClient();
                 finish();
             }
         });
@@ -122,11 +135,13 @@ public class CarerHomeActivity extends BroadcastActivity {
     /**
      * Async task to run on background thread to get the carer user from the server
      */
-    private class DisplayDependentsListTask extends AsyncTask<String, Void, List<DependentUser>> {
+    private class DisplayDependentsListTask extends NetworkTask<String, Void, List<DependentUser>> {
         private Exception exception;
 
         @Override
         protected List<DependentUser> doInBackground(String... strings) {
+            super.doInBackground(strings);
+
             // Get the carer User from the server
             try {
                 CarerUser carer = AccountController.getInstance().getCarer(strings[0]);
@@ -140,6 +155,7 @@ public class CarerHomeActivity extends BroadcastActivity {
 
         @Override
         protected void onPostExecute(List<DependentUser> dependents) {
+            super.onPostExecute(dependents);
 
             LoginSharedPreference.setName(getApplicationContext(), user.getName());
 
@@ -185,13 +201,12 @@ public class CarerHomeActivity extends BroadcastActivity {
 
         // Get the dependents
         if (dependents == null) {
-            System.out.println("NULL");
             finish();
         }
 
         // Handle where carer has no dependents
         if (dependents.size() == 0) {
-            dependentNames.add("You currently have no dependents :(");
+            dependentNames.add(NO_DEPENDENTS_MSG);
             isSetOnClick = false;
         }
         // Carer has dependents
@@ -225,7 +240,7 @@ public class CarerHomeActivity extends BroadcastActivity {
      * @param i
      */
     private void setupAlertDialog(final int i) {
-        String[] options = {"Call", "Message", "Edit"};
+        String[] options = {"Call", "Message", "Locations", "Video Call", "Internet Call"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
         builder.setTitle("Choose");
@@ -234,10 +249,11 @@ public class CarerHomeActivity extends BroadcastActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // the user clicked on options[which]
                 Intent intent;
+                dependentSelected = getDependentAt(i);
                 switch (which) {
                     case 0:
                         // Get the phone number of the dependent
-                        String phoneNumber = getDependentAt(i).getPhoneNumber();
+                        String phoneNumber = dependentSelected.getPhoneNumber();
 
                         // Make a new calling intent
                         intent = new Intent(Intent.ACTION_CALL);
@@ -256,7 +272,7 @@ public class CarerHomeActivity extends BroadcastActivity {
 
                     case 1:
                         intent = new Intent(getApplicationContext(), ChatActivity.class);
-                        intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER_ID, getDependentAt(i).getId());
+                        intent.putExtra(ChatActivity.EXTRA_CHAT_PARTNER_USER_ID, dependentSelected.getId());
 
                         startActivity(intent);
                         break;
@@ -268,6 +284,13 @@ public class CarerHomeActivity extends BroadcastActivity {
                         intent.putExtra(EditDependentsActivity.EXTRA_DEPENDENT, getDependentAt(i));
                         startActivity(intent);
                         break;
+
+                    case 3:
+                        startCall(true);
+                        break;
+
+                    case 4:
+                        startCall(false);
 
                     // Default case
                     default:
@@ -286,5 +309,31 @@ public class CarerHomeActivity extends BroadcastActivity {
      */
     private DependentUser getDependentAt(int i) {
         return dependents.get(i);
+    }
+
+    private void startCall(boolean isVideo) {
+        if (getSinchInterface() == null || !getSinchInterface().isStarted()) {
+            return;
+        }
+
+        // Choose which call
+        Call call;
+        Intent intent;
+        // VIdeo call
+        if (isVideo) {
+            call = getSinchInterface().callUserVideo(dependentSelected.getId());
+            intent = new Intent(getApplicationContext(), VideoCallActivity.class);
+        }
+        // Internet call
+        else {
+            call = getSinchInterface().callUserVoice(dependentSelected.getId());
+            intent = new Intent(getApplicationContext(), VoiceCallActivity.class);
+        }
+
+        String callId = call.getCallId();
+
+        // Star tthe intent
+        intent.putExtra(SinchClientService.CALL_ID, callId);
+        startActivity(intent);
     }
 }

@@ -80,9 +80,10 @@ public class LocationsListFragment extends ListFragment<Location> {
     private void setList() {
 
         @SuppressLint("StaticFieldLeak")
-        AsyncTask task = new AsyncTask() {
+        NetworkTask task = new NetworkTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
+                super.doInBackground(objects);
 
                 try {
                     locations = user.getLocations();

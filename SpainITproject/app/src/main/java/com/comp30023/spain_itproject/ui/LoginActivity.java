@@ -4,22 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.User;
-import com.comp30023.spain_itproject.uicontroller.AccountController;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends NetworkActivity {
 
     public static final int PIN_LENGTH = 4;
 
@@ -39,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         messageText = (TextView) findViewById(R.id.login_message_text);
 
         loginButton = (Button) findViewById(R.id.login_loginButton);
+        loginButton.setEnabled(false);
         setLoginButtonListener(this);
 
         cancelButton = (Button) findViewById(R.id.login_cancelButton);
@@ -47,6 +42,11 @@ public class LoginActivity extends AppCompatActivity {
         phoneNumberText = (EditText) findViewById(R.id.login_phoneNumberLoginField);
 
         setPinFields();
+    }
+
+    @Override
+    public void onServiceConnected() {
+        loginButton.setEnabled(true);
     }
 
     //Set restrictions for the pin field
@@ -92,9 +92,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Asynchronous task for logging in
                 @SuppressLint("StaticFieldLeak")
-                AsyncTask task = new AsyncTask() {
+                NetworkTask task = new NetworkTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
+                        super.doInBackground(objects);
+
                         try {
                             LoginHandler.getInstance().login(context, phoneNumber, pin);
 
@@ -102,6 +104,13 @@ public class LoginActivity extends AppCompatActivity {
                             displayErrorMessage(e.getMessage());
                         }
                         return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        if (getSinchInterface() != null && !getSinchInterface().isStarted()) {
+                            getSinchInterface().startClient(LoginSharedPreference.getId(LoginActivity.this));
+                        }
                     }
                 };
 

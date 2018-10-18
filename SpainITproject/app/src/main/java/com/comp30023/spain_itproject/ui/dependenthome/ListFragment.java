@@ -1,10 +1,6 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +9,18 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
+import com.comp30023.spain_itproject.ui.NetworkFragment;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DisplayName;
-import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.ui.views.ItemButton;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Fragment that displays a list of items that have a display name
  */
 
-public abstract class ListFragment<T extends DisplayName> extends Fragment {
+public abstract class ListFragment<T extends DisplayName> extends NetworkFragment {
 
     /**
      * The maximum number of list buttons that are viewed within the frame

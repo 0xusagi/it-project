@@ -1,19 +1,18 @@
 package com.comp30023.spain_itproject.ui.carerhome;
 
 import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.comp30023.spain_itproject.ui.NetworkFragment;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
-public class PlaceSelectedFragment extends Fragment {
+public class PlaceSelectedFragment extends NetworkFragment {
 
     public static final String ARGUMENT_PLACE_ID = "PLACE_ID";
     public static final String ARGUMENT_PLACE_NAME = "PLACE_NAME";
@@ -54,9 +53,11 @@ public class PlaceSelectedFragment extends Fragment {
 
                 final String name = inputText.getText().toString();
 
-                @SuppressLint("StaticFieldLeak") AsyncTask task = new AsyncTask() {
+                @SuppressLint("StaticFieldLeak")
+                NetworkTask task = new NetworkTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
+                        super.doInBackground(objects);
 
                         AccountController accountController = AccountController.getInstance();
                         try {
@@ -69,6 +70,10 @@ public class PlaceSelectedFragment extends Fragment {
                         return null;
                     }
 
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
+                    }
                 };
                 task.execute();
             }
