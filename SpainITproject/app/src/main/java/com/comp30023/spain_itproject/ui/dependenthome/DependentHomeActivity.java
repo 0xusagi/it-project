@@ -1,21 +1,20 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.AsyncTask;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 import android.widget.PopupWindow;
@@ -25,6 +24,9 @@ import android.widget.Toast;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.domain.Location;
+import com.comp30023.spain_itproject.external_services.ServiceFactory;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.network.NoConnectionException;
 import com.comp30023.spain_itproject.ui.BroadcastActivity;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
@@ -40,6 +42,12 @@ public class DependentHomeActivity extends BroadcastActivity {
 
     public static final String LIST_NAME_LOCATION = "Locations";
     public static final String LIST_NAME_CARERS = "Carers";
+
+    public static final String CONFIRM_GET_HELP_TITLE = "Get Help";
+    public static final String CONFIRM_GET_HELP_MESSAGE = "Send a help request to your carers?";
+    public static final String CONFIRM_GET_HELP_POSITIVE = "Yes";
+    public static final String CONFIRM_GET_HELP_NEGATIVE = "No";
+
 
     private DrawerLayout drawerLayout;
 
@@ -92,15 +100,12 @@ public class DependentHomeActivity extends BroadcastActivity {
         callsButton = (Button) findViewById(R.id.callButton);
         setCallsButtonListener(this);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
         signOutButton = findViewById(R.id.tempSignOutButton);
         setSignOutButtonListener(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionbar.setTitle("");
         actionbar.setSubtitle("");
 
@@ -109,29 +114,52 @@ public class DependentHomeActivity extends BroadcastActivity {
             @Override
             public void onClick(View v) {
 
-                ViewGroup group = (ViewGroup) getWindow().getDecorView().getRootView();
+                /*ViewGroup group = (ViewGroup) getWindow().getDecorView().getRootView();
                 helpWindow = new HelpPopupWindow(context, user, group);
 
                 //Show at centre of screen
-                helpWindow.showAtLocation(drawerLayout, Gravity.CENTER, 0, 0);
+                helpWindow.showAtLocation(drawerLayout, Gravity.CENTER, 0, 0);*/
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                        .setMessage(CONFIRM_GET_HELP_MESSAGE)
+                        .setTitle(CONFIRM_GET_HELP_TITLE);
+
+                builder.setPositiveButton(CONFIRM_GET_HELP_POSITIVE, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                @SuppressLint("StaticFieldLeak")
+                                AsyncTask task = new AsyncTask() {
+                                    @Override
+                                    protected Object doInBackground(Object[] objects) {
+
+                                        try {
+                                            ServiceFactory.getInstance().notificationSendingService().sendHelp(user, null);
+                                            System.out.println("Notification sent");
+                                        } catch (BadRequestException e) {
+                                            e.printStackTrace();
+                                        } catch (NoConnectionException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        return null;
+                                    }
+                                };
+                                task.execute();
+                            }
+                });
+
+                builder.setNegativeButton(CONFIRM_GET_HELP_NEGATIVE, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.show();
 
             }
         });
     }
 
-    /**
-     * Respond to the menu button press
-     * @param item
-     * @return
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     //Sets the listener for when the callsButton is pressed
     private void setCallsButtonListener(final Context context) {
