@@ -33,6 +33,7 @@ public class LoginActivity extends NetworkActivity {
         messageText = (TextView) findViewById(R.id.login_message_text);
 
         loginButton = (Button) findViewById(R.id.login_loginButton);
+        loginButton.setEnabled(false);
         setLoginButtonListener(this);
 
         cancelButton = (Button) findViewById(R.id.login_cancelButton);
@@ -41,6 +42,11 @@ public class LoginActivity extends NetworkActivity {
         phoneNumberText = (EditText) findViewById(R.id.login_phoneNumberLoginField);
 
         setPinFields();
+    }
+
+    @Override
+    public void onServiceConnected() {
+        loginButton.setEnabled(true);
     }
 
     //Set restrictions for the pin field
@@ -102,7 +108,9 @@ public class LoginActivity extends NetworkActivity {
 
                     @Override
                     protected void onPostExecute(Object o) {
-                        super.onPostExecute(o);
+                        if (getSinchInterface() != null && !getSinchInterface().isStarted()) {
+                            getSinchInterface().startClient(LoginSharedPreference.getId(LoginActivity.this));
+                        }
                     }
                 };
 

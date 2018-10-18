@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
@@ -13,11 +14,13 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.ui.calls.BaseActivity;
 
 /**
  * Activity for uses to create/register an account
  * When an account is registered, logs in the account and launches the corresponding HomeActivity (either CarerHomeActivity or DependentHomeActivity)
  */
+
 public class AccountCreationActivity extends NetworkActivity {
 
     public static final int PIN_LENGTH = 4;
@@ -80,10 +83,20 @@ public class AccountCreationActivity extends NetworkActivity {
         setPinFields();
 
         registerButton = (Button) findViewById(R.id.registerButton);
+        registerButton.setEnabled(false);
         setRegisterButtonListener(this);
 
         cancelButton = (Button) findViewById(R.id.cancelButton);
         setCancelButtonListener(this);
+    }
+
+    /**
+     * Disable the register button if the sinch client is not available yet so that the user
+     * is able to register to the sinch client and will not cause any complications later
+     */
+    @Override
+    public void onServiceConnected() {
+        registerButton.setEnabled(true);
     }
 
     /**
@@ -147,6 +160,10 @@ public class AccountCreationActivity extends NetworkActivity {
                     @Override
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
+                        if (getSinchInterface() != null && !getSinchInterface().isStarted()) {
+                            getSinchInterface().startClient(LoginSharedPreference.getId(AccountCreationActivity.this));
+                        }
+
                     }
                 };
 

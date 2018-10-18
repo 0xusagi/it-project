@@ -218,6 +218,8 @@ public class DependentHomeActivity extends NetworkActivity {
             public void onClick(View v) {
 
                 LoginHandler.getInstance().logout(context);
+                // Stop the sinch client
+                getSinchInterface().stopClient();
                 finish();
             }
         });
