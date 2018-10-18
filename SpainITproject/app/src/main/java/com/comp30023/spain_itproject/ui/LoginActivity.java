@@ -5,21 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.domain.User;
-import com.comp30023.spain_itproject.ui.videocalls.BaseActivity;
-import com.comp30023.spain_itproject.uicontroller.AccountController;
+import com.comp30023.spain_itproject.ui.calls.BaseActivity;
 
 public class LoginActivity extends BaseActivity {
 

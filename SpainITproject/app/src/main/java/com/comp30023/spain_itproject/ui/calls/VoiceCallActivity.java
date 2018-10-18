@@ -1,10 +1,11 @@
-package com.comp30023.spain_itproject.ui.videocalls;
+package com.comp30023.spain_itproject.ui.calls;
 
 import android.media.AudioManager;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
+import android.speech.tts.Voice;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,13 +24,14 @@ import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
+import com.sinch.android.rtc.calling.CallListener;
 import com.sinch.android.rtc.calling.CallState;
 import com.sinch.android.rtc.video.VideoCallListener;
 import com.sinch.android.rtc.video.VideoController;
 
 import java.util.List;
 
-public class VideoCallActivity extends BaseActivity {
+public class VoiceCallActivity extends BaseActivity {
 
     private String callId;
     private long startTime;
@@ -39,7 +41,9 @@ public class VideoCallActivity extends BaseActivity {
     private TextView callerName;
 
     private Button endCallButton;
-    private Button flipCameraButton;
+    private Button speakerButton;
+
+    private boolean isSpeakerOn;
 
     private boolean isAddedListener = false;
     private boolean isAddedVideoViews = false;
@@ -64,21 +68,22 @@ public class VideoCallActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_call);
+        setContentView(R.layout.activity_voice_call);
 
         // Get the views
-        callTime = findViewById(R.id.videoCall_callTime);
+        callTime = findViewById(R.id.voiceCall_callTime);
         callTime.setText("0:00");
         startTime = 0;
-        callerName = findViewById(R.id.videoCall_remoteCallerName);
+        callerName = findViewById(R.id.voiceCall_remoteCallerName);
 
         // Setup the endCall button
-        endCallButton = findViewById(R.id.videoCall_endCallButton);
+        endCallButton = findViewById(R.id.voiceCall_endCallButton);
         setupEndCallButton();
 
         // Setup the flip camera button
-        flipCameraButton = findViewById(R.id.videoCall_flipCameraButton);
-        setupFlipCameraButton();
+        speakerButton = findViewById(R.id.voiceCall_speakerOnButton);
+        isSpeakerOn = false;
+        setupSpeakerButton();
 
         // Get the call id of the user
         callId = getIntent().getStringExtra(SinchClientService.CALL_ID);
@@ -98,36 +103,16 @@ public class VideoCallActivity extends BaseActivity {
         Call call = getSinchInterface().getCall(callId);
         if (call != null) {
             if (!isAddedListener) {
-                call.addCallListener(new VideoCallListener() {
-                    @Override
-                    public void onVideoTrackAdded(Call call) {
-                        Log.d(VideoCallActivity.class.getSimpleName(), "Video track added");
-                        setupVideoViews();
-                    }
-
-                    @Override
-                    public void onVideoTrackPaused(Call call) {
-                        call.pauseVideo();
-                    }
-
-                    @Override
-                    public void onVideoTrackResumed(Call call) {
-                        call.resumeVideo();
-                    }
-
+                call.addCallListener(new CallListener() {
                     @Override
                     public void onCallProgressing(Call call) {
-                        Log.d(VideoCallActivity.class.getSimpleName(), "Call progressing");
+                        Log.d(VoiceCallActivity.class.getSimpleName(), "Call progressing");
                     }
 
                     @Override
                     public void onCallEstablished(Call call) {
-                        Log.d(VideoCallActivity.class.getSimpleName(), "Call established");
+                        Log.d(VoiceCallActivity.class.getSimpleName(), "Call established");
                         setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
-
-                        // Enable speaker
-                        AudioController audioController = getSinchInterface().getAudioController();
-                        audioController.enableSpeaker();
 
                         // Start the timer
                         new GetCallerNameTask().execute(call.getRemoteUserId());
@@ -147,38 +132,17 @@ public class VideoCallActivity extends BaseActivity {
                         endCall();
 
                         // Make a toast with the call details
-                        Toast.makeText(VideoCallActivity.this, "Ended call: " + call.getDetails().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VoiceCallActivity.this, "Ended call: " + call.getDetails().toString(), Toast.LENGTH_SHORT).show();
                     }
-
 
                     @Override
                     public void onShouldSendPushNotification(Call call, List<PushPair> list) {
-                        // Dont need to send push notifications
+                        // No need to send push notification
                     }
                 });
             }
         } else {
             finish();
-        }
-    }
-
-    /**
-     * Update the screen to reflect the new information
-     */
-    private void updateScreen() {
-        // Early exit
-        if (getSinchInterface() == null) {
-            return;
-        }
-
-        // Update the interface
-        Call call = getSinchInterface().getCall(callId);
-        if (call != null) {
-            // Set the name of the person who is calling
-
-            if (call.getState() == CallState.ESTABLISHED) {
-                setupVideoViews();
-            }
         }
     }
 
@@ -188,18 +152,11 @@ public class VideoCallActivity extends BaseActivity {
 
         // Cancel the timer
         timerHandler.removeCallbacks(timerRunnable);
-
-        removeVideoViews();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        // Make a new timer
-
-
-        updateScreen();
     }
 
     @Override
@@ -220,58 +177,31 @@ public class VideoCallActivity extends BaseActivity {
     }
 
     /**
-     * Setup the video views to display the videos in video call
+     * Setup the button to toggle the speaker
      */
-    private void setupVideoViews() {
-        // Early exit
-        if (isAddedVideoViews || getSinchInterface() == null) {
-            return;
-        }
-
-        VideoController vc = getSinchInterface().getVideoController();
-
-        // Set the local view to display the video
-        if (vc != null) {
-            RelativeLayout localView = findViewById(R.id.videoCall_localVideo);
-
-            localView.addView(vc.getLocalView());
-        }
-
-        LinearLayout view = findViewById(R.id.videoCall_remoteVideo);
-        view.addView(vc.getRemoteView());
-        isAddedVideoViews = true;
-    }
-
-    /**
-     * Remove the video views that are displayed in the video call
-     */
-    private void removeVideoViews() {
-        // Early exit
-        if (getSinchInterface() == null) {
-            return;
-        }
-
-        // Remove the views
-        VideoController vc = getSinchInterface().getVideoController();
-        if (vc != null) {
-            LinearLayout view = findViewById(R.id.videoCall_remoteVideo);
-            view.removeAllViews();
-
-            RelativeLayout localView = findViewById(R.id.videoCall_localVideo);
-            localView.removeAllViews();
-            isAddedVideoViews = false;
-        }
-    }
-
-    /**
-     * Setup the button to flip the camera
-     */
-    private void setupFlipCameraButton() {
-        flipCameraButton.setOnClickListener(new View.OnClickListener() {
+    private void setupSpeakerButton() {
+        speakerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VideoController vc = getSinchInterface().getVideoController();
-                vc.toggleCaptureDevicePosition();
+                if (!isSpeakerOn) {
+                    // Enable speaker
+                    AudioController audioController = getSinchInterface().getAudioController();
+                    audioController.enableSpeaker();
+
+                    // Change the text on the button
+                    speakerButton.setText("Speaker Off");
+
+                    isSpeakerOn = true;
+                }
+                else {
+                    AudioController audioController = getSinchInterface().getAudioController();
+                    audioController.disableSpeaker();
+
+                    // Change the text on the button
+                    speakerButton.setText("Speaker On");
+
+                    isSpeakerOn = false;
+                }
             }
         });
     }
@@ -290,7 +220,7 @@ public class VideoCallActivity extends BaseActivity {
 
             // Get the name from the server
             // If current user is dependent then get carer
-            if (LoginSharedPreference.getIsDependent(VideoCallActivity.this)) {
+            if (LoginSharedPreference.getIsDependent(VoiceCallActivity.this)) {
                 try {
                     CarerUser caller = AccountController.getInstance().getCarer(callerId);
                     return caller.getName();
@@ -313,7 +243,7 @@ public class VideoCallActivity extends BaseActivity {
         @Override
         protected void onPostExecute(String name) {
             if (name == null) {
-                Toast.makeText(VideoCallActivity.this, SERVER_ERROR_MSG, Toast.LENGTH_LONG).show();
+                Toast.makeText(VoiceCallActivity.this, SERVER_ERROR_MSG, Toast.LENGTH_LONG).show();
                 return;
             }
             callerName.setText(name);

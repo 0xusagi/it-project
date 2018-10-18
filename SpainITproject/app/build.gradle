@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.3.3'
 
     // Sinch
-    implementation (name:'sinch-android-rtc', version:'+', ext:'aar')
+    implementation(name: 'sinch-android-rtc', version: '+', ext: 'aar')
 
     implementation 'com.google.firebase:firebase-database:16.0.3'
     implementation 'com.google.firebase:firebase-storage:16.0.3'

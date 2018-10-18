@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.calls.VideoCallActivity"
+    tools:context=".ui.calls.VoiceCallActivity"
     tools:layout_editor_absoluteY="25dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="5"
+        android:weightSum="3"
         android:background="#ffffffff">
 
         <LinearLayout
@@ -23,7 +23,7 @@
             >
 
             <TextView
-                android:id="@+id/videoCall_remoteCallerName"
+                android:id="@+id/voiceCall_remoteCallerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -31,7 +31,7 @@
                 android:textSize="28sp"/>
 
             <TextView
-                android:id="@+id/videoCall_callTime"
+                android:id="@+id/voiceCall_callTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -42,46 +42,24 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:padding="0dip"
-            android:layout_weight="3"
-            android:orientation="vertical">
-
-            <LinearLayout android:id="@+id/videoCall_remoteVideo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:orientation="horizontal"/>
-
-            <RelativeLayout android:id="@+id/videoCall_localVideo"
-                android:layout_width="150dp"
-                android:layout_alignParentRight="true"
-                android:layout_height="200dp"
-                android:layout_alignParentTop="true" />
-
-        </RelativeLayout>
-
         <LinearLayout
-            android:id="@+id/videoCall_bottomPanel"
+            android:id="@+id/voiceCall_bottomPanel"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:orientation="vertical"
             android:weightSum="2">
             <Button
-                android:id="@+id/videoCall_flipCameraButton"
+                android:id="@+id/voiceCall_speakerOnButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp"
                 android:paddingTop="20dp"
-                android:text="Flip Camera"
+                android:text="Speaker On"
                 android:layout_weight="1"/>
 
             <Button
-                android:id="@+id/videoCall_endCallButton"
+                android:id="@+id/voiceCall_endCallButton"
                 android:text="End Call"
                 android:paddingBottom="20dp"
                 android:paddingTop="20dp"

@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.ui.videocalls;
+package com.comp30023.spain_itproject.ui.calls;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
@@ -16,7 +14,6 @@ import com.comp30023.spain_itproject.domain.User;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.sinch.android.rtc.PushPair;
-import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.video.VideoCallListener;

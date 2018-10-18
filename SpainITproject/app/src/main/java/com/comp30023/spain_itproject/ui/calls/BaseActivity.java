@@ -1,4 +1,4 @@
-package com.comp30023.spain_itproject.ui.videocalls;
+package com.comp30023.spain_itproject.ui.calls;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
 
 public abstract class BaseActivity extends AppCompatActivity implements ServiceConnection {
@@ -47,7 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceC
 
     }
 
-    protected SinchClientService.SinchServiceInterface getSinchInterface() {
+    public SinchClientService.SinchServiceInterface getSinchInterface() {
         return sinchInterface;
     }
 }

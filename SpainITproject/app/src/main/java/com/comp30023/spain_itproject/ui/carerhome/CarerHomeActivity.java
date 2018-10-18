@@ -1,7 +1,6 @@
 package com.comp30023.spain_itproject.ui.carerhome;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.speech.tts.Voice;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.ui.calls.VoiceCallActivity;
 import com.comp30023.spain_itproject.ui.chat.ChatActivity;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
@@ -28,7 +29,7 @@ import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.ui.BroadcastActivity;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
-import com.comp30023.spain_itproject.ui.videocalls.VideoCallActivity;
+import com.comp30023.spain_itproject.ui.calls.VideoCallActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.sinch.android.rtc.calling.Call;
 
@@ -237,7 +238,7 @@ public class CarerHomeActivity extends BroadcastActivity {
      * @param i
      */
     private void setupAlertDialog(final int i) {
-        String[] options = {"Call", "Message", "Edit", "Video Call"};
+        String[] options = {"Call", "Message", "Edit", "Video Call", "Internet Call"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
         builder.setTitle("Choose");
@@ -283,8 +284,12 @@ public class CarerHomeActivity extends BroadcastActivity {
 
                     case 3:
                         dependentSelected = getDependentAt(i);
-                        startVideoCall();
+                        startCall(true);
                         break;
+
+                    case 4:
+                        dependentSelected = getDependentAt(i);
+                        startCall(false);
 
                     // Default case
                     default:
@@ -305,17 +310,28 @@ public class CarerHomeActivity extends BroadcastActivity {
         return dependents.get(i);
     }
 
-    private void startVideoCall() {
+    private void startCall(boolean isVideo) {
         if (getSinchInterface() == null || !getSinchInterface().isStarted()) {
             return;
         }
 
-        // Start the video call
-        Call call = getSinchInterface().callUserVideo(dependentSelected.getId());
+        // Choose which call
+        Call call;
+        Intent intent;
+        // VIdeo call
+        if (isVideo) {
+            call = getSinchInterface().callUserVideo(dependentSelected.getId());
+            intent = new Intent(getApplicationContext(), VideoCallActivity.class);
+        }
+        // Internet call
+        else {
+            call = getSinchInterface().callUserVoice(dependentSelected.getId());
+            intent = new Intent(getApplicationContext(), VoiceCallActivity.class);
+        }
+
         String callId = call.getCallId();
 
         // Star tthe intent
-        Intent intent = new Intent(getApplicationContext(), VideoCallActivity.class);
         intent.putExtra(SinchClientService.CALL_ID, callId);
         startActivity(intent);
     }

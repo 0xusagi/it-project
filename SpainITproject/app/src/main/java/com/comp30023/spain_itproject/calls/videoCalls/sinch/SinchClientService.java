@@ -1,19 +1,14 @@
 package com.comp30023.spain_itproject.calls.videoCalls.sinch;
 
-import android.Manifest;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
-import com.comp30023.spain_itproject.ui.videocalls.IncomingVideoCallActivity;
+import com.comp30023.spain_itproject.ui.calls.IncomingVideoCallActivity;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.ClientRegistration;
 import com.sinch.android.rtc.Sinch;
@@ -181,8 +176,22 @@ public class SinchClientService extends Service {
 
     public class SinchServiceInterface extends Binder {
 
+        /**
+         * Make a video call to the intended user
+         * @param userId
+         * @return
+         */
         public Call callUserVideo(String userId) {
             return client.getCallClient().callUserVideo(userId);
+        }
+
+        /**
+         * Make a internet voice call to the intended user
+         * @param userId
+         * @return
+         */
+        public Call callUserVoice(String userId) {
+            return client.getCallClient().callUser(userId);
         }
 
         public String getUserName() {
