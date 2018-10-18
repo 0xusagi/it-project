@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.speech.tts.Voice;
@@ -20,13 +19,13 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.ui.NetworkActivity;
 import com.comp30023.spain_itproject.ui.calls.VoiceCallActivity;
 import com.comp30023.spain_itproject.ui.chat.ChatActivity;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.calls.videoCalls.sinch.SinchClientService;
 import com.comp30023.spain_itproject.domain.CarerUser;
 import com.comp30023.spain_itproject.domain.DependentUser;
-import com.comp30023.spain_itproject.ui.BroadcastActivity;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.ui.calls.VideoCallActivity;
@@ -42,10 +41,9 @@ import java.util.List;
  * Contains a list of dependents, upon clicking the dependents, allowing the carer to perform
  * various different activities in order to observe or contact the dependent
  */
-public class CarerHomeActivity extends BroadcastActivity {
+public class CarerHomeActivity extends NetworkActivity {
     // String Constants
     private final String NO_DEPENDENTS_MSG = "You currently have no dependents :(";
-
 
     // The list of dependents of the carer which contains all information about the dependents
     // to be used when the carer wants to edit the dependent
@@ -137,11 +135,13 @@ public class CarerHomeActivity extends BroadcastActivity {
     /**
      * Async task to run on background thread to get the carer user from the server
      */
-    private class DisplayDependentsListTask extends AsyncTask<String, Void, List<DependentUser>> {
+    private class DisplayDependentsListTask extends NetworkTask<String, Void, List<DependentUser>> {
         private Exception exception;
 
         @Override
         protected List<DependentUser> doInBackground(String... strings) {
+            super.doInBackground(strings);
+
             // Get the carer User from the server
             try {
                 CarerUser carer = AccountController.getInstance().getCarer(strings[0]);
@@ -155,6 +155,7 @@ public class CarerHomeActivity extends BroadcastActivity {
 
         @Override
         protected void onPostExecute(List<DependentUser> dependents) {
+            super.onPostExecute(dependents);
 
             LoginSharedPreference.setName(getApplicationContext(), user.getName());
 

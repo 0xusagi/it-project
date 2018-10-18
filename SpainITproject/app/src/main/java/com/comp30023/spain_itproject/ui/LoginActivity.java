@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
@@ -13,9 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.comp30023.spain_itproject.R;
-import com.comp30023.spain_itproject.ui.calls.BaseActivity;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends NetworkActivity {
 
     public static final int PIN_LENGTH = 4;
 
@@ -94,9 +92,11 @@ public class LoginActivity extends BaseActivity {
 
                 //Asynchronous task for logging in
                 @SuppressLint("StaticFieldLeak")
-                AsyncTask task = new AsyncTask() {
+                NetworkTask task = new NetworkTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
+                        super.doInBackground(objects);
+
                         try {
                             LoginHandler.getInstance().login(context, phoneNumber, pin);
 
@@ -107,7 +107,7 @@ public class LoginActivity extends BaseActivity {
                     }
 
                     @Override
-                    protected void onPostExecute(Object object) {
+                    protected void onPostExecute(Object o) {
                         if (getSinchInterface() != null && !getSinchInterface().isStarted()) {
                             getSinchInterface().startClient(LoginSharedPreference.getId(LoginActivity.this));
                         }

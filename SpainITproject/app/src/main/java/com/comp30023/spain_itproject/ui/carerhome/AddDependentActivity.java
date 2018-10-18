@@ -1,20 +1,19 @@
 package com.comp30023.spain_itproject.ui.carerhome;
 
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.ui.NetworkActivity;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 
-public class AddDependentActivity extends AppCompatActivity {
+public class AddDependentActivity extends NetworkActivity {
 
     private EditText mobileNumberField;
     private Button searchButton;
@@ -54,11 +53,13 @@ public class AddDependentActivity extends AppCompatActivity {
     /**
      * Task to get the dependent's name from the server based on a phone number
      */
-    private class GetDependentNameFromNumberTask extends AsyncTask<String, Void, String> {
+    private class GetDependentNameFromNumberTask extends NetworkTask<String, Void, String> {
         private Exception exception;
 
         @Override
         protected String doInBackground(String... params) {
+            super.doInBackground(params);
+
             // First argument is the phone number of the dependent to search for
             String phoneNumber = params[0];
 
@@ -76,6 +77,8 @@ public class AddDependentActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String name) {
+            super.onPostExecute(name);
+
             if (name == null) {
                 Toast.makeText(AddDependentActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
             } else {
@@ -127,11 +130,13 @@ public class AddDependentActivity extends AppCompatActivity {
      * Async task to add a dependent on the background thread which interacts with the server
      * Calling execute(phoneNumber) always returns null
      */
-    private class AddDependentTask extends AsyncTask<String, Void, Boolean> {
+    private class AddDependentTask extends NetworkTask<String, Void, Boolean> {
          private Exception exception;
 
          @Override
          protected Boolean doInBackground(String... strings) {
+             super.doInBackground(strings);
+
              // Dependent phone number is the first argument
              String dependentPhoneNumber = strings[0];
 
@@ -150,6 +155,8 @@ public class AddDependentActivity extends AppCompatActivity {
 
          @Override
          protected void onPostExecute(Boolean success) {
+             super.onPostExecute(success);
+
              if (success) {
                  Toast.makeText(AddDependentActivity.this, "Dependent added", Toast.LENGTH_SHORT).show();
              }

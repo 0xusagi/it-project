@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
@@ -20,7 +20,9 @@ import com.comp30023.spain_itproject.ui.calls.BaseActivity;
  * Activity for uses to create/register an account
  * When an account is registered, logs in the account and launches the corresponding HomeActivity (either CarerHomeActivity or DependentHomeActivity)
  */
-public class AccountCreationActivity extends BaseActivity {
+
+public class AccountCreationActivity extends NetworkActivity {
+
     public static final int PIN_LENGTH = 4;
 
     private TextView messageText;
@@ -141,9 +143,10 @@ public class AccountCreationActivity extends BaseActivity {
 
                 //Logs in on new thread asynchronously
                 @SuppressLint("StaticFieldLeak")
-                AsyncTask task = new AsyncTask() {
+                NetworkTask task = new NetworkTask() {
                     @Override
                     protected Object doInBackground(Object[] objects) {
+                        super.doInBackground(objects);
                         try {
                             LoginHandler.getInstance().register(context, name, phoneNumber, pin, confirmPin, isDependent);
                         } catch (Exception e) {
@@ -155,10 +158,12 @@ public class AccountCreationActivity extends BaseActivity {
                     }
 
                     @Override
-                    protected void onPostExecute(Object object) {
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
                         if (getSinchInterface() != null && !getSinchInterface().isStarted()) {
                             getSinchInterface().startClient(LoginSharedPreference.getId(AccountCreationActivity.this));
                         }
+
                     }
                 };
 
