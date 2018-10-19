@@ -16,6 +16,7 @@
         android:layout_weight="0.5"
         android:text="Incoming Call"
         android:textSize="32dp"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

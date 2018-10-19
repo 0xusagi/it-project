@@ -34,6 +34,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:text="Spain Web IT"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textAllCaps="false"
         android:textSize="45dp"
         android:textStyle="italic"
