@@ -129,10 +129,10 @@ public class DependentUser extends User {
         getPendingCarers().remove(carer);
         if (accept) {
 
-            if (confirmedCarerObjects == null) {
-                confirmedCarerObjects = new ArrayList<CarerUser>();
+            if (confirmedCarerObjects != null) {
+                confirmedCarerObjects.add(carer);
             }
-            getCarers().add(carer);
+
         }
     }
 
