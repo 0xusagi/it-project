@@ -104,7 +104,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                         MarkerOptions markerOptions = new MarkerOptions().position(coordinates).title(title);
                         marker = map.addMarker(markerOptions);
                         marker.setTitle(title);
-                        marker.showInfoWindow();
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15.0f));
                     }
                 } else {
                     marker.setPosition(coordinates);
@@ -156,7 +156,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                                                             MarkerOptions markerOptions = new MarkerOptions().position(coordinates).title(title);
                                                             marker = map.addMarker(markerOptions);
                                                             marker.setTitle(title);
-
+                                                            marker.showInfoWindow();
                                                             map.addPolyline(polylineOptions);
 
                                                             // Add a marker for the dependent's destination.
