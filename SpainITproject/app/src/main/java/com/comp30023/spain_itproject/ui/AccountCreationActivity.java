@@ -2,19 +2,27 @@ package com.comp30023.spain_itproject.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.comp30023.spain_itproject.R;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.network.NoConnectionException;
+import com.comp30023.spain_itproject.network.UnverifiedAccountException;
 import com.comp30023.spain_itproject.ui.calls.BaseActivity;
+import com.comp30023.spain_itproject.uicontroller.AccountController;
 
 /**
  * Activity for uses to create/register an account
@@ -37,6 +45,8 @@ public class AccountCreationActivity extends NetworkActivity {
 
     private Button registerButton;
     private Button cancelButton;
+
+    private boolean verified;
 
     /**
      * Initialises activity, sets display to corresponding layout and sets references to Views in layout
@@ -81,6 +91,8 @@ public class AccountCreationActivity extends NetworkActivity {
         phoneNumberText = (EditText) findViewById(R.id.phoneNumberField);
 
         setPinFields();
+
+        verified = true;
 
         registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setEnabled(false);
@@ -149,6 +161,13 @@ public class AccountCreationActivity extends NetworkActivity {
                         super.doInBackground(objects);
                         try {
                             LoginHandler.getInstance().register(context, name, phoneNumber, pin, confirmPin, isDependent);
+
+
+                        } catch (UnverifiedAccountException e) {
+
+                            System.out.println("Unverified received");
+                            verified = false;
+
                         } catch (Exception e) {
                             String message = e.getMessage();
                             displayErrorMessage(message);
@@ -160,10 +179,16 @@ public class AccountCreationActivity extends NetworkActivity {
                     @Override
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
-                        if (getSinchInterface() != null && !getSinchInterface().isStarted()) {
-                            getSinchInterface().startClient(LoginSharedPreference.getId(AccountCreationActivity.this));
+
+                        if (!verified) {
+                            displayDialog(context, "Enter the text that was send to your mobile: ", phoneNumber, pin);
                         }
 
+                        if (LoginSharedPreference.getId(AccountCreationActivity.this) != null) {
+                            if (getSinchInterface() != null && !getSinchInterface().isStarted()) {
+                                getSinchInterface().startClient(LoginSharedPreference.getId(AccountCreationActivity.this));
+                            }
+                        }
                     }
                 };
 
@@ -208,5 +233,80 @@ public class AccountCreationActivity extends NetworkActivity {
                 messageText.setText(message);
             }
         });
+    }
+
+    private void displayDialog(final Context context, String message, final String phoneNumber, final String pin) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LoginActivity.VERIFY_ACCOUNT_TITLE);
+
+        TextView textPrompt = new TextView(context);
+        textPrompt.setText(message);
+
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        // Set up the input
+        final EditText input = new EditText(context);
+
+        layout.addView(textPrompt);
+        layout.addView(input);
+
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        builder.setView(layout);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                final String code = input.getText().toString();
+                verified = true;
+
+                @SuppressLint("StaticFieldLeak")
+                NetworkTask task = new NetworkTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        super.doInBackground(objects);
+
+                        try {
+                            AccountController.getInstance().verifyAccount(phoneNumber, code);
+                            LoginHandler.getInstance().login(context, phoneNumber, pin);
+
+                        } catch (UnverifiedAccountException e1) {
+                            verified = false;
+
+                        } catch (BadRequestException e1) {
+                            e1.printStackTrace();
+                            verified = false;
+
+                        } catch (NoConnectionException e1) {
+                            e1.printStackTrace();
+
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
+
+                        if (!verified) {
+                            displayDialog(context, "That code was not correct, please try again", phoneNumber, pin);
+                        }
+                    }
+                };
+                task.execute();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }
