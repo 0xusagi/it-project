@@ -39,8 +39,15 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
@@ -53,7 +60,6 @@ public class TrackerMapFragment extends MarkerMapsFragment {
     public static final String ARGUMENT_TRACK_USER_ID = "USER";
     public static final String ARGUMENT_CURRENT_USER = "CURRENT";
     public static final String ARGYMENT_TRACK_USER_NAME = "NAME";
-
 
     private GeoDataClient mGeoDataClient;
 
@@ -90,18 +96,12 @@ public class TrackerMapFragment extends MarkerMapsFragment {
             public void onChanged(@Nullable final Position position) {
 
                 final LatLng coordinates = new LatLng(position.getLat(), position.getLng());
-                String title = trackedUserName;
+                final String title = trackedUserName;
 
                 if (marker == null) {
-
-                    MarkerOptions markerOptions = new MarkerOptions().position(coordinates).title(title);
-
                     GoogleMap map = getMap();
                     if (map != null) {
-                        marker = map.addMarker(markerOptions);
-                        marker.setTitle(title);
-                        marker.showInfoWindow();
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 17));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15.0f));
                     }
                 } else {
                     marker.setPosition(coordinates);
@@ -121,6 +121,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
 
                                 final LatLng destinationLatLng = dependentDestination.getLatLng();
                                 final String destinationName = dependentDestination.getName().toString();
+
 
                                 // Draw the route.
                                 GoogleDirection.withServerKey(getString(R.string.serverKey))
@@ -148,13 +149,16 @@ public class TrackerMapFragment extends MarkerMapsFragment {
 
                                                         GoogleMap map = getMap();
                                                         if (map != null) {
+                                                            map.clear();
+                                                            MarkerOptions markerOptions = new MarkerOptions().position(coordinates).title(title);
+                                                            marker = map.addMarker(markerOptions);
+                                                            marker.setTitle(title);
                                                             map.addPolyline(polylineOptions);
+
                                                             // Add a marker for the dependent's destination.
                                                             map.addMarker(new MarkerOptions()
                                                                     .position(destinationLatLng)
-                                                                    .title(destinationName))
-                                                                    .showInfoWindow();
-
+                                                                    .title(destinationName));
                                                         }
                                                     }
 
