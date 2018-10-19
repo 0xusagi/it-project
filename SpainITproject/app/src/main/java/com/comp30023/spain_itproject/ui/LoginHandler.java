@@ -140,7 +140,6 @@ public class LoginHandler {
 
             //Update token in SharedPreferences
             LoginSharedPreference.updateToken(context, token);
-
         }
     }
 

@@ -68,7 +68,14 @@ public class AccountController {
         try {
             Response<UserModel> response = call.execute();
 
+            System.out.println("Response: " + response.code());
+
             if (response.isSuccessful()) {
+
+                if (response.code() == UNVERIFIED_CODE) {
+                    System.out.println("Unverified code");
+                    throw new UnverifiedAccountException();
+                }
 
                 User user;
 
@@ -84,6 +91,7 @@ public class AccountController {
             } else {
 
                 if (response.code() == UNVERIFIED_CODE) {
+                    System.out.println("Unverified code");
                     throw new UnverifiedAccountException();
                 }
 
