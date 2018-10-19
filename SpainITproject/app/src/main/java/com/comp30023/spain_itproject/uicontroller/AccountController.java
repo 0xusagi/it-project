@@ -10,6 +10,7 @@ import com.comp30023.spain_itproject.network.ErrorResponse;
 import com.comp30023.spain_itproject.network.ErrorUtils;
 import com.comp30023.spain_itproject.network.NoConnectionException;
 import com.comp30023.spain_itproject.network.RetrofitClientInstance;
+import com.comp30023.spain_itproject.network.UnverifiedAccountException;
 import com.comp30023.spain_itproject.network.UserModel;
 import com.comp30023.spain_itproject.domain.Location;
 import com.comp30023.spain_itproject.domain.User;
@@ -27,6 +28,8 @@ import retrofit2.Response;
  * Retrofit REST API for exchanging messages between client and server
  */
 public class AccountController {
+
+    public static final int UNVERIFIED_CODE = 412;
 
     private static AccountController instance;
     public static AccountController getInstance() {
@@ -51,7 +54,7 @@ public class AccountController {
      * @throws NoConnectionException If the request could not be completed due to a connection issue
      */
     public User registerAccount(String name, String phoneNumber, String pin, Boolean isDependent, String token)
-            throws BadRequestException, NoConnectionException {
+            throws BadRequestException, NoConnectionException, UnverifiedAccountException {
 
         checkService();
 
@@ -61,16 +64,44 @@ public class AccountController {
         Call<UserModel> call = service.registerUser(name, phoneNumber, pin, userType, token);
 
         UserModel userModel = executeCallReturnResponse(call);
-        User user;
 
-        //Create the type of user based on input (corresponds to user returned from server
-        if (isDependent) {
-            user = new DependentUser(userModel.getName(), phoneNumber, pin, userModel.getId());
-        } else {
-            user = new CarerUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+        try {
+            Response<UserModel> response = call.execute();
+
+            System.out.println("Response: " + response.code());
+
+            if (response.isSuccessful()) {
+
+                if (response.code() == UNVERIFIED_CODE) {
+                    System.out.println("Unverified code");
+                    throw new UnverifiedAccountException();
+                }
+
+                User user;
+
+                //Create the type of user based on input (corresponds to user returned from server
+                if (isDependent) {
+                    user = new DependentUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                } else {
+                    user = new CarerUser(userModel.getName(), phoneNumber, pin, userModel.getId());
+                }
+
+                return user;
+
+            } else {
+
+                if (response.code() == UNVERIFIED_CODE) {
+                    System.out.println("Unverified code");
+                    throw new UnverifiedAccountException();
+                }
+
+                ErrorResponse error = ErrorUtils.parseError(response);
+                throw new BadRequestException(error);
+            }
+
+        } catch (IOException e) {
+            throw new NoConnectionException();
         }
-
-        return user;
     }
 
     /**
@@ -82,20 +113,37 @@ public class AccountController {
      * @throws NoConnectionException If the request could not be completed due to a connection issue
      */
     public Pair<String, Boolean> login(String phoneNumber, String pin, String token)
-            throws BadRequestException, NoConnectionException {
+            throws BadRequestException, NoConnectionException, UnverifiedAccountException {
         checkService();
 
         //Create the call to the server
         Call<UserModel> call = service.loginUser(phoneNumber, pin, token);
 
-        UserModel response = executeCallReturnResponse(call);
+        try {
+            Response<UserModel> response = call.execute();
 
-        boolean isDependent = AccountService.USERTYPE_DEPENDENT.equals(response.getUserType());
-        String userId = response.getId();
+            if (response.isSuccessful()) {
 
-        Pair<String, Boolean> pair = new Pair<String, Boolean>(userId, isDependent);
+                boolean isDependent = AccountService.USERTYPE_DEPENDENT.equals(response.body().getUserType());
+                String userId = response.body().getId();
 
-        return pair;
+                Pair<String, Boolean> pair = new Pair<String, Boolean>(userId, isDependent);
+
+                return pair;
+
+            } else {
+
+                if (response.code() == UNVERIFIED_CODE) {
+                    throw new UnverifiedAccountException();
+                }
+
+                ErrorResponse error = ErrorUtils.parseError(response);
+                throw new BadRequestException(error);
+            }
+
+        } catch (IOException e) {
+            throw new NoConnectionException();
+        }
     }
 
     //CONFIRM
@@ -387,5 +435,13 @@ public class AccountController {
             // TODO If this update fails, should the app close or log out?
             e.printStackTrace();
         }
+    }
+
+    public void verifyAccount(String mobile, String code) throws BadRequestException, NoConnectionException {
+        checkService();
+
+        Call<ResponseBody> call = service.verify(mobile, code);
+
+        executeCallNoResponse(call);
     }
 }

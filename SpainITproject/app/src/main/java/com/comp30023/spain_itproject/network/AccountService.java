@@ -145,10 +145,17 @@ public interface AccountService {
     );
 
     @FormUrlEncoded
-    @POST("user/sendMessage")
+    @POST("/user/sendMessage")
     Call<ResponseBody> sendChat(
             @Field("senderId") String senderId,
             @Field("receiverId") String receiverId,
             @Field ("message") String message
+    );
+
+    @FormUrlEncoded
+    @POST("/user/verify")
+    Call<ResponseBody> verify(
+            @Field("mobile") String mobile,
+            @Field("verificationCode") String verificationCode
     );
 }
