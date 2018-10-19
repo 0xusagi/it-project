@@ -95,6 +95,7 @@ public class DependentHomeActivity extends NetworkActivity {
         setCallsButtonListener(this);
 
         locationsButton = (Button) findViewById(R.id.locationsButton);
+        locationsButton.setVisibility(View.GONE);
         setLocationsButtonListener();
 
         signOutButton = findViewById(R.id.tempSignOutButton);
@@ -183,6 +184,7 @@ public class DependentHomeActivity extends NetworkActivity {
                     messagesButton.setVisibility(View.VISIBLE);
                     callsButton.setVisibility(View.GONE);
                     locationsButton.setVisibility(View.VISIBLE);
+                    signOutButton.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -212,6 +214,7 @@ public class DependentHomeActivity extends NetworkActivity {
                     messagesButton.setVisibility(View.GONE);
                     callsButton.setVisibility(View.VISIBLE);
                     locationsButton.setVisibility(View.VISIBLE);
+                    signOutButton.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -239,6 +242,7 @@ public class DependentHomeActivity extends NetworkActivity {
                     messagesButton.setVisibility(View.VISIBLE);
                     callsButton.setVisibility(View.VISIBLE);
                     locationsButton.setVisibility(View.GONE);
+                    signOutButton.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -344,6 +348,9 @@ public class DependentHomeActivity extends NetworkActivity {
 
                         //Otherwise display the locations
                     } else {
+
+                        locationsButton.setVisibility(View.VISIBLE);
+                        signOutButton.setVisibility(View.GONE);
                         fragment = new CarerRequestsListFragment();
                     }
 
@@ -355,8 +362,6 @@ public class DependentHomeActivity extends NetworkActivity {
 
                     transaction.replace(R.id.fragment_container, fragment);
                     transaction.commit();
-
-                    locationsButton.setVisibility(View.VISIBLE);
 
 
                 } catch (Exception e) {
