@@ -33,8 +33,6 @@ public class ChatActivity extends BroadcastActivity {
 
     public static final String EXTRA_CHAT_PARTNER_USER_ID = "PARTNER";
 
-    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-
     private String currentUserId;
     private String currentUserName;
     private String chatPartnerId;
@@ -53,8 +51,6 @@ public class ChatActivity extends BroadcastActivity {
     private ImageButton changeFragmentButton;
 
     private ChatService chatService;
-
-    private boolean permissionToRecordAccepted = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -174,14 +170,9 @@ public class ChatActivity extends BroadcastActivity {
 
         } else if (currentFragment instanceof TextInputFragment) {
 
-            if (permissionToRecordAccepted) {
-                currentFragment = new VoiceInputFragment();
-                changeFragmentButton.setImageResource(R.drawable.ic_keyboard_black_24dp);
+            currentFragment = new VoiceInputFragment();
+            changeFragmentButton.setImageResource(R.drawable.ic_keyboard_black_24dp);
 
-            } else {
-                String [] permissions = {Manifest.permission.RECORD_AUDIO};
-                ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
-            }
         } else {
             currentFragment = new TextInputFragment();
             changeFragmentButton.setImageResource(R.drawable.ic_mic_black_24dp);
@@ -195,19 +186,6 @@ public class ChatActivity extends BroadcastActivity {
         super.onPause();
 
         finish();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode){
-            case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                changeFragment();
-                break;
-        }
     }
 
     private void setFragment() {
