@@ -1,6 +1,7 @@
 package com.comp30023.spain_itproject.ui.carerhome;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +20,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.network.NoConnectionException;
 import com.comp30023.spain_itproject.ui.NetworkActivity;
 import com.comp30023.spain_itproject.ui.calls.VoiceCallActivity;
 import com.comp30023.spain_itproject.ui.chat.ChatActivity;
@@ -124,10 +127,44 @@ public class CarerHomeActivity extends NetworkActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginHandler.getInstance().logout(context);
-                // Stop the sinch client
-                getSinchInterface().stopClient();
-                finish();
+                @SuppressLint("StaticFieldLeak")
+                NetworkTask task = new NetworkTask() {
+
+                    private boolean success;
+
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        super.doInBackground(objects);
+
+                        success = false;
+
+                        try {
+
+                            LoginHandler.getInstance().logout(context);
+                            success = true;
+
+
+                        } catch (BadRequestException e) {
+                            e.printStackTrace();
+                        } catch (NoConnectionException e) {
+                            e.printStackTrace();
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
+
+                        if (success) {
+                            // Stop the sinch client
+                            getSinchInterface().stopClient();
+                            finish();
+                        }
+                    }
+                };
+                task.execute();
             }
         });
     }
