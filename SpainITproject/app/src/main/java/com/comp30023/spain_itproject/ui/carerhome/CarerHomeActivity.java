@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.comp30023.spain_itproject.ui.NetworkActivity;
+import com.comp30023.spain_itproject.ui.calls.BaseActivity;
 import com.comp30023.spain_itproject.ui.calls.VoiceCallActivity;
 import com.comp30023.spain_itproject.ui.chat.ChatActivity;
 import com.comp30023.spain_itproject.R;
@@ -29,6 +30,7 @@ import com.comp30023.spain_itproject.domain.DependentUser;
 import com.comp30023.spain_itproject.ui.LoginHandler;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.comp30023.spain_itproject.ui.calls.VideoCallActivity;
+import com.comp30023.spain_itproject.ui.maps.TrackerMapFragment;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
 import com.sinch.android.rtc.calling.Call;
 
@@ -157,7 +159,9 @@ public class CarerHomeActivity extends NetworkActivity {
         protected void onPostExecute(List<DependentUser> dependents) {
             super.onPostExecute(dependents);
 
-            LoginSharedPreference.setName(getApplicationContext(), user.getName());
+            if (user != null) {
+                LoginSharedPreference.setName(getApplicationContext(), user.getName());
+            }
 
             // If the carer User is null, then there is an error
             if (dependents == null) {
@@ -240,7 +244,7 @@ public class CarerHomeActivity extends NetworkActivity {
      * @param i
      */
     private void setupAlertDialog(final int i) {
-        String[] options = {"Call", "Message", "Locations", "Video Call", "Internet Call"};
+        String[] options = {"Call", "Message", "Locations", "Video Call", "Internet Call", "View Current Location"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CarerHomeActivity.this);
         builder.setTitle("Choose");
@@ -291,8 +295,16 @@ public class CarerHomeActivity extends NetworkActivity {
 
                     case 4:
                         startCall(false);
+                        break;
 
-                    // Default case
+                    case 5:
+                        intent = new Intent(getApplicationContext(), ViewDependentLocationActivity.class);
+                        intent.putExtra(ViewDependentLocationActivity.EXTRA_SENDER_NAME, getDependentAt(i).getName());
+                        intent.putExtra(ViewDependentLocationActivity.EXTRA_SENDER_ID, getDependentAt(i).getId());
+                        startActivity(intent);
+                        break;
+
+                        // Default case
                     default:
                         break;
                 }
