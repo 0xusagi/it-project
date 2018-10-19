@@ -25,8 +25,15 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class CarerMapsActivity extends NetworkActivity {
 
@@ -37,7 +44,7 @@ public class CarerMapsActivity extends NetworkActivity {
     private double placeLat;
     private double placeLng;
 
-    private MarkerMapsFragment fragment;
+    private GpsMapsFragment fragment;
     private PlaceAutocompleteFragment autocompleteFragment;
 
     private DependentUser dependent;

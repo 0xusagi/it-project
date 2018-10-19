@@ -24,19 +24,30 @@
                 android:id="@+id/messagesButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Messages" />
+                android:text="Messages"
+                android:layout_weight="1"/>
 
             <Button
                 android:id="@+id/callButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calls" />
+                android:text="Calls"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/locationsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Locations"
+                android:layout_weight="1"/>
 
             <Button
                 android:id="@+id/tempSignOutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Out" />
+                android:text="Sign Out"
+                android:layout_weight="1"/>
 
         </LinearLayout>
 

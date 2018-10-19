@@ -37,7 +37,8 @@
         android:roundIcon="@mipmap/launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:fullBackupContent="@xml/backup_descriptor">
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -85,6 +86,7 @@
         <activity android:name=".ui.carerhome.CarerHomeActivity" />
         <activity android:name=".ui.carerhome.AddDependentActivity" />
         <activity android:name=".ui.carerhome.EditDependentsActivity" />
+        <activity android:name=".ui.carerhome.ViewDependentLocationActivity"/>
         <activity android:name=".ui.calls.VideoCallActivity" />
         <activity android:name=".ui.calls.IncomingCallActivity" />
         <activity android:name=".ui.carerhome.DisplayHelpRequestActivity" />
