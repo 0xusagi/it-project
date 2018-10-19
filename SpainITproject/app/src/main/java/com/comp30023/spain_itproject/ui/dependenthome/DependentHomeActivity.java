@@ -1,6 +1,7 @@
 package com.comp30023.spain_itproject.ui.dependenthome;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 
 
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -46,7 +48,6 @@ public class DependentHomeActivity extends NetworkActivity {
     public static final String CONFIRM_GET_HELP_POSITIVE = "Yes";
     public static final String CONFIRM_GET_HELP_NEGATIVE = "No";
 
-
     private DrawerLayout drawerLayout;
 
     private FragmentManager fragmentManager;
@@ -59,6 +60,7 @@ public class DependentHomeActivity extends NetworkActivity {
     private Button locationsButton;
     private Button helpButton;
     private Button signOutButton;
+    private ImageButton refreshButton;
 
     //The logged in DependentUser
     private DependentUser user;
@@ -86,7 +88,7 @@ public class DependentHomeActivity extends NetworkActivity {
         responding = false;
 
         //Retrieve the logged in account from the server
-        new DownloadDependentTask().execute(LoginSharedPreference.getId(this));
+        new DownloadDependentTask(this).execute(LoginSharedPreference.getId(this));
 
         messagesButton = (Button) findViewById(R.id.messagesButton);
         setMessagesButtonListener(this);
@@ -97,6 +99,14 @@ public class DependentHomeActivity extends NetworkActivity {
         locationsButton = (Button) findViewById(R.id.locationsButton);
         locationsButton.setVisibility(View.GONE);
         setLocationsButtonListener();
+
+        refreshButton = (ImageButton) findViewById(R.id.dependentHome_refreshButton);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DownloadDependentTask(context).execute(LoginSharedPreference.getId(context));
+            }
+        });
 
         signOutButton = findViewById(R.id.tempSignOutButton);
         setSignOutButtonListener(this);
@@ -303,17 +313,25 @@ public class DependentHomeActivity extends NetworkActivity {
     //Downloads the logged in DependentUser from the database
     private class DownloadDependentTask extends NetworkTask<String, Void, DependentUser> {
 
+        private boolean downloaded;
+
+        private final Context context;
+
+        public DownloadDependentTask(Context context) {
+            this.context = context;
+        }
+
         @Override
         protected DependentUser doInBackground(String... strings) {
             super.doInBackground(strings);
 
             responding = true;
 
-            displaySpinner(true);
+            downloaded = false;
             try {
 
                 user = AccountController.getInstance().getDependent(strings[0]);
-                return null;
+                downloaded = true;
             }
 
             // Exception when can't connect to the server
@@ -334,6 +352,30 @@ public class DependentHomeActivity extends NetworkActivity {
 
             displaySpinner(false);
 
+            if (!downloaded) {
+
+                AlertDialog.Builder  builder = new AlertDialog.Builder(context);
+                builder.setTitle("Failed to download");
+                builder.setMessage("Please retry");
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new DownloadDependentTask(context).execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        ((Activity) context).finish();
+                    }
+                });
+
+                builder.show();
+
+                return;
+            }
+
             if (user != null) {
 
                 LoginSharedPreference.setName(getApplicationContext(), user.getName());
@@ -347,6 +389,9 @@ public class DependentHomeActivity extends NetworkActivity {
                         fragment = new LocationsListFragment();
 
                         //Otherwise display the locations
+                        locationsButton.setVisibility(View.GONE);
+                        signOutButton.setVisibility(View.VISIBLE);
+
                     } else {
 
                         locationsButton.setVisibility(View.VISIBLE);
@@ -362,6 +407,9 @@ public class DependentHomeActivity extends NetworkActivity {
 
                     transaction.replace(R.id.fragment_container, fragment);
                     transaction.commit();
+
+                    messagesButton.setVisibility(View.VISIBLE);
+                    callsButton.setVisibility(View.VISIBLE);
 
 
                 } catch (Exception e) {

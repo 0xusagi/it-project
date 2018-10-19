@@ -49,6 +49,12 @@
                 android:text="Sign Out"
                 android:layout_weight="1"/>
 
+            <ImageButton
+                android:id="@+id/dependentHome_refreshButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_refresh_black_24dp" />
+
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
