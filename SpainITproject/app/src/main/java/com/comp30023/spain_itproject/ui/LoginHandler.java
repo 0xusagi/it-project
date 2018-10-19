@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Pair;
 
+import com.comp30023.spain_itproject.detailsvalidation.InvalidDetailsException;
 import com.comp30023.spain_itproject.domain.User;
+import com.comp30023.spain_itproject.network.BadRequestException;
+import com.comp30023.spain_itproject.network.NoConnectionException;
+import com.comp30023.spain_itproject.network.UnverifiedAccountException;
 import com.comp30023.spain_itproject.ui.carerhome.CarerHomeActivity;
 import com.comp30023.spain_itproject.ui.dependenthome.DependentHomeActivity;
 import com.comp30023.spain_itproject.uicontroller.AccountController;
@@ -42,7 +46,7 @@ public class LoginHandler {
      * @param phoneNumber The phone number of the user to be logged in
      * @param pin The pin of the user to be logged in
      */
-    public void login(Context context, String phoneNumber, String pin) throws Exception {
+    public void login(Context context, String phoneNumber, String pin) throws UnverifiedAccountException, BadRequestException, NoConnectionException {
 
         String token = FirebaseInstanceId.getInstance().getToken();
 
@@ -66,7 +70,7 @@ public class LoginHandler {
      * @param isDependent
      * @throws Exception Thrown with a message if there is an error in the registration process
      */
-    public void register(Context context, String name, String phoneNumber, String pin, String confirmPin, boolean isDependent) throws Exception {
+    public void register(Context context, String name, String phoneNumber, String pin, String confirmPin, boolean isDependent) throws InvalidDetailsException, UnverifiedAccountException, BadRequestException, NoConnectionException {
 
         DetailsValidator.getInstance().checkDetails(name, phoneNumber, pin, confirmPin, isDependent);
 
@@ -110,7 +114,9 @@ public class LoginHandler {
      * Logs out the current user and begins the StartActivity
      * @param context
      */
-    public void logout(Context context) {
+    public void logout(Context context) throws BadRequestException, NoConnectionException {
+
+        AccountController.getInstance().logout(LoginSharedPreference.getId(context));
 
         LoginSharedPreference.setLogOut(context);
         Intent intent = new Intent(context, StartActivity.class);
@@ -136,7 +142,6 @@ public class LoginHandler {
 
             //Update token in SharedPreferences
             LoginSharedPreference.updateToken(context, token);
-
         }
     }
 

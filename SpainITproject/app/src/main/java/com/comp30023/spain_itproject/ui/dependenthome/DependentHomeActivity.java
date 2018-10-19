@@ -217,10 +217,44 @@ public class DependentHomeActivity extends NetworkActivity {
             @Override
             public void onClick(View v) {
 
-                LoginHandler.getInstance().logout(context);
-                // Stop the sinch client
-                getSinchInterface().stopClient();
-                finish();
+                @SuppressLint("StaticFieldLeak")
+                NetworkTask task = new NetworkTask() {
+
+                    private boolean success;
+
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        super.doInBackground(objects);
+
+                        success = false;
+
+                        try {
+
+                            LoginHandler.getInstance().logout(context);
+                            success = true;
+
+
+                        } catch (BadRequestException e) {
+                            e.printStackTrace();
+                        } catch (NoConnectionException e) {
+                            e.printStackTrace();
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
+
+                        if (success) {
+                            // Stop the sinch client
+                            getSinchInterface().stopClient();
+                            finish();
+                        }
+                    }
+                };
+                task.execute();
             }
         });
     }
