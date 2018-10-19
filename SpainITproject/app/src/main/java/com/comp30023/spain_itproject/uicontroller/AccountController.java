@@ -444,4 +444,13 @@ public class AccountController {
 
         executeCallNoResponse(call);
     }
+
+    public void logout(String id) throws BadRequestException, NoConnectionException {
+        checkService();
+
+        Call<ResponseBody> call = service.logout(id);
+
+        executeCallNoResponse(call);
+
+    }
 }

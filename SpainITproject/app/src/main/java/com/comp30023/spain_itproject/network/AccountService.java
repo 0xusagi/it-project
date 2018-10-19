@@ -158,4 +158,9 @@ public interface AccountService {
             @Field("mobile") String mobile,
             @Field("verificationCode") String verificationCode
     );
+
+    @PUT("/user/{id}/logout")
+    Call<ResponseBody> logout(
+            @Path("id") String id
+    );
 }

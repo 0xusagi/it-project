@@ -114,7 +114,9 @@ public class LoginHandler {
      * Logs out the current user and begins the StartActivity
      * @param context
      */
-    public void logout(Context context) {
+    public void logout(Context context) throws BadRequestException, NoConnectionException {
+
+        AccountController.getInstance().logout(LoginSharedPreference.getId(context));
 
         LoginSharedPreference.setLogOut(context);
         Intent intent = new Intent(context, StartActivity.class);
