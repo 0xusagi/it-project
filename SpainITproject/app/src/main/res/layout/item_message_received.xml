@@ -36,7 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="240dp"
-            android:textColor="#ffffff"/>
+            android:textSize="50px"
+            android:textColor="#000000"/>
 
         <ImageButton
             android:id="@+id/text_play_button"

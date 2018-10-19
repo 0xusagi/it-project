@@ -9,7 +9,7 @@
 
     <!-- View background color -->
     <solid
-        android:color="#008000" >
+        android:color="#087ffe" >
     </solid>
 
     <TextView

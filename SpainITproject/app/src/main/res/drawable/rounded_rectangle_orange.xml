@@ -9,14 +9,15 @@
 
     <!-- View background color -->
     <solid
-        android:color="#FF6E00" >
+        android:color="#E6E5EB" >
     </solid>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:textColor="#ffffff"
+        android:textColor="#000000"
+        android:textSize="200%"
         android:layout_marginTop="4dp"/>
 
     <!-- The radius makes the corners rounded -->
