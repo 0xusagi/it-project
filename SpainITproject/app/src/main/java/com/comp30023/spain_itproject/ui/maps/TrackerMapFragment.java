@@ -101,9 +101,6 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                 if (marker == null) {
                     GoogleMap map = getMap();
                     if (map != null) {
-                        MarkerOptions markerOptions = new MarkerOptions().position(coordinates).title(title);
-                        marker = map.addMarker(markerOptions);
-                        marker.setTitle(title);
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15.0f));
                     }
                 } else {
@@ -156,7 +153,6 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                                                             MarkerOptions markerOptions = new MarkerOptions().position(coordinates).title(title);
                                                             marker = map.addMarker(markerOptions);
                                                             marker.setTitle(title);
-                                                            marker.showInfoWindow();
                                                             map.addPolyline(polylineOptions);
 
                                                             // Add a marker for the dependent's destination.
