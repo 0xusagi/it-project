@@ -15,6 +15,17 @@ To edit:
 
 3. Click the 'Build' button on the toolbar
 
+Dependencies:
+- Firebase API
+- Sinch API
+- Google Maps API
+
+Tests location:
+- Integrated tests: 
+    - ./Spain/SpainITproject/app/src/androidTest
+- Unit tests:
+    - ./Spain/SpainITproject/app/src/test
+
 # Spain Server
 
 Dependencies:
