@@ -106,7 +106,6 @@ public class AddDependentActivity extends NetworkActivity {
             // Send the request to the dependent
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // TODO send a request to the server
                 new AddDependentTask().execute(phoneNumber);
             }
         });

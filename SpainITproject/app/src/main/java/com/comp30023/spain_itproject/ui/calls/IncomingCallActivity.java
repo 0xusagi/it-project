@@ -93,8 +93,14 @@ public class IncomingCallActivity extends BaseActivity {
         if (call != null) {
             call.answer();
 
-            // Change the intent to the video call screen
-            Intent intent = new Intent(this, VideoCallActivity.class);
+            // Change the intent to the correct screen
+            Intent intent;
+            if (call.getDetails().isVideoOffered()) {
+                intent = new Intent(this, VideoCallActivity.class);
+            }
+            else {
+                intent = new Intent(this, VoiceCallActivity.class);
+            }
             intent.putExtra(SinchClientService.CALL_ID, callId);
             startActivity(intent);
         }
