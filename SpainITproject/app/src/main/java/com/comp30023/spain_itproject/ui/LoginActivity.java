@@ -89,7 +89,6 @@ public class LoginActivity extends NetworkActivity {
         });
     }
 
-    /**STILL REQUIRES CHECKING FOR INVALID DETAILS*/
     private void setLoginButtonListener(final Context context) {
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +128,7 @@ public class LoginActivity extends NetworkActivity {
                         super.onPostExecute(o);
 
                         if (!verified) {
-                            displayDialog(context, "Enter the text that was send to your mobile: ", phoneNumber, pin);
+                            new VerificationDialog(context, phoneNumber, pin, null).show();
                         }
 
 
@@ -165,80 +164,5 @@ public class LoginActivity extends NetworkActivity {
                 messageText.setText(message);
             }
         });
-    }
-
-    private void displayDialog(final Context context, String message, final String phoneNumber, final String pin) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(VERIFY_ACCOUNT_TITLE);
-
-        TextView textPrompt = new TextView(context);
-        textPrompt.setText(message);
-
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        // Set up the input
-        final EditText input = new EditText(context);
-
-        layout.addView(textPrompt);
-        layout.addView(input);
-
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        builder.setView(layout);
-
-        // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                final String code = input.getText().toString();
-                verified = true;
-
-                @SuppressLint("StaticFieldLeak")
-                NetworkTask task = new NetworkTask() {
-                    @Override
-                    protected Object doInBackground(Object[] objects) {
-                        super.doInBackground(objects);
-
-                        try {
-                            AccountController.getInstance().verifyAccount(phoneNumber, code);
-                            LoginHandler.getInstance().login(context, phoneNumber, pin);
-
-                        } catch (UnverifiedAccountException e1) {
-                            verified = false;
-
-                        } catch (BadRequestException e1) {
-                            e1.printStackTrace();
-                            verified = false;
-
-                        } catch (NoConnectionException e1) {
-                            e1.printStackTrace();
-
-                        }
-
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Object o) {
-                        super.onPostExecute(o);
-
-                        if (!verified) {
-                            displayDialog(context, "That code was not correct, please try again", phoneNumber, pin);
-                        }
-                    }
-                };
-                task.execute();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
     }
 }
