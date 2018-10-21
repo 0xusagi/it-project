@@ -91,10 +91,6 @@
         <activity android:name=".ui.calls.IncomingCallActivity" />
         <activity android:name=".ui.carerhome.DisplayHelpRequestActivity" />
         <activity android:name=".ui.chat.ChatActivity" />
-        <activity
-            android:name=".ui.BasicActivity"
-            android:label="@string/title_activity_basic"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".ui.calls.VoiceCallActivity"></activity>
     </application>
 

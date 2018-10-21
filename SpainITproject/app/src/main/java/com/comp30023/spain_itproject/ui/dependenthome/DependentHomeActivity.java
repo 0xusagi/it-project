@@ -6,6 +6,7 @@ import android.content.Context;
 
 
 import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -40,20 +41,7 @@ import java.util.ArrayList;
  */
 public class DependentHomeActivity extends NetworkActivity {
 
-    public static final String LIST_NAME_LOCATION = "Locations";
-    public static final String LIST_NAME_CARERS = "Carers";
-
-    public static final String CONFIRM_GET_HELP_TITLE = "Get Help";
-    public static final String CONFIRM_GET_HELP_MESSAGE = "Send a help request to your carers?";
-    public static final String CONFIRM_GET_HELP_POSITIVE = "Yes";
-    public static final String CONFIRM_GET_HELP_NEGATIVE = "No";
-
-    private DrawerLayout drawerLayout;
-
     private FragmentManager fragmentManager;
-    private Fragment locationsFragment;
-
-    private PopupWindow helpWindow;
 
     private Button messagesButton;
     private Button callsButton;
@@ -81,8 +69,6 @@ public class DependentHomeActivity extends NetworkActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dependent_home);
 
-        final Context context = this;
-
         fragmentManager = getSupportFragmentManager();
 
         responding = false;
@@ -90,95 +76,62 @@ public class DependentHomeActivity extends NetworkActivity {
         //Retrieve the logged in account from the server
         new DownloadDependentTask(this).execute(LoginSharedPreference.getId(this));
 
-        messagesButton = (Button) findViewById(R.id.messagesButton);
-        setMessagesButtonListener(this);
+        setMessagesButton();
+        setCallsButton();
+        setLocationsButton();
+        setRefreshButton(this);
+        setSignOutButton(this);
+        setToolbar();
+        setHelpButton(this);
+    }
 
-        callsButton = (Button) findViewById(R.id.callButton);
-        setCallsButtonListener(this);
-
-        locationsButton = (Button) findViewById(R.id.locationsButton);
-        locationsButton.setVisibility(View.GONE);
-        setLocationsButtonListener();
-
-        refreshButton = (ImageButton) findViewById(R.id.dependentHome_refreshButton);
-        refreshButton.setOnClickListener(new View.OnClickListener() {
+    //Finds the view and sets the button to display a AlertDialog when pressed
+    private void setHelpButton(final Context context) {
+        helpButton = (Button) findViewById(R.id.helpButton);
+        helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DownloadDependentTask(context).execute(LoginSharedPreference.getId(context));
+                HelpDialog builder = new HelpDialog(context, user);
+                builder.show();
             }
         });
+    }
 
-        signOutButton = findViewById(R.id.tempSignOutButton);
-        setSignOutButtonListener(this);
-
+    //Finds the view and sets the content within the toolbar
+    private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("");
         actionbar.setSubtitle("");
+    }
 
-        helpButton = (Button) findViewById(R.id.helpButton);
-        helpButton.setOnClickListener(new View.OnClickListener() {
+    //Finds the view and reloads the current user when pressed
+    public void setRefreshButton(final Context context) {
+        refreshButton = (ImageButton) findViewById(R.id.dependentHome_refreshButton);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                /*ViewGroup group = (ViewGroup) getWindow().getDecorView().getRootView();
-                helpWindow = new HelpPopupWindow(context, user, group);
-
-                //Show at centre of screen
-                helpWindow.showAtLocation(drawerLayout, Gravity.CENTER, 0, 0);*/
-
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                        .setMessage(CONFIRM_GET_HELP_MESSAGE)
-                        .setTitle(CONFIRM_GET_HELP_TITLE);
-
-                builder.setPositiveButton(CONFIRM_GET_HELP_POSITIVE, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                @SuppressLint("StaticFieldLeak")
-                                NetworkTask task = new NetworkTask() {
-                                    @Override
-                                    protected Object doInBackground(Object[] objects) {
-                                        super.doInBackground(objects);
-
-                                        try {
-                                            ServiceFactory.getInstance().notificationSendingService().sendHelp(user, null);
-                                            System.out.println("Notification sent");
-                                        } catch (BadRequestException e) {
-                                            e.printStackTrace();
-                                        } catch (NoConnectionException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        return null;
-                                    }
-                                };
-                                task.execute();
-                            }
-                });
-
-                builder.setNegativeButton(CONFIRM_GET_HELP_NEGATIVE, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                builder.show();
-
+                if (!responding) {
+                    new DownloadDependentTask(context).execute(LoginSharedPreference.getId(context));
+                }
             }
         });
     }
 
-
-    //Sets the listener for when the callsButton is pressed
-    private void setCallsButtonListener(final Context context) {
+    //Finds the view and replaces the current fragment with the CallsListFragment when pressed
+    private void setCallsButton() {
+        callsButton = (Button) findViewById(R.id.callButton);
         callsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
-                if (!(currentFragment instanceof CallsListFragment)) {
+                //Replace the current fragment with a CallsListFragment
+                if (!responding && !(currentFragment instanceof CallsListFragment)) {
+
                     Fragment carersFragment = new CallsListFragment();
 
                     Bundle arguments = new Bundle();
@@ -191,6 +144,7 @@ public class DependentHomeActivity extends NetworkActivity {
                     transaction.replace(R.id.fragment_container, carersFragment);
                     transaction.commit();
 
+                    //Change which buttons are displayed
                     messagesButton.setVisibility(View.VISIBLE);
                     callsButton.setVisibility(View.GONE);
                     locationsButton.setVisibility(View.VISIBLE);
@@ -200,15 +154,18 @@ public class DependentHomeActivity extends NetworkActivity {
         });
     }
 
-
-    private void setMessagesButtonListener(final Context context) {
+    //Finds the view and replaces the current fragment with the MessagesListFragment when pressed
+    private void setMessagesButton() {
+        messagesButton = (Button) findViewById(R.id.messagesButton);
         messagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
-                if (!(currentFragment instanceof MessagesListFragment)) {
+                //Replace current fragment to MessagesListFragment
+                if (!responding && !(currentFragment instanceof MessagesListFragment)) {
+
                     Fragment carersFragment = new MessagesListFragment();
 
                     Bundle arguments = new Bundle();
@@ -221,6 +178,7 @@ public class DependentHomeActivity extends NetworkActivity {
                     transaction.replace(R.id.fragment_container, carersFragment);
                     transaction.commit();
 
+                    //Change which buttons are displayed
                     messagesButton.setVisibility(View.GONE);
                     callsButton.setVisibility(View.VISIBLE);
                     locationsButton.setVisibility(View.VISIBLE);
@@ -230,13 +188,17 @@ public class DependentHomeActivity extends NetworkActivity {
         });
     }
 
-    private void setLocationsButtonListener() {
+    //Finds the view and replaces the current fragment with the LocationsListFragment when pressed
+    private void setLocationsButton() {
+        locationsButton = (Button) findViewById(R.id.locationsButton);
         locationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
-                if (!(currentFragment instanceof LocationsListFragment)) {
+                //Replaces the current fragment with the LocationsListFragment
+                if (!responding && !(currentFragment instanceof LocationsListFragment)) {
                     Fragment carersFragment = new LocationsListFragment();
 
                     Bundle arguments = new Bundle();
@@ -249,6 +211,7 @@ public class DependentHomeActivity extends NetworkActivity {
                     transaction.replace(R.id.fragment_container, carersFragment);
                     transaction.commit();
 
+                    //Changes which buttons are displayed
                     messagesButton.setVisibility(View.VISIBLE);
                     callsButton.setVisibility(View.VISIBLE);
                     locationsButton.setVisibility(View.GONE);
@@ -258,8 +221,9 @@ public class DependentHomeActivity extends NetworkActivity {
         });
     }
 
-    //Signs out the user and loads the StartActivity
-    private void setSignOutButtonListener(final Context context) {
+    //Finds the view and signs out the user when pressed
+    private void setSignOutButton(final Context context) {
+        signOutButton = findViewById(R.id.tempSignOutButton);
         signOutButton.setOnClickListener(new View.OnClickListener() {
             /**
              * When the button is clicked, logs out closes the activity
@@ -268,54 +232,20 @@ public class DependentHomeActivity extends NetworkActivity {
             @Override
             public void onClick(View v) {
 
-                @SuppressLint("StaticFieldLeak")
-                NetworkTask task = new NetworkTask() {
-
-                    private boolean success;
-
-                    @Override
-                    protected Object doInBackground(Object[] objects) {
-                        super.doInBackground(objects);
-
-                        success = false;
-
-                        try {
-
-                            LoginHandler.getInstance().logout(context);
-                            success = true;
-
-
-                        } catch (BadRequestException e) {
-                            e.printStackTrace();
-                        } catch (NoConnectionException e) {
-                            e.printStackTrace();
-                        }
-
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Object o) {
-                        super.onPostExecute(o);
-
-                        if (success) {
-                            // Stop the sinch client
-                            getSinchInterface().stopClient();
-                            finish();
-                        }
-                    }
-                };
-                task.execute();
+                if (!responding) {
+                    new SignOutDialog(context).show();
+                }
             }
         });
     }
 
     //Downloads the logged in DependentUser from the database
+    @SuppressLint("StaticFieldLeak")
     private class DownloadDependentTask extends NetworkTask<String, Void, DependentUser> {
 
         private boolean downloaded;
-
         private final Context context;
+        private String message;
 
         public DownloadDependentTask(Context context) {
             this.context = context;
@@ -326,8 +256,8 @@ public class DependentHomeActivity extends NetworkActivity {
             super.doInBackground(strings);
 
             responding = true;
-
             downloaded = false;
+            message = null;
             try {
 
                 user = AccountController.getInstance().getDependent(strings[0]);
@@ -336,7 +266,7 @@ public class DependentHomeActivity extends NetworkActivity {
 
             // Exception when can't connect to the server
             catch (Exception e) {
-                e.printStackTrace();
+                displayMessageToast(e.getMessage());
             }
 
             return null;
@@ -350,27 +280,11 @@ public class DependentHomeActivity extends NetworkActivity {
         protected void onPostExecute(DependentUser dependentUser) {
             super.onPostExecute(dependentUser);
 
-            displaySpinner(false);
+            responding = false;
 
             if (!downloaded) {
 
-                AlertDialog.Builder  builder = new AlertDialog.Builder(context);
-                builder.setTitle("Failed to download");
-                builder.setMessage("Please retry");
-                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new DownloadDependentTask(context).execute();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        ((Activity) context).finish();
-                    }
-                });
-
+                RetryDialog  builder = new RetryDialog(context, message);
                 builder.show();
 
                 return;
@@ -378,66 +292,168 @@ public class DependentHomeActivity extends NetworkActivity {
 
             if (user != null) {
 
+                //Save the name
                 LoginSharedPreference.setName(getApplicationContext(), user.getName());
 
-                try {
-
-                    Fragment fragment;
-
-                    //If there are pending requests, display them
-                    if (!user.hasPendingCarers()) {
-                        fragment = new LocationsListFragment();
-
-                        //Otherwise display the locations
-                        locationsButton.setVisibility(View.GONE);
-                        signOutButton.setVisibility(View.VISIBLE);
-
-                    } else {
-
-                        locationsButton.setVisibility(View.VISIBLE);
-                        signOutButton.setVisibility(View.GONE);
-                        fragment = new CarerRequestsListFragment();
-                    }
-
-                    Bundle arguments = new Bundle();
-                    arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
-                    fragment.setArguments(arguments);
-
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-                    transaction.replace(R.id.fragment_container, fragment);
-                    transaction.commit();
-
-                    messagesButton.setVisibility(View.VISIBLE);
-                    callsButton.setVisibility(View.VISIBLE);
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                responding = false;
+                setFirstFragment();
             }
         }
     }
 
-    private void displayErrorToast(final Exception e) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+    //Displays the initial fragment
+    private void setFirstFragment() {
+        //View the fragment
+        try {
+            Fragment fragment;
+
+            //If there are no pending requests, display the locations
+            if (!user.hasPendingCarers()) {
+                fragment = new LocationsListFragment();
+
+                locationsButton.setVisibility(View.GONE);
+                signOutButton.setVisibility(View.VISIBLE);
+
+            } else {
+                fragment = new CarerRequestsListFragment();
+
+                locationsButton.setVisibility(View.VISIBLE);
+                signOutButton.setVisibility(View.GONE);
             }
-        });
+
+            Bundle arguments = new Bundle();
+            arguments.putSerializable(LocationsListFragment.ARGUMENT_USER, user);
+            fragment.setArguments(arguments);
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+            transaction.replace(R.id.fragment_container, fragment);
+            transaction.commit();
+
+            messagesButton.setVisibility(View.VISIBLE);
+            callsButton.setVisibility(View.VISIBLE);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void onBackPressed() {
+    //Dialog providing the ability to retry downloading the account
+    private class RetryDialog extends AlertDialog.Builder {
 
-        //If the helpbutton is on display, dismiss it
-        if (helpWindow != null && helpWindow.isShowing()) {
-            helpWindow.dismiss();
-        } else {
-            super.onBackPressed();
+        public static final String RETRY_TITLE = "Failed to download";
+        public static final String RETRY_MESSAGE = "Please retry";
+
+        public static final String RETRY_POSITIVE = "Retry";
+        public static final String RETRY_NEGATIVE = "Cancel";
+
+        public RetryDialog(final @NonNull Context context, String message) {
+            super(context);
+
+            setTitle(RETRY_TITLE);
+
+            if (message != null) {
+                setMessage(message);
+            } else {
+                setMessage(RETRY_MESSAGE);
+            }
+
+            //Download the account again
+            setPositiveButton(RETRY_POSITIVE, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new DownloadDependentTask(context).execute();
+                }
+            });
+
+            //Close the application
+            setNegativeButton(RETRY_NEGATIVE, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    ((Activity) context).finish();
+                }
+            });
+        }
+    }
+
+    //Dialog for signing out
+    private class SignOutDialog extends AlertDialog.Builder {
+
+        public static final String SIGN_OUT_TITLE = "Sign out";
+        public static final String SIGN_OUT_POSITIVE = "Confirm";
+        public static final String SIGN_OUT_NEGATIVE = "Cancel";
+
+        public SignOutDialog(final @NonNull Context context) {
+            super(context);
+
+            setTitle(SIGN_OUT_TITLE);
+
+            setPositiveButton(SIGN_OUT_POSITIVE, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    @SuppressLint("StaticFieldLeak")
+                    NetworkTask task = new NetworkTask() {
+
+                        private boolean success;
+
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+                            super.doInBackground(objects);
+
+                            responding = true;
+                            success = false;
+
+                            try {
+
+                                LoginHandler.getInstance().logout(context);
+                                success = true;
+
+                            } catch (Exception e) {
+                                displayMessageToast(e.getMessage());
+                            }
+
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            super.onPostExecute(o);
+
+                            responding = false;
+                            if (success) {
+
+                                // Stop the sinch client
+                                getSinchInterface().stopClient();
+                                finish();
+                            }
+                        }
+                    };
+                    task.execute();
+                }
+            });
+
+            setNegativeButton(SIGN_OUT_NEGATIVE, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }
+    }
+
+    //Display a toast
+    private void displayMessageToast(final String message) {
+
+        if (message != null) {
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 }
