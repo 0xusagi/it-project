@@ -36,8 +36,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 DataMessage message = DataMessage.toDataMessage(remoteMessage.getData());
                 broadcastMessage(message);
 
-            //TODO maybe send error message to server to retry?
             } catch (InvalidMessageException e) {
+
             }
         }
     }
