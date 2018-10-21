@@ -7,6 +7,10 @@ import android.widget.TextView;
 import com.comp30023.spain_itproject.R;
 import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 
+/**
+ * This activity gets called when a carer opens a help request notification. The only
+ * difference between its supertype is the addition of some text above the map fragment.
+ */
 public class DisplayHelpRequestActivity extends ViewDependentLocationActivity {
 
     public static final String TITLE = " has requested help!";
@@ -39,6 +43,7 @@ public class DisplayHelpRequestActivity extends ViewDependentLocationActivity {
     }
 
 
+    //
     private void setTitleText() {
 
         titleText = (TextView) findViewById(R.id.displayHelpRequest_title);

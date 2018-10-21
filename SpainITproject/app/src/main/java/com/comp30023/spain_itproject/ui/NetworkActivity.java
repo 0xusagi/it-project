@@ -16,7 +16,7 @@ import com.comp30023.spain_itproject.ui.calls.BaseActivity;
 /**
  * Base Activity to enable spinning on a network call
  */
-public class NetworkActivity extends BaseActivity {
+public class NetworkActivity extends BroadcastActivity {
 
     private ProgressBar spinner;
 

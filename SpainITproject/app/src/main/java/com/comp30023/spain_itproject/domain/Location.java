@@ -6,6 +6,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+/**
+ * This is our own personal representation of Locations that co-ordinates
+ * with the Google standard for locations in their places SDK.
+ */
 public class Location implements Serializable, DisplayName {
 
 

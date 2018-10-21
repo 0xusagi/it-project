@@ -26,7 +26,8 @@ import com.comp30023.spain_itproject.ui.maps.TrackerMapFragment;
 import com.sinch.android.rtc.calling.Call;
 
 /**
- * Loaded when a user displays a help request
+ * This activity gets called when a carer wants to view a dependent's current (or last)
+ * location and route.
  */
 public class ViewDependentLocationActivity extends BaseActivity {
 

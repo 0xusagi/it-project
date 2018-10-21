@@ -53,7 +53,8 @@ import java.util.Map;
 import static android.support.constraint.Constraints.TAG;
 
 /**
- * A fragment that
+ * This is the maps fragment used by the Carer to view tracking information
+ * for the respective dependent.
  */
 public class TrackerMapFragment extends MarkerMapsFragment {
 
@@ -86,18 +87,26 @@ public class TrackerMapFragment extends MarkerMapsFragment {
         trackedUserId = arguments.getString(ARGUMENT_TRACK_USER_ID);
         trackedUserName = arguments.getString(ARGYMENT_TRACK_USER_NAME);
 
+        // This is the data gained from the firebase real-time server.
         positionLiveData = ServiceFactory.getInstance().realTimeLocationSharingService().trackLocation(trackedUserId);
 
+        /** This is the Google Places API SDK client, used for retrieving place information from a
+         *  GoogleID.
+         */
         mGeoDataClient = Places.getGeoDataClient(getActivity());
 
         //Update the marker on the map when the position is updated
         positionLiveData.observe(this, new Observer<Position>() {
             @Override
             public void onChanged(@Nullable final Position position) {
+                if (position == null) {
+                    return;
+                }
 
                 final LatLng coordinates = new LatLng(position.getLat(), position.getLng());
                 final String title = trackedUserName;
 
+                // If there's no marker set for the dependent, set it and animate towards it.
                 if (marker == null) {
                     GoogleMap map = getMap();
                     if (map != null) {
@@ -107,7 +116,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                     marker.setPosition(coordinates);
                 }
 
-                // If dependent is on a route, render the route on the carer's screen.
+                // Render the last or current route the dependenet was on.
                 if (position.getDestinationID() != null) {
                     // Get the Google Place using GoogleID.
                     mGeoDataClient.getPlaceById(position.getDestinationID()).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
@@ -161,7 +170,6 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                                                                     .title(destinationName));
                                                         }
                                                     }
-
                                                 }
                                             }
 
@@ -179,10 +187,7 @@ public class TrackerMapFragment extends MarkerMapsFragment {
                         }
                     });
                 }
-
-                /*clearMarkers();
-                addMarker(trackedUserName + ", " + position.getTimeStamp(), position.getLat(), position.getLng());*/
-        }
+            }
         });
 
         if (pendingObservers != null && !pendingObservers.isEmpty()) {

@@ -17,6 +17,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+/** This is our base class for a sequence of different Maps fragments
+ * used throughout the codebase. This class will set a map, and allows
+ * easy marker placement, tracking and deletion.
+ *
+ */
+
 public class MarkerMapsFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     public GoogleMap map;

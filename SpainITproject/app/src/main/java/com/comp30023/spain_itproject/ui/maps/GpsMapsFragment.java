@@ -12,9 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.comp30023.spain_itproject.external_services.ServiceFactory;
-import com.comp30023.spain_itproject.domain.Position;
-import com.comp30023.spain_itproject.ui.LoginSharedPreference;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -22,10 +19,11 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Extension of the SupportMapFagment with handling of device GPS permissions and device location pinpointing
+ * Extension of the MarkerMapsFragment with handling of device GPS permissions and device location pinpointing
  */
 public class GpsMapsFragment extends MarkerMapsFragment {
 
@@ -36,6 +34,10 @@ public class GpsMapsFragment extends MarkerMapsFragment {
     private Location currentLocation;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
+
+    // This gets called periodically depending upon what's set in mLocationRequest.
+    LocationCallback mLocationCallback;
+    // This variable keeps track of how many location callbacks are made.
     private int locationCallbackCount = 0;
 
     private boolean locationUpdatesOn;
@@ -57,8 +59,6 @@ public class GpsMapsFragment extends MarkerMapsFragment {
         this.locationCallbackCount = locationCallbackCount;
     }
 
-    // This gets called periodically depending upon what's set in mLocationRequest.
-    LocationCallback mLocationCallback;
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -118,6 +118,8 @@ public class GpsMapsFragment extends MarkerMapsFragment {
             return;
         }
 
+        // Create a new request, set the interval time (how frequently to make a location request)
+        // and set the request to power and accuracy balanced.
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(12000); // 20 second interval
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);

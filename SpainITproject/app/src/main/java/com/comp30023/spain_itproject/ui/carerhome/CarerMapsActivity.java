@@ -156,7 +156,8 @@ public class CarerMapsActivity extends NetworkActivity {
 
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(parentContainer);
-                constraintSet.connect(R.id.carerMapsActivity_mapFrame, ConstraintSet.BOTTOM, R.id.carerMaps_placeSelectedFrame, ConstraintSet.TOP, 0);
+                constraintSet.connect(R.id.carerMapsActivity_mapFrame,
+                        ConstraintSet.BOTTOM, R.id.carerMaps_placeSelectedFrame, ConstraintSet.TOP, 0);
                 constraintSet.applyTo(parentContainer);
 
                 enterNameText.setVisibility(View.VISIBLE);
